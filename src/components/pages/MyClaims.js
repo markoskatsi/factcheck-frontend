@@ -1,5 +1,7 @@
 import { useState, useEffect } from "react";
 import API from "../api/API.js";
+import { CardContainer, Card } from "../UI/Card.js";
+import ClaimItem from "../entity/ClaimItem.js";
 
 function MyClaims() {
   // Inititalisation ---------------------------------------
@@ -30,8 +32,26 @@ function MyClaims() {
       ) : claims.length === 0 ? (
         <p>You have not made any claims yet!</p>
       ) : (
-        claims.map((claim) => <p key={claim.ClaimID}>{claim.ClaimTitle}</p>)
+        <CardContainer>
+          {claims.map((claim) => (
+            <Card key={claim.ClaimID}>
+              <ClaimItem claim={claim} key={claim.ClaimID} />
+            </Card>
+          ))}
+        </CardContainer>
       )}
+      <button
+        style={{
+          padding: "12px 24px",
+          marginTop: "50px",
+          cursor: "pointer",
+          display: "block",
+          marginLeft: "auto",
+          marginRight: "auto",
+        }}
+      >
+        Add New Claim
+      </button>
     </section>
   );
 }
