@@ -1,0 +1,12 @@
+footer {
+  height: 50px;
+  display: grid;
+  place-items: center;
+  border-top: 1px solid #001e55;
+  background: #1B2633;
+}
+
+footer p {
+  color: #F9FAFB;
+  font-size: 70%;
+}
