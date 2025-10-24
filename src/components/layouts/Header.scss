@@ -1,0 +1,19 @@
+header {
+  color: white;
+  background: #1e2a38;
+  display: flex;
+
+  > a {
+    text-decoration: none;
+    color: inherit;
+  }
+
+  div.login {
+    flex: 1;
+    margin-right: 0.5rem;
+    text-align: right;
+    display: flex;
+    justify-content: flex-end;
+    align-items: flex-end;
+  }
+}
