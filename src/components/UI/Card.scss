@@ -1,0 +1,21 @@
+div.cardContainer {
+  padding: 10px;
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+
+  gap: 20px;
+
+  div.card {
+    flex: 1 1 400px;
+    min-width: 400px;
+    max-width: 400px;
+    height: 100%;
+    padding: 22px;
+    border-radius: 5px;
+    background: #273847;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+  }
+}
