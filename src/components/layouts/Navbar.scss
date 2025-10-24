@@ -1,0 +1,22 @@
+nav {
+  display: flex;
+  overflow: hidden;
+  background-color: #273847;
+
+  div.navItem {
+    padding: 10px;
+
+    &:hover {
+      background-color: #3b82f6;
+    }
+
+    a {
+      color: #f9fafb;
+      text-decoration: none;
+
+      &.navSelected {
+        color: #96bfff;
+      }
+    }
+  }
+}
