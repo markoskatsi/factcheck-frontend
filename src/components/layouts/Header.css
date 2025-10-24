@@ -1,6 +1,6 @@
 header {
   color: white;
-  background: #1E2A38;
+  background: #1e2a38;
   display: flex;
 }
 
@@ -8,7 +8,12 @@ header div.login {
   flex: 1;
   margin-right: 0.5rem;
   text-align: right;
-  display: flex; 
+  display: flex;
   justify-content: flex-end;
   align-items: flex-end;
+}
+
+header > a {
+  text-decoration: none;
+  color: inherit;
 }
