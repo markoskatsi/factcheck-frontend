@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import API from "../api/API.js";
 import { CardContainer, Card } from "../UI/Card.js";
 import ClaimItem from "../entity/ClaimItem.js";
+import { Link } from "react-router-dom";
 
 function MyClaims() {
   // Inititalisation ---------------------------------------
@@ -34,9 +35,15 @@ function MyClaims() {
       ) : (
         <CardContainer>
           {claims.map((claim) => (
-            <Card key={claim.ClaimID}>
-              <ClaimItem claim={claim} key={claim.ClaimID} />
-            </Card>
+            <Link
+              to={`/myclaims/${claim.ClaimID}`}
+              className="claimCardLink"
+              key={claim.ClaimID}
+            >
+              <Card key={claim.ClaimID}>
+                <ClaimItem claim={claim} key={claim.ClaimID} />
+              </Card>
+            </Link>
           ))}
         </CardContainer>
       )}
