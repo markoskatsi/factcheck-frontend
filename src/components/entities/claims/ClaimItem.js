@@ -1,4 +1,4 @@
-import { formatDateTime } from "../utils/dateUtils.jsx";
+import { formatDateTime } from "../../utils/dateUtils.jsx";
 import "./ClaimItem.scss";
 
 export function ClaimItem({ claim }) {
