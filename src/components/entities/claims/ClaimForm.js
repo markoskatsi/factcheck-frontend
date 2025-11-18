@@ -1,5 +1,8 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import API from "../../api/API.js";
 import FormItem from "../../UI/Form.js";
+import Action from "../../UI/Actions.js";
+import { useNavigate } from "react-router-dom";
 
 const emptyClaim = {
   ClaimTitle: "",
@@ -23,6 +26,7 @@ export default function ClaimForm({
   initialSource = emptySource,
 }) {
   // Initialisation --------------------------------
+  const navigate = useNavigate();
   const isValid = {
     ClaimTitle: (name) => name.length > 5,
     ClaimDescription: (desc) => desc.length > 10,
@@ -51,6 +55,22 @@ export default function ClaimForm({
     )
   );
 
+  const [sourceTypes, setSourceTypes] = useState([]);
+  const [loadingTypesMessage, setLoadingTypesMessage] = useState(
+    "Loading records...."
+  );
+
+  const getSourceTypes = async () => {
+    const response = await API.get("/sourcetypes");
+    response.isSuccess
+      ? setSourceTypes(response.result)
+      : setLoadingTypesMessage("Error loading source types");
+  };
+
+  useEffect(() => {
+    getSourceTypes();
+  }, []);
+
   // Handlers --------------------------------------
   const handleChange = (event) => {
     const { name, value } = event.target;
@@ -63,11 +83,16 @@ export default function ClaimForm({
     });
   };
 
+  const handleSubmit = () => {};
+  const handleCancel = () => {
+    navigate("/myclaims");
+  };
+
   // View ------------------------------------------
   return (
-    <form className="BorderedForm">
+    <form className="Form Bordered">
       <FormItem
-        label="Claim Title"
+        label="Claim title"
         htmlFor="ClaimTitle"
         advice="Please enter the title"
         error={errors.ClaimTitle}
@@ -81,7 +106,7 @@ export default function ClaimForm({
       </FormItem>
 
       <FormItem
-        label="Claim Description"
+        label="Claim description"
         htmlFor="ClaimDescription"
         advice="Please enter the description"
         error={errors.ClaimDescription}
@@ -109,35 +134,35 @@ export default function ClaimForm({
       </FormItem>
 
       <FormItem
-        label="Source Type"
+        label="Source type"
         htmlFor="SourceSourcetypeID"
         advice="Choose a source type"
         error={errors.SourceSourcetypeID}
       >
-        <select
-          name="SourceSourcetypeID"
-          value={source.SourceSourcetypeID}
-          onChange={handleChange}
-        >
-          <option value={0} disabled>
-            Select an option
-          </option>
-          {[
-            { id: 1, name: "Article" },
-            { id: 2, name: "Report" },
-            { id: 3, name: "Video" },
-            { id: 4, name: "Social Media" },
-            { id: 5, name: "Image" },
-          ].map((type) => (
-            <option key={type.id} value={type.id}>
-              {type.name}
+        {!sourceTypes ? (
+          <p>{loadingTypesMessage}</p>
+        ) : sourceTypes.length === 0 ? (
+          <p>No source types found</p>
+        ) : (
+          <select
+            name="SourceSourcetypeID"
+            value={source.SourceSourcetypeID}
+            onChange={handleChange}
+          >
+            <option value={0} disabled>
+              Select an option
             </option>
-          ))}
-        </select>
+            {sourceTypes.map((type) => (
+              <option key={type.SourcetypeID} value={type.SourcetypeID}>
+                {type.SourcetypeName}
+              </option>
+            ))}
+          </select>
+        )}
       </FormItem>
 
       <FormItem
-        label="Source Description"
+        label="Source description"
         htmlFor="SourceDescription"
         advice="Please enter the source description"
         error={errors.SourceDescription}
@@ -150,7 +175,14 @@ export default function ClaimForm({
         />
       </FormItem>
 
-      {/* <button}>Add Another Source</button> */}
+      <Action.Tray>
+        <Action.Add
+          showText
+          buttonText={"Submit claim"}
+          onClick={handleSubmit}
+        />
+        <Action.Cancel showText buttonText={"Cancel"} onClick={handleCancel} />
+      </Action.Tray>
     </form>
   );
 }
