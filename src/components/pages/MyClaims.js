@@ -14,7 +14,7 @@ function MyClaims() {
   const [loadingMessage, setLoadingMessage] = useState("Loading records...");
   // Context -----------------------------------------------
   // Methods -----------------------------------------------
-  const apiCall = async (endpoint) => {
+  const getClaims = async (endpoint) => {
     const response = await API.get(endpoint);
     response.isSuccess
       ? setClaims(response.result)
@@ -22,7 +22,7 @@ function MyClaims() {
   };
 
   useEffect(() => {
-    apiCall(endpoint);
+    getClaims(endpoint);
   }, [endpoint]);
 
   // View --------------------------------------------------
