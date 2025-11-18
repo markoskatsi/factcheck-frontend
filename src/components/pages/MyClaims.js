@@ -12,6 +12,7 @@ function MyClaims() {
   // State -------------------------------------------------
   const [claims, setClaims] = useState(null);
   const [loadingMessage, setLoadingMessage] = useState("Loading records...");
+  const [showForm, setShowForm] = useState(false);
   // Context -----------------------------------------------
   // Methods -----------------------------------------------
   const apiCall = async (endpoint) => {
@@ -49,6 +50,7 @@ function MyClaims() {
         </CardContainer>
       )}
       <button
+        onClick={() => setShowForm(!showForm)}
         style={{
           padding: "12px 24px",
           marginTop: "50px",
@@ -58,8 +60,13 @@ function MyClaims() {
           marginRight: "auto",
         }}
       >
-        <Link to="/createclaim">Add New Claim</Link>
+        {showForm ? "Cancel" : "Add New Claim"}
       </button>
+      {showForm && (
+        <div style={{ marginTop: "20px" }}>
+          <ClaimForm />
+        </div>
+      )}
     </section>
   );
 }
