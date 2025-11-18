@@ -1,8 +1,9 @@
 import { useState, useEffect } from "react";
 import API from "../api/API.js";
 import { CardContainer, Card } from "../UI/Card.js";
-import ClaimItem from "../entity/ClaimItem.js";
+import ClaimItem from "../entities/claims/ClaimItem.js";
 import { Link } from "react-router-dom";
+import ClaimForm from "../entities/claims/ClaimForm.js";
 
 function MyClaims() {
   // Inititalisation ---------------------------------------
@@ -13,7 +14,7 @@ function MyClaims() {
   const [loadingMessage, setLoadingMessage] = useState("Loading records...");
   // Context -----------------------------------------------
   // Methods -----------------------------------------------
-  const apiCall = async (endpoint) => {
+  const getClaims = async (endpoint) => {
     const response = await API.get(endpoint);
     response.isSuccess
       ? setClaims(response.result)
@@ -21,7 +22,7 @@ function MyClaims() {
   };
 
   useEffect(() => {
-    apiCall(endpoint);
+    getClaims(endpoint);
   }, [endpoint]);
 
   // View --------------------------------------------------
@@ -57,7 +58,7 @@ function MyClaims() {
           marginRight: "auto",
         }}
       >
-        Add New Claim
+        <Link to="/createclaim">Add New Claim</Link>
       </button>
     </section>
   );

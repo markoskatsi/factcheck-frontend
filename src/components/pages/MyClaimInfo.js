@@ -30,7 +30,7 @@ const MyClaimInfo = () => {
       <p>{claim.ClaimDescription}</p>
       <p>{claim.ClaimStatus}</p>
       <p>{claim.ClaimstatusName}</p>
-      <p>{formatDateTime(claim.ClaimPublished)}</p>
+      <p>{formatDateTime(claim.ClaimCreated)}</p>
       <h2>Sources:</h2>
       {sources ? (
         sources.map((source) => (
