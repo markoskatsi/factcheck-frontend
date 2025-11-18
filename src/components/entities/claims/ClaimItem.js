@@ -7,7 +7,7 @@ export function ClaimItem({ claim }) {
       <h3>{claim.ClaimTitle}</h3>
       <p>{claim.ClaimDescription}</p>
       <p className="status">Status: {claim.ClaimstatusName}</p>
-      <p>Date Published: {formatDateTime(claim.ClaimPublished)}</p>
+      <p>Date Created: {formatDateTime(claim.ClaimCreated)}</p>
     </div>
   );
 }

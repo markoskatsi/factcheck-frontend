@@ -7,21 +7,18 @@ import { useNavigate } from "react-router-dom";
 const emptyClaim = {
   ClaimTitle: "",
   ClaimDescription: "",
-  ClaimStatus: "",
-  ClaimCreated: 0,
-  ClaimUserID: 0,
-  ClaimClaimstatusID: "",
+  ClaimClaimstatusID: 1,
+  ClaimUserID: 1,
 };
 
 const emptySource = {
   SourceDescription: "",
   SourceURL: "",
-  SourceCreated: 0,
-  SourceClaimID: 0,
   SourceSourcetypeID: 0,
 };
 
 export default function ClaimForm({
+  onSubmit,
   initialClaim = emptyClaim,
   initialSource = emptySource,
 }) {
@@ -31,11 +28,11 @@ export default function ClaimForm({
     ClaimTitle: (name) => name.length > 5,
     ClaimDescription: (desc) => desc.length > 10,
     SourceURL: (url) => url.startsWith("http"),
-    SourceSourcetypeID: (type) => type !== "",
+    SourceSourcetypeID: (type) => type !== 0,
     SourceDescription: (desc) => desc.length > 10,
   };
 
-  const errorMessages = {
+  const errorMessage = {
     ClaimTitle: "Claim title is too short",
     ClaimDescription: "Claim Description is too short",
     SourceURL: "Source URL is invalid",
@@ -75,17 +72,39 @@ export default function ClaimForm({
   const handleChange = (event) => {
     const { name, value } = event.target;
     const newValue = name === "SourceSourcetypeID" ? parseInt(value) : value;
-    setClaim({ ...claim, [name]: newValue });
-    setSource({ ...source, [name]: newValue });
+    if (name.startsWith("Claim")) {
+      setClaim({ ...claim, [name]: newValue });
+    } else if (name.startsWith("Source")) {
+      setSource({ ...source, [name]: newValue });
+    }
     setErrors({
       ...errors,
-      [name]: isValid[name](newValue) ? null : errorMessages[name],
+      [name]: isValid[name](newValue) ? null : errorMessage[name],
     });
   };
 
-  const handleSubmit = () => {};
+  const isValidClaim = (claim, source) => {
+    let isClaimValid = true;
+    const allData = { ...claim, ...source };
+
+    Object.keys(isValid).forEach((key) => {
+      if (isValid[key](allData[key])) {
+        errors[key] = null;
+      } else {
+        errors[key] = errorMessage[key];
+        isClaimValid = false;
+      }
+    });
+    return isClaimValid;
+  };
+
   const handleCancel = () => {
     navigate("/myclaims");
+  };
+  const handleSubmit = (event) => {
+    event.preventDefault();
+    isValidClaim(claim, source) && onSubmit(claim, source);
+    setErrors({ ...errors });
   };
 
   // View ------------------------------------------
