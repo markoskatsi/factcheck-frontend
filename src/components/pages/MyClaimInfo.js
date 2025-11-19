@@ -1,7 +1,9 @@
 import { useParams } from "react-router-dom";
 import { useState, useEffect } from "react";
 import API from "../api/API.js";
-import { formatDateTime } from "../utils/dateUtils.jsx";
+import { ClaimItem } from "../entities/claims/ClaimItem.js";
+import { SourceItem } from "../entities/sources/SourceItem.js";
+import { Card, CardContainer } from "../UI/Card.js";
 
 const MyClaimInfo = () => {
   // Initialisation --------------------------------
@@ -25,26 +27,19 @@ const MyClaimInfo = () => {
   // View ------------------------------------------
   if (!claim) return <p>Loading claim details...</p>;
   return (
-    <>
-      <h1>{claim.ClaimTitle}</h1>
-      <p>{claim.ClaimDescription}</p>
-      <p>{claim.ClaimStatus}</p>
-      <p>{claim.ClaimstatusName}</p>
-      <p>{formatDateTime(claim.ClaimCreated)}</p>
-      <h2>Sources:</h2>
+    <CardContainer>
+      <Card>
+        <ClaimItem claim={claim} />
+      <h3>Attached sources:</h3>
       {sources ? (
         sources.map((source) => (
-          <div key={source.SourceID}>
-            <h3>{source.SourcetypeName}</h3>
-            <p>
-              {source.SourceDescription} <a href={source.SourceURL}>Link</a>
-            </p>
-          </div>
+            <SourceItem source={source} />
         ))
       ) : (
         <p>No sources attached.</p>
       )}
-    </>
+      </Card>
+    </CardContainer>
   );
 };
 

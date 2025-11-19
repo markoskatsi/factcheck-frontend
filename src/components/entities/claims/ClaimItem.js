@@ -1,9 +1,8 @@
 import { formatDateTime } from "../../utils/dateUtils.jsx";
-import "./ClaimItem.scss";
 
 export function ClaimItem({ claim }) {
   return (
-    <div className="claimItem">
+    <div key={claim.ClaimID}>
       <h3>{claim.ClaimTitle}</h3>
       <p>{claim.ClaimDescription}</p>
       <p className="status">Status: {claim.ClaimstatusName}</p>
