@@ -3,7 +3,7 @@ import API from "../api/API.js";
 import { CardContainer, Card } from "../UI/Card.js";
 import ClaimItem from "../entities/claims/ClaimItem.js";
 import { Link } from "react-router-dom";
-import ClaimForm from "../entities/claims/ClaimForm.js";
+import "./MyClaims.scss";
 
 function MyClaims() {
   // Inititalisation ---------------------------------------
@@ -36,13 +36,9 @@ function MyClaims() {
       ) : (
         <CardContainer>
           {claims.map((claim) => (
-            <Link
-              to={`/myclaims/${claim.ClaimID}`}
-              className="claimCardLink"
-              key={claim.ClaimID}
-            >
-              <Card key={claim.ClaimID}>
-                <ClaimItem claim={claim} key={claim.ClaimID} />
+            <Link to={`/myclaims/${claim.ClaimID}`} key={claim.ClaimID}>
+              <Card>
+                <ClaimItem claim={claim} />
               </Card>
             </Link>
           ))}
