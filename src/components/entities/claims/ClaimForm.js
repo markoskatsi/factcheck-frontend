@@ -1,5 +1,4 @@
 import Form from "../../UI/Form.js";
-import { useNavigate } from "react-router-dom";
 import useLoad from "../../api/useLoad.js";
 
 const emptyClaim = {
@@ -17,12 +16,11 @@ const emptySource = {
 
 export default function ClaimForm({
   onSubmit,
+  onCancel,
   initialClaim = emptyClaim,
   initialSource = emptySource,
 }) {
   // Initialisation --------------------------------
-  const navigate = useNavigate();
-
   const validation = {
     isValid: {
       ClaimTitle: (name) => name.length > 5,
@@ -41,60 +39,41 @@ export default function ClaimForm({
   };
 
   const conformance = ["SourceSourcetypeID"];
-
   const sourceTypesEndpoint = "/sourcetypes";
 
   // State -----------------------------------------
-  const [claim, claimErrors, setClaimErrors, handleChange] =
-    Form.useForm(initialClaim,conformance,validation);
-  const [source, sourceErrors, setSourceErrors, handleSourceChange] =
-    Form.useForm(initialSource,conformance,validation);
-  const [sourceTypes, , loadingTypesMessage, ,] = useLoad(sourceTypesEndpoint);
+  const [formData, errors, handleChange, handleSubmit] = Form.useForm(
+    { ...initialClaim, ...initialSource },
+    conformance,
+    validation,
+    handleFormSubmit,
+    onCancel
+  );
+
+  const [sourceTypes, , loadingTypesMessage] = useLoad(sourceTypesEndpoint);
 
   // Handlers --------------------------------------
+  
+  function handleFormSubmit(data) {
+    const claim = {
+      ClaimTitle: data.ClaimTitle,
+      ClaimDescription: data.ClaimDescription,
+      ClaimClaimstatusID: data.ClaimClaimstatusID,
+      ClaimUserID: data.ClaimUserID,
+    };
 
-  const isValidClaim = (claim, source) => {
-    let isClaimValid = true;
-    const allData = { ...claim, ...source };
-    const newClaimErrors = { ...claimErrors };
-    const newSourceErrors = { ...sourceErrors };
+    const source = {
+      SourceDescription: data.SourceDescription,
+      SourceURL: data.SourceURL,
+      SourceSourcetypeID: data.SourceSourcetypeID,
+    };
 
-    Object.keys(validation.isValid).forEach((key) => {
-      if (validation.isValid[key](allData[key])) {
-        if (key.startsWith("Claim")) {
-          newClaimErrors[key] = null;
-        } else {
-          newSourceErrors[key] = null;
-        }
-      } else {
-        if (key.startsWith("Claim")) {
-          newClaimErrors[key] = validation.errorMessage[key];
-        } else {
-          newSourceErrors[key] = validation.errorMessage[key];
-        }
-        isClaimValid = false;
-      }
-    });
-
-    setClaimErrors(newClaimErrors);
-    setSourceErrors(newSourceErrors);
-    return isClaimValid;
-  };
-
-  const handleSubmit = (event) => {
-    event.preventDefault();
-    isValidClaim(claim, source) && onSubmit(claim, source);
-  };
-
-  const errors = { ...claimErrors, ...sourceErrors };
-
-  const handleCancel = () => {
-    navigate("/myclaims");
-  };
+    onSubmit(claim, source);
+  }
 
   // View ------------------------------------------
   return (
-    <Form onSubmit={handleSubmit} onCancel={handleCancel}>
+    <Form onSubmit={handleSubmit} onCancel={onCancel}>
       <Form.Item
         label="Claim title"
         htmlFor="ClaimTitle"
@@ -104,7 +83,7 @@ export default function ClaimForm({
         <input
           type="text"
           name="ClaimTitle"
-          value={claim.ClaimTitle}
+          value={formData.ClaimTitle}
           onChange={handleChange}
         />
       </Form.Item>
@@ -118,7 +97,7 @@ export default function ClaimForm({
         <input
           type="text"
           name="ClaimDescription"
-          value={claim.ClaimDescription}
+          value={formData.ClaimDescription}
           onChange={handleChange}
         />
       </Form.Item>
@@ -132,8 +111,8 @@ export default function ClaimForm({
         <input
           type="text"
           name="SourceURL"
-          value={source.SourceURL}
-          onChange={handleSourceChange}
+          value={formData.SourceURL}
+          onChange={handleChange}
         />
       </Form.Item>
 
@@ -150,8 +129,8 @@ export default function ClaimForm({
         ) : (
           <select
             name="SourceSourcetypeID"
-            value={source.SourceSourcetypeID}
-            onChange={handleSourceChange}
+            value={formData.SourceSourcetypeID}
+            onChange={handleChange}
           >
             <option value={0} disabled>
               Select an option
@@ -174,10 +153,11 @@ export default function ClaimForm({
         <input
           type="text"
           name="SourceDescription"
-          value={source.SourceDescription}
-          onChange={handleSourceChange}
+          value={formData.SourceDescription}
+          onChange={handleChange}
         />
       </Form.Item>
+      <button>Add another source</button>
     </Form>
   );
 }
