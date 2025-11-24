@@ -14,6 +14,11 @@ const CreateClaim = () => {
     const claimResponse = await API.post(claimsEndpoint, claim);
     if (!claimResponse.isSuccess) return false;
 
+    // if (source.file) {
+    //   const formData = new FormData();
+    //   formData.append({ file: source.file });
+    // }
+
     const sourceResponse = await API.post(sourcesEndpoint, {
       ...source,
       SourceClaimID: claimResponse.result[0].ClaimID,
