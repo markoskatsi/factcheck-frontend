@@ -1,4 +1,3 @@
-import { useState } from "react";
 import Form from "../../UI/Form.js";
 import { useNavigate } from "react-router-dom";
 import useLoad from "../../api/useLoad.js";
@@ -23,75 +22,74 @@ export default function ClaimForm({
 }) {
   // Initialisation --------------------------------
   const navigate = useNavigate();
-  const isValid = {
-    ClaimTitle: (name) => name.length > 5,
-    ClaimDescription: (desc) => desc.length > 10,
-    SourceURL: (url) => url.startsWith("http"),
-    SourceSourcetypeID: (type) => type !== 0,
-    SourceDescription: (desc) => desc.length > 10,
+
+  const validation = {
+    isValid: {
+      ClaimTitle: (name) => name.length > 5,
+      ClaimDescription: (desc) => desc.length > 10,
+      SourceURL: (url) => url.startsWith("http"),
+      SourceSourcetypeID: (type) => type !== 0,
+      SourceDescription: (desc) => desc.length > 10,
+    },
+    errorMessage: {
+      ClaimTitle: "Claim title is too short",
+      ClaimDescription: "Claim Description is too short",
+      SourceURL: "Source URL is invalid",
+      SourceSourcetypeID: "Please select a source type",
+      SourceDescription: "Source Description is too short",
+    },
   };
 
-  const errorMessage = {
-    ClaimTitle: "Claim title is too short",
-    ClaimDescription: "Claim Description is too short",
-    SourceURL: "Source URL is invalid",
-    SourceSourcetypeID: "Please select a source type",
-    SourceDescription: "Source Description is too short",
-  };
+  const conformance = ["SourceSourcetypeID"];
 
   const sourceTypesEndpoint = "/sourcetypes";
-  // State -----------------------------------------
-  const [claim, setClaim] = useState(initialClaim);
-  const [source, setSource] = useState(initialSource);
-  const [errors, setErrors] = useState(
-    [...Object.keys(initialClaim), ...Object.keys(initialSource)].reduce(
-      (accum, key) => ({
-        ...accum,
-        [key]: null,
-      }),
-      {}
-    )
-  );
 
+  // State -----------------------------------------
+  const [claim, claimErrors, setClaimErrors, handleChange] =
+    Form.useForm(initialClaim,conformance,validation);
+  const [source, sourceErrors, setSourceErrors, handleSourceChange] =
+    Form.useForm(initialSource,conformance,validation);
   const [sourceTypes, , loadingTypesMessage, ,] = useLoad(sourceTypesEndpoint);
 
   // Handlers --------------------------------------
-  const handleChange = (event) => {
-    const { name, value } = event.target;
-    const newValue = name === "SourceSourcetypeID" ? parseInt(value) : value;
-    if (name.startsWith("Claim")) {
-      setClaim({ ...claim, [name]: newValue });
-    } else if (name.startsWith("Source")) {
-      setSource({ ...source, [name]: newValue });
-    }
-    setErrors({
-      ...errors,
-      [name]: isValid[name](newValue) ? null : errorMessage[name],
-    });
-  };
 
   const isValidClaim = (claim, source) => {
     let isClaimValid = true;
     const allData = { ...claim, ...source };
+    const newClaimErrors = { ...claimErrors };
+    const newSourceErrors = { ...sourceErrors };
 
-    Object.keys(isValid).forEach((key) => {
-      if (isValid[key](allData[key])) {
-        errors[key] = null;
+    Object.keys(validation.isValid).forEach((key) => {
+      if (validation.isValid[key](allData[key])) {
+        if (key.startsWith("Claim")) {
+          newClaimErrors[key] = null;
+        } else {
+          newSourceErrors[key] = null;
+        }
       } else {
-        errors[key] = errorMessage[key];
+        if (key.startsWith("Claim")) {
+          newClaimErrors[key] = validation.errorMessage[key];
+        } else {
+          newSourceErrors[key] = validation.errorMessage[key];
+        }
         isClaimValid = false;
       }
     });
+
+    setClaimErrors(newClaimErrors);
+    setSourceErrors(newSourceErrors);
     return isClaimValid;
   };
 
-  const handleCancel = () => {
-    navigate("/myclaims");
-  };
   const handleSubmit = (event) => {
     event.preventDefault();
     isValidClaim(claim, source) && onSubmit(claim, source);
-    setErrors({ ...errors });
+  };
+
+  const errors = { ...claimErrors, ...sourceErrors };
+
+  const handleCancel = () => {
+    navigate("/myclaims");
   };
 
   // View ------------------------------------------
@@ -135,7 +133,7 @@ export default function ClaimForm({
           type="text"
           name="SourceURL"
           value={source.SourceURL}
-          onChange={handleChange}
+          onChange={handleSourceChange}
         />
       </Form.Item>
 
@@ -153,7 +151,7 @@ export default function ClaimForm({
           <select
             name="SourceSourcetypeID"
             value={source.SourceSourcetypeID}
-            onChange={handleChange}
+            onChange={handleSourceChange}
           >
             <option value={0} disabled>
               Select an option
@@ -177,7 +175,7 @@ export default function ClaimForm({
           type="text"
           name="SourceDescription"
           value={source.SourceDescription}
-          onChange={handleChange}
+          onChange={handleSourceChange}
         />
       </Form.Item>
     </Form>
