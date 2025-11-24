@@ -1,6 +1,5 @@
 import { useState } from "react";
-import FormItem from "../../UI/Form.js";
-import Action from "../../UI/Actions.js";
+import Form from "../../UI/Form.js";
 import { useNavigate } from "react-router-dom";
 import useLoad from "../../api/useLoad.js";
 
@@ -97,8 +96,8 @@ export default function ClaimForm({
 
   // View ------------------------------------------
   return (
-    <form className="Form Bordered">
-      <FormItem
+    <Form onSubmit={handleSubmit} onCancel={handleCancel}>
+      <Form.Item
         label="Claim title"
         htmlFor="ClaimTitle"
         advice="Please enter the title"
@@ -110,9 +109,9 @@ export default function ClaimForm({
           value={claim.ClaimTitle}
           onChange={handleChange}
         />
-      </FormItem>
+      </Form.Item>
 
-      <FormItem
+      <Form.Item
         label="Claim description"
         htmlFor="ClaimDescription"
         advice="Please enter the description"
@@ -124,9 +123,9 @@ export default function ClaimForm({
           value={claim.ClaimDescription}
           onChange={handleChange}
         />
-      </FormItem>
+      </Form.Item>
 
-      <FormItem
+      <Form.Item
         label="Source URL"
         htmlFor="SourceURL"
         advice="Please enter the source URL"
@@ -138,9 +137,9 @@ export default function ClaimForm({
           value={source.SourceURL}
           onChange={handleChange}
         />
-      </FormItem>
+      </Form.Item>
 
-      <FormItem
+      <Form.Item
         label="Source type"
         htmlFor="SourceSourcetypeID"
         advice="Choose a source type"
@@ -166,9 +165,9 @@ export default function ClaimForm({
             ))}
           </select>
         )}
-      </FormItem>
+      </Form.Item>
 
-      <FormItem
+      <Form.Item
         label="Source description"
         htmlFor="SourceDescription"
         advice="Please enter the source description"
@@ -180,16 +179,7 @@ export default function ClaimForm({
           value={source.SourceDescription}
           onChange={handleChange}
         />
-      </FormItem>
-
-      <Action.Tray>
-        <Action.Add
-          showText
-          buttonText={"Submit claim"}
-          onClick={handleSubmit}
-        />
-        <Action.Cancel showText buttonText={"Cancel"} onClick={handleCancel} />
-      </Action.Tray>
-    </form>
+      </Form.Item>
+    </Form>
   );
 }
