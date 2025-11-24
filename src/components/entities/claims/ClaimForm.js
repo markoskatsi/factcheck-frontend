@@ -139,20 +139,6 @@ export default function ClaimForm({
       </FormItem>
 
       <FormItem
-        label="Source URL"
-        htmlFor="SourceURL"
-        advice="Please enter the source URL"
-        error={errors.SourceURL}
-      >
-        <input
-          type="text"
-          name="SourceURL"
-          value={source.SourceURL}
-          onChange={handleChange}
-        />
-      </FormItem>
-
-      <FormItem
         label="Source type"
         htmlFor="SourceSourcetypeID"
         advice="Choose a source type"
@@ -179,6 +165,38 @@ export default function ClaimForm({
           </select>
         )}
       </FormItem>
+
+      {source.SourceSourcetypeID !== 0 && (
+        <>
+          {source.SourceSourcetypeID === 5 ? (
+            <FormItem
+              label="File"
+              htmlFor="SourceFilename"
+              advice="Please upload a file"
+            >
+              <input
+                type="file"
+                name="file"
+                onChange={handleChange}
+              />
+            </FormItem>
+          ) : (
+            <FormItem
+              label="Source URL"
+              htmlFor="SourceURL"
+              advice="Please enter the source URL"
+              error={errors.SourceURL}
+            >
+              <input
+                type="text"
+                name="SourceURL"
+                value={source.SourceURL}
+                onChange={handleChange}
+              />
+            </FormItem>
+          )}
+        </>
+      )}
 
       <FormItem
         label="Source description"
