@@ -7,7 +7,6 @@ export default function Form({ children, onSubmit, onCancel }) {
   // State -----------------------------------------
   // Handlers --------------------------------------
   const handleSubmit = (e) => {
-    e.preventDefault();
     onSubmit(e);
   };
 
@@ -47,7 +46,13 @@ function Item({ children, label, htmlFor, advice, error }) {
   );
 }
 
-function useForm(initialRecord, conformance, { isValid, errorMessage }) {
+function useForm(
+  initialRecord,
+  conformance,
+  { isValid, errorMessage },
+  onSubmit,
+  onCancel
+) {
   // Initialisation --------------------------------
   // State -----------------------------------------
   const [record, setRecord] = useState(initialRecord);
@@ -67,11 +72,40 @@ function useForm(initialRecord, conformance, { isValid, errorMessage }) {
     setRecord({ ...record, [name]: newValue });
     setErrors({
       ...errors,
-      [name]: isValid[name](newValue) ? null : errorMessage[name],
+      [name]: isValid[name]
+        ? isValid[name](newValue)
+          ? null
+          : errorMessage[name]
+        : null,
     });
   };
+
+  const isValidRecord = (record) => {
+    let isRecordValid = true;
+    Object.keys(record).forEach((key) => {
+      if (isValid[key]) {
+        if (isValid[key](record[key])) {
+          errors[key] = null;
+        } else {
+          errors[key] = errorMessage[key];
+          isRecordValid = false;
+        }
+      }
+    });
+    return isRecordValid;
+  };
+
+  const handleSubmit = (event) => {
+    event.preventDefault();
+    isValidRecord(record) && onSubmit(record);
+  };
+
+  const handleCancel = () => {
+    onCancel();
+  };
+
   // View ------------------------------------------
-  return [record, errors, setErrors, handleChange];
+  return [record, errors, handleChange, handleSubmit, handleCancel];
 }
 
 // Compose from object
