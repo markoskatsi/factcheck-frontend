@@ -1,8 +1,8 @@
-import { useState, useEffect } from "react";
-import API from "../../api/API.js";
+import { useState } from "react";
 import FormItem from "../../UI/Form.js";
 import Action from "../../UI/Actions.js";
 import { useNavigate } from "react-router-dom";
+import useLoad from "../../api/useLoad.js";
 
 const emptyClaim = {
   ClaimTitle: "",
@@ -39,6 +39,8 @@ export default function ClaimForm({
     SourceSourcetypeID: "Please select a source type",
     SourceDescription: "Source Description is too short",
   };
+
+  const sourceTypesEndpoint = "/sourcetypes";
   // State -----------------------------------------
   const [claim, setClaim] = useState(initialClaim);
   const [source, setSource] = useState(initialSource);
@@ -52,21 +54,7 @@ export default function ClaimForm({
     )
   );
 
-  const [sourceTypes, setSourceTypes] = useState([]);
-  const [loadingTypesMessage, setLoadingTypesMessage] = useState(
-    "Loading records...."
-  );
-
-  const getSourceTypes = async () => {
-    const response = await API.get("/sourcetypes");
-    response.isSuccess
-      ? setSourceTypes(response.result)
-      : setLoadingTypesMessage("Error loading source types");
-  };
-
-  useEffect(() => {
-    getSourceTypes();
-  }, []);
+  const [sourceTypes, , loadingTypesMessage, ,] = useLoad(sourceTypesEndpoint);
 
   // Handlers --------------------------------------
   const handleChange = (event) => {
