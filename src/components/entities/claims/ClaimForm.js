@@ -42,19 +42,7 @@ export default function ClaimForm({
   const sourceTypesEndpoint = "/sourcetypes";
 
   // State -----------------------------------------
-  const [formData, errors, handleChange, handleSubmit] = Form.useForm(
-    { ...initialClaim, ...initialSource },
-    conformance,
-    validation,
-    handleFormSubmit,
-    onCancel
-  );
-
-  const [sourceTypes, , loadingTypesMessage] = useLoad(sourceTypesEndpoint);
-
-  // Handlers --------------------------------------
-  
-  function handleFormSubmit(data) {
+  const handleFormSubmit = (data) => {
     const claim = {
       ClaimTitle: data.ClaimTitle,
       ClaimDescription: data.ClaimDescription,
@@ -69,7 +57,23 @@ export default function ClaimForm({
     };
 
     onSubmit(claim, source);
-  }
+  };
+
+  const [formData, errors, handleChange, handleSubmit] = Form.useForm(
+    { ...initialClaim, ...initialSource },
+    conformance,
+    validation,
+    handleFormSubmit,
+    onCancel
+  );
+
+  const [sourceTypes, , loadingTypesMessage] = useLoad(sourceTypesEndpoint);
+
+  // Handlers --------------------------------------
+
+  const handleAddSource = () => {
+    alert("Not implemented yet.");
+  };
 
   // View ------------------------------------------
   return (
@@ -81,6 +85,7 @@ export default function ClaimForm({
         error={errors.ClaimTitle}
       >
         <input
+          className="FormInput"
           type="text"
           name="ClaimTitle"
           value={formData.ClaimTitle}
@@ -94,11 +99,13 @@ export default function ClaimForm({
         advice="Please enter the description"
         error={errors.ClaimDescription}
       >
-        <input
+        <textarea
           type="text"
+          className="FormInput"
           name="ClaimDescription"
           value={formData.ClaimDescription}
           onChange={handleChange}
+          rows="3"
         />
       </Form.Item>
 
@@ -110,6 +117,7 @@ export default function ClaimForm({
       >
         <input
           type="text"
+          className="FormInput"
           name="SourceURL"
           value={formData.SourceURL}
           onChange={handleChange}
@@ -128,6 +136,7 @@ export default function ClaimForm({
           <p>No source types found</p>
         ) : (
           <select
+            className="FormInput"
             name="SourceSourcetypeID"
             value={formData.SourceSourcetypeID}
             onChange={handleChange}
@@ -150,14 +159,17 @@ export default function ClaimForm({
         advice="Please enter the source description"
         error={errors.SourceDescription}
       >
-        <input
-          type="text"
+        <textarea
+          className="FormInput"
           name="SourceDescription"
           value={formData.SourceDescription}
           onChange={handleChange}
+          rows="3"
         />
       </Form.Item>
-      <button>Add another source</button>
+      <button type="button" onClick={handleAddSource}>
+        Add another source
+      </button>
     </Form>
   );
 }
