@@ -95,9 +95,10 @@ function useForm(
     return isRecordValid;
   };
 
-  const handleSubmit = (event) => {
-    event.preventDefault();
+  const handleSubmit = (e) => {
+    e.preventDefault();
     isValidRecord(record) && onSubmit(record);
+    setErrors({ ...errors });
   };
 
   const handleCancel = () => {
