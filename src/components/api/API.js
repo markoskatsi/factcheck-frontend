@@ -7,14 +7,25 @@ API.put = (endpoint, data) => callFetch(endpoint, "PUT", data);
 API.delete = (endpoint) => callFetch(endpoint, "DELETE", null);
 
 const callFetch = async (endpoint, method, record) => {
+  const isFormData = record instanceof FormData;
   // Build request object
   let requestObj = { method: method };
-  if (record)
-    requestObj = {
-      ...requestObj,
-      headers: { "Content-type": "application/json" },
-      body: JSON.stringify(record),
-    };
+  if (record) {
+    if (isFormData) {
+      // For FormData, lets browsser set the headers
+      requestObj = {
+        ...requestObj,
+        body: record,
+      };
+    } else {
+      // For regular objects use JSON
+      requestObj = {
+        ...requestObj,
+        headers: { "Content-type": "application/json" },
+        body: JSON.stringify(record),
+      };
+    }
+  }
 
   // Call Fetch
   try {

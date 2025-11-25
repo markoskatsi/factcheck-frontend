@@ -28,6 +28,7 @@ export default function ClaimForm({
       SourceURL: (url) => url.startsWith("http"),
       SourceSourcetypeID: (type) => type !== 0,
       SourceDescription: (desc) => desc.length > 10,
+      file: (file) => file instanceof File,
     },
     errorMessage: {
       ClaimTitle: "Claim title is too short",
@@ -35,6 +36,7 @@ export default function ClaimForm({
       SourceURL: "Source URL is invalid",
       SourceSourcetypeID: "Please select a source type",
       SourceDescription: "Source Description is too short",
+      file: "Please select a valid file",
     },
   };
 
@@ -52,9 +54,15 @@ export default function ClaimForm({
 
     const source = {
       SourceDescription: data.SourceDescription,
-      SourceURL: data.SourceURL,
       SourceSourcetypeID: data.SourceSourcetypeID,
     };
+
+    if (data.SourceSourcetypeID === 5 && data.file) {
+      source.file = data.file;
+      source.SourceFilename = data.SourceFilename;
+    } else {
+      source.SourceURL = data.SourceURL;
+    }
 
     onSubmit(claim, source);
   };
@@ -138,18 +146,23 @@ export default function ClaimForm({
         )}
       </Form.Item>
 
-      {source.SourceSourcetypeID !== 0 && (
+      {formData.SourceSourcetypeID !== 0 && (
         <>
-          {source.SourceSourcetypeID === 5 ? (
-            <FormItem
+          {formData.SourceSourcetypeID === 5 ? (
+            <Form.Item
               label="File"
               htmlFor="SourceFilename"
               advice="Please upload a file"
             >
-              <input type="file" name="file" onChange={handleChange} />
-            </FormItem>
+              <input
+                type="file"
+                name="file"
+                className="FormInput"
+                onChange={handleChange}
+              />
+            </Form.Item>
           ) : (
-            <FormItem
+            <Form.Item
               label="Source URL"
               htmlFor="SourceURL"
               advice="Please enter the source URL"
@@ -157,16 +170,17 @@ export default function ClaimForm({
             >
               <input
                 type="text"
+                className="FormInput"
                 name="SourceURL"
-                value={source.SourceURL}
+                value={formData.SourceURL}
                 onChange={handleChange}
               />
-            </FormItem>
+            </Form.Item>
           )}
         </>
       )}
 
-      <FormItem
+      <Form.Item
         label="Source description"
         htmlFor="SourceDescription"
         advice="Please enter the source description"
@@ -179,7 +193,7 @@ export default function ClaimForm({
           onChange={handleChange}
           rows="3"
         />
-      </FormItem>
+      </Form.Item>
       <button type="button" onClick={handleAddSource}>
         Add another source
       </button>

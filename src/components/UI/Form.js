@@ -15,7 +15,7 @@ export default function Form({ children, onSubmit, onCancel }) {
   };
   // View ------------------------------------------
   return (
-    <form className="Form Bordered">
+    <form className="Form Bordered" encType="multipart/form-data">
       <div className="FormTray">{children}</div>
       <Action.Tray>
         <Action.Add
@@ -67,17 +67,24 @@ function useForm(
   );
   // Handlers --------------------------------------
   const handleChange = (event) => {
-    const { name, value } = event.target;
-    const newValue = conformance.includes(name) ? parseInt(value) : value;
-    setRecord({ ...record, [name]: newValue });
-    setErrors({
-      ...errors,
-      [name]: isValid[name]
-        ? isValid[name](newValue)
-          ? null
-          : errorMessage[name]
-        : null,
-    });
+    if (event.target.type === "file" && event.target.files) {
+      const file = event.target.files[0];
+      if (file) {
+        setRecord({ ...record, file: file, SourceFilename: file.name });
+      }
+    } else {
+      const { name, value } = event.target;
+      const newValue = conformance.includes(name) ? parseInt(value) : value;
+      setRecord({ ...record, [name]: newValue });
+      setErrors({
+        ...errors,
+        [name]: isValid[name]
+          ? isValid[name](newValue)
+            ? null
+            : errorMessage[name]
+          : null,
+      });
+    }
   };
 
   const isValidRecord = (record) => {

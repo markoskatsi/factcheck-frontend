@@ -22,7 +22,7 @@ const MyClaimInfo = () => {
         <ClaimItem claim={claim[0]} />
         <h3>Attached sources:</h3>
         {sources ? (
-          sources.map((source) => <SourceItem source={source} />)
+          sources.map((source) => <SourceItem source={source} key={source.SourceID} />)
         ) : (
           <p>No sources attached.</p>
         )}
