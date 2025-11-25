@@ -25,7 +25,7 @@ export default function ClaimForm({
     isValid: {
       ClaimTitle: (name) => name.length > 5,
       ClaimDescription: (desc) => desc.length > 10,
-      SourceURL: (url) => url.startsWith("http"),
+      SourceURL: (url) => url === "" || url.startsWith("http"),
       SourceSourcetypeID: (type) => type !== 0,
       SourceDescription: (desc) => desc.length > 10,
       file: (file) => file instanceof File,
