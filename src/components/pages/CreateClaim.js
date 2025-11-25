@@ -7,7 +7,6 @@ const CreateClaim = () => {
   const claimsEndpoint = "/claims";
   const sourcesEndpoint = "/sources";
   const navigate = useNavigate();
-  // State -----------------------------------------
 
   // Handlers --------------------------------------
   const handleSubmit = async (claim, source) => {
@@ -29,11 +28,15 @@ const CreateClaim = () => {
     return sourceResponse.isSuccess;
   };
 
+  const handleCancel = () => {
+    navigate("/myclaims");
+  };
+
   // View ------------------------------------------
   return (
     <>
       <h1>Create a new Claim</h1>
-      <ClaimForm onSubmit={handleSubmit} />
+      <ClaimForm onSubmit={handleSubmit} onCancel={handleCancel} />
     </>
   );
 };
