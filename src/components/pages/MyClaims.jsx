@@ -1,6 +1,6 @@
 import useLoad from "../api/useLoad.js";
-import { CardContainer, Card } from "../UI/Card.js";
-import ClaimItem from "../entities/claims/ClaimItem.js";
+import { CardContainer, Card } from "../UI/Card.jsx";
+import ClaimItem from "../entities/claims/ClaimItem.jsx";
 import { Link } from "react-router-dom";
 import "./MyClaims.scss";
 

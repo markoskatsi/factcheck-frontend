@@ -1,5 +1,5 @@
 import PropTypes from "prop-types";
-import Icon from "./Icons.js";
+import Icon from "./Icons.jsx";
 import "./Actions.scss";
 
 // -----------------------------------------

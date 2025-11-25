@@ -1,8 +1,8 @@
 import { useParams } from "react-router-dom";
 import useLoad from "../api/useLoad.js";
-import ClaimItem from "../entities/claims/ClaimItem.js";
-import { SourceItem } from "../entities/sources/SourceItem.js";
-import { Card, CardContainer } from "../UI/Card.js";
+import ClaimItem from "../entities/claims/ClaimItem.jsx";
+import { SourceItem } from "../entities/sources/SourceItem.jsx";
+import { Card, CardContainer } from "../UI/Card.jsx";
 
 const MyClaimInfo = () => {
   // Initialisation --------------------------------
