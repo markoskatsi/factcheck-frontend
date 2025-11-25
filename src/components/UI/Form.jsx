@@ -1,4 +1,4 @@
-import Action from "./Actions.js";
+import Action from "./Actions.jsx";
 import { useState } from "react";
 import "./Form.scss";
 

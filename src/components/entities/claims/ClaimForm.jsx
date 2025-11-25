@@ -1,4 +1,4 @@
-import Form from "../../UI/Form.js";
+import Form from "../../UI/Form.jsx";
 import useLoad from "../../api/useLoad.js";
 
 const emptyClaim = {
