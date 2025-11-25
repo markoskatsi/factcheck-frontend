@@ -9,13 +9,17 @@ function MyClaims() {
   const loggedinUserID = 1;
   const claimsEndpoint = `/claims/users/${loggedinUserID}`;
   // State -------------------------------------------------
-  const [claims, setClaims, loadingClaimsMessage, setLoadingClaimsMessage] = useLoad(claimsEndpoint);
+  const [claims, , loadingClaimsMessage] = useLoad(claimsEndpoint);
   // Context -----------------------------------------------
   // Methods -----------------------------------------------
   // View --------------------------------------------------
   return (
     <section>
       <h1>My Claims</h1>
+      <Link to="/createclaim">
+        <button>Add New Claim</button>
+      </Link>
+
       {!claims ? (
         <p>{loadingClaimsMessage}</p>
       ) : claims.length === 0 ? (
@@ -24,25 +28,15 @@ function MyClaims() {
         <CardContainer>
           {claims.map((claim) => (
             <Link to={`/myclaims/${claim.ClaimID}`} key={claim.ClaimID}>
-              <Card>
-                <ClaimItem claim={claim} />
-              </Card>
+              <div className="fixed">
+                <Card>
+                  <ClaimItem claim={claim} />
+                </Card>
+              </div>
             </Link>
           ))}
         </CardContainer>
       )}
-      <button
-        style={{
-          padding: "12px 24px",
-          marginTop: "50px",
-          cursor: "pointer",
-          display: "block",
-          marginLeft: "auto",
-          marginRight: "auto",
-        }}
-      >
-        <Link to="/createclaim">Add New Claim</Link>
-      </button>
     </section>
   );
 }
