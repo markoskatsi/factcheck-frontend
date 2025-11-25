@@ -6,6 +6,8 @@ $DarkRed: darken($Red, 20%);
 
 form.Form {
   width: 100%;
+  max-width: 800px;
+  margin: 0 auto;
   padding: 10px 0;
 
   &.Bordered {
@@ -36,7 +38,8 @@ div.FormItem {
   }
 
   select.FormInput,
-  input.FormInput {
+  input.FormInput,
+  textarea.FormInput {
     width: 100%;
     padding: 3px;
     margin: 1px 0;
@@ -44,6 +47,7 @@ div.FormItem {
     border-radius: 0px;
     border: 1px solid $BorderGrey;
     background: White;
+    resize: none;
 
     &::placeholder,
     &:disabled {
