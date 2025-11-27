@@ -2,9 +2,10 @@ nav {
   display: flex;
   overflow: hidden;
   background-color: #273847;
+  justify-content: center;
 
   div.navItem {
-    padding: 10px;
+    padding: 15px;
 
     &:hover {
       background-color: #3b82f6;
