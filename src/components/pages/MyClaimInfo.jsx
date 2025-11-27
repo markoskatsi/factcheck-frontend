@@ -3,6 +3,7 @@ import useLoad from "../api/useLoad.js";
 import ClaimItem from "../entities/claims/ClaimItem.jsx";
 import { SourceItem } from "../entities/sources/SourceItem.jsx";
 import { Card, CardContainer } from "../UI/Card.jsx";
+import { Link } from "react-router-dom";
 
 const MyClaimInfo = () => {
   // Initialisation --------------------------------
@@ -22,10 +23,15 @@ const MyClaimInfo = () => {
         <ClaimItem claim={claim[0]} />
         <h3>Attached sources:</h3>
         {sources ? (
-          sources.map((source) => <SourceItem source={source} key={source.SourceID} />)
+          sources.map((source) => (
+            <SourceItem source={source} key={source.SourceID} />
+          ))
         ) : (
           <p>No sources attached.</p>
         )}
+        <button>
+          <Link to={`/addsource/${claimId}`}>Add a source</Link>
+        </button>
       </Card>
     </CardContainer>
   );

@@ -1,5 +1,4 @@
 import Form from "../../UI/Form.jsx";
-import useLoad from "../../api/useLoad.js";
 
 const emptyClaim = {
   ClaimTitle: "",
@@ -8,80 +7,35 @@ const emptyClaim = {
   ClaimUserID: 1,
 };
 
-const emptySource = {
-  SourceDescription: "",
-  SourceURL: "",
-  SourceSourcetypeID: 0,
-};
-
 export default function ClaimForm({
   onSubmit,
   onCancel,
   initialClaim = emptyClaim,
-  initialSource = emptySource,
 }) {
   // Initialisation --------------------------------
   const validation = {
     isValid: {
       ClaimTitle: (name) => name.length > 5,
       ClaimDescription: (desc) => desc.length > 10,
-      SourceURL: (url) => url === "" || url.startsWith("http"),
-      SourceSourcetypeID: (type) => type !== 0,
-      SourceDescription: (desc) => desc.length > 10,
-      file: (file) => file instanceof File,
     },
     errorMessage: {
       ClaimTitle: "Claim title is too short",
       ClaimDescription: "Claim Description is too short",
-      SourceURL: "Source URL is invalid",
-      SourceSourcetypeID: "Please select a source type",
-      SourceDescription: "Source Description is too short",
-      file: "Please select a valid file",
     },
   };
 
-  const conformance = ["SourceSourcetypeID"];
-  const sourceTypesEndpoint = "/sourcetypes";
+  const conformance = ["ClaimUserID", "ClaimClaimstatusID"];
 
   // State -----------------------------------------
-  const handleFormSubmit = (data) => {
-    const claim = {
-      ClaimTitle: data.ClaimTitle,
-      ClaimDescription: data.ClaimDescription,
-      ClaimClaimstatusID: data.ClaimClaimstatusID,
-      ClaimUserID: data.ClaimUserID,
-    };
 
-    const source = {
-      SourceDescription: data.SourceDescription,
-      SourceSourcetypeID: data.SourceSourcetypeID,
-    };
-
-    if (data.SourceSourcetypeID === 5 && data.file) {
-      source.file = data.file;
-      source.SourceFilename = data.SourceFilename;
-    } else {
-      source.SourceURL = data.SourceURL;
-    }
-
-    onSubmit(claim, source);
-  };
-
-  const [formData, errors, handleChange, handleSubmit] = Form.useForm(
-    { ...initialClaim, ...initialSource },
+  const [claim, errors, handleChange, handleSubmit] = Form.useForm(
+    initialClaim,
     conformance,
     validation,
-    handleFormSubmit,
+    onSubmit,
     onCancel
   );
-
-  const [sourceTypes, , loadingTypesMessage] = useLoad(sourceTypesEndpoint);
-
   // Handlers --------------------------------------
-
-  const handleAddSource = () => {
-    alert("Not implemented yet.");
-  };
 
   // View ------------------------------------------
   return (
@@ -96,7 +50,7 @@ export default function ClaimForm({
           className="FormInput"
           type="text"
           name="ClaimTitle"
-          value={formData.ClaimTitle}
+          value={claim.ClaimTitle}
           onChange={handleChange}
         />
       </Form.Item>
@@ -111,92 +65,11 @@ export default function ClaimForm({
           type="text"
           className="FormInput"
           name="ClaimDescription"
-          value={formData.ClaimDescription}
+          value={claim.ClaimDescription}
           onChange={handleChange}
           rows="3"
         />
       </Form.Item>
-
-      <Form.Item
-        label="Source type"
-        htmlFor="SourceSourcetypeID"
-        advice="Choose a source type"
-        error={errors.SourceSourcetypeID}
-      >
-        {!sourceTypes ? (
-          <p>{loadingTypesMessage}</p>
-        ) : sourceTypes.length === 0 ? (
-          <p>No source types found</p>
-        ) : (
-          <select
-            className="FormInput"
-            name="SourceSourcetypeID"
-            value={formData.SourceSourcetypeID}
-            onChange={handleChange}
-          >
-            <option value={0} disabled>
-              Select an option
-            </option>
-            {sourceTypes.map((type) => (
-              <option key={type.SourcetypeID} value={type.SourcetypeID}>
-                {type.SourcetypeName}
-              </option>
-            ))}
-          </select>
-        )}
-      </Form.Item>
-
-      {formData.SourceSourcetypeID !== 0 && (
-        <>
-          {formData.SourceSourcetypeID === 5 ? (
-            <Form.Item
-              label="File"
-              htmlFor="SourceFilename"
-              advice="Please upload a file"
-            >
-              <input
-                type="file"
-                name="file"
-                className="FormInput"
-                onChange={handleChange}
-              />
-            </Form.Item>
-          ) : (
-            <Form.Item
-              label="Source URL"
-              htmlFor="SourceURL"
-              advice="Please enter the source URL"
-              error={errors.SourceURL}
-            >
-              <input
-                type="text"
-                className="FormInput"
-                name="SourceURL"
-                value={formData.SourceURL}
-                onChange={handleChange}
-              />
-            </Form.Item>
-          )}
-        </>
-      )}
-
-      <Form.Item
-        label="Source description"
-        htmlFor="SourceDescription"
-        advice="Please enter the source description"
-        error={errors.SourceDescription}
-      >
-        <textarea
-          className="FormInput"
-          name="SourceDescription"
-          value={formData.SourceDescription}
-          onChange={handleChange}
-          rows="3"
-        />
-      </Form.Item>
-      <button type="button" onClick={handleAddSource}>
-        Add another source
-      </button>
     </Form>
   );
 }
