@@ -19,15 +19,24 @@ function Login() {
   const usersEndpoint = "/users";
 
   // State ----------------------------
-  const [users, , loadingUsersMessage, setLoadingUsersMessage] =
-    useLoad(usersEndpoint);
-  const [selectedUser, setSelectedUser] = useState(null);
-  // Handlers -------------------------
+  const [users, , loadingUsersMessage] = useLoad(usersEndpoint);
+  const [user, setUser] = useState(emptyUser);
 
-  const handleChange = (e) => {};
+  // Handlers -------------------------
+  const handleChange = (e) => {
+    const selectedUser = users.find(
+      (u) => u.UserID === parseInt(e.target.value)
+    );
+    setUser(selectedUser);
+  };
+
   const handleSubmit = () => {
-    login(selectedUser);
-    navigate("/");
+    if (user.UserID) {
+      login(user);
+      navigate("/");
+    } else {
+      alert("Please select a user to log in.");
+    }
   };
 
   // View -----------------------------
@@ -36,7 +45,7 @@ function Login() {
       {!users ? (
         <p>{loadingUsersMessage}</p>
       ) : (
-        <select name="UserID" value={users.UserID} onChange={handleChange}>
+        <select value={user.UserID} onChange={handleChange}>
           <option value={0} disabled>
             Select a user
           </option>
@@ -48,7 +57,7 @@ function Login() {
         </select>
       )}
       <Action.Tray>
-        <Action.Submit showText buttonText={"Log in"} onClick={handleSubmit} />
+        <Action.Submit showText buttonText="Log in" onClick={handleSubmit} />
       </Action.Tray>
     </>
   );
