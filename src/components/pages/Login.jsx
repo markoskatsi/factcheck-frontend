@@ -3,6 +3,7 @@ import { useAuth } from "../auth/useAuth.jsx";
 import Action from "../UI/Actions.jsx";
 import useLoad from "../api/useLoad.js";
 import { useState } from "react";
+import "./Login.scss";
 
 const emptyUser = {
   UserID: 0,
@@ -41,7 +42,7 @@ function Login() {
 
   // View -----------------------------
   return (
-    <>
+    <div className="loginOptions">
       {!users ? (
         <p>{loadingUsersMessage}</p>
       ) : (
@@ -59,7 +60,7 @@ function Login() {
       <Action.Tray>
         <Action.Submit showText buttonText="Log in" onClick={handleSubmit} />
       </Action.Tray>
-    </>
+    </div>
   );
 }
 

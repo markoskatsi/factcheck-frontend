@@ -22,7 +22,7 @@ function Navbar() {
             </NavLink>
           </div>
           <div className="navItem">
-            <NavLink to="/logout" className={getLinkStyle}>
+            <NavLink to="/logout" onClick={logout} className={getLinkStyle}>
               Logout
             </NavLink>
           </div>
