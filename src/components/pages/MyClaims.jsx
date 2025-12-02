@@ -7,10 +7,10 @@ import "./MyClaims.scss";
 
 function MyClaims() {
   // Inititalisation ---------------------------------------
-  const {loggedInUserID} = useAuth();
+  const { loggedInUserID } = useAuth();
   const claimsEndpoint = `/claims/users/${loggedInUserID}`;
   // State -------------------------------------------------
-  const [claims, , loadingClaimsMessage] = useLoad(claimsEndpoint);
+  const [claims, , , loadingClaimsMessage] = useLoad(claimsEndpoint);
   // Context -----------------------------------------------
   // Methods -----------------------------------------------
   // View --------------------------------------------------
@@ -22,9 +22,7 @@ function MyClaims() {
       </Link>
 
       {!claims ? (
-        <p>{loadingClaimsMessage}</p>
-      ) : claims.length === 0 ? (
-        <p>You have not made any claims yet!</p>
+        <p>You have not made any claims</p>
       ) : (
         <CardContainer>
           {claims.map((claim) => (

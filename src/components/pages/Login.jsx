@@ -57,9 +57,11 @@ function Login() {
           ))}
         </select>
       )}
-      <Action.Tray>
-        <Action.Submit showText buttonText="Log in" onClick={handleSubmit} />
-      </Action.Tray>
+      <div className="button">
+        <Action.Tray>
+          <Action.Submit showText buttonText="Log in" onClick={handleSubmit} />
+        </Action.Tray>
+      </div>
     </div>
   );
 }
