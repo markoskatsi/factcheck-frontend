@@ -23,6 +23,7 @@ function App() {
             <Route path="/createclaim" element={<CreateClaim />} />
             <Route path="/addsource/:claimId" element={<AddSource />} />
             <Route path="/login" element={<Login />} />
+            <Route path="/logout" element={<Login />} />
             <Route path="*" element={<PageNotFound />} />
           </Routes>
         </Layout>
