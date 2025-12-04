@@ -3,28 +3,32 @@ import useLoad from "../api/useLoad.js";
 import ClaimItem from "../entities/claims/ClaimItem.jsx";
 import { SourceItem } from "../entities/sources/SourceItem.jsx";
 import { Card, CardContainer } from "../UI/Card.jsx";
-import { Link } from "react-router-dom";
 import { useAuth } from "../auth/useAuth.jsx";
+import { useNavigate } from "react-router-dom";
 
-const MyClaimInfo = () => {
+const ClaimInfo = () => {
   // Initialisation --------------------------------
   const { claimId } = useParams();
   const { loggedInUserID } = useAuth();
+  const navigate = useNavigate();
+  const publishedClaimsEndpoint = `/claims/claimstatus/3`;
 
-  const claimEndpoint = `/claims/${claimId}`;
-  const sourcesEndpoint = `/sources/claims/${claimId}`;
   // State -----------------------------------------
-  const [claim, , ,] = useLoad(claimEndpoint);
-  const [sources, , ,] = useLoad(sourcesEndpoint);
+  const [publishedClaims, , ,] = useLoad(publishedClaimsEndpoint);
+  const [sources, , ,] = useLoad(`/sources/claims/${claimId}`);
 
   // Handlers --------------------------------------
+  const claim = publishedClaims?.find(
+    (claim) => claim.ClaimID === parseInt(claimId)
+  );
+
   // View ------------------------------------------
-  if (!claim) return <p>Loading claim details...</p>;
-  if (claim[0]?.ClaimUserID !== loggedInUserID) return <p>Claim not available.</p>;
+  if (!publishedClaims) return <p>Loading...</p>;
+  if (!claim) return <p>Claim not available.</p>;
   return (
     <CardContainer>
       <Card>
-        <ClaimItem claim={claim[0]} />
+        <ClaimItem claim={claim} />
         <h3>Attached sources:</h3>
         {sources ? (
           sources.map((source) => (
@@ -33,12 +37,9 @@ const MyClaimInfo = () => {
         ) : (
           <p>No sources attached.</p>
         )}
-        <button>
-          <Link to={`/addsource/${claimId}`}>Add a source</Link>
-        </button>
       </Card>
     </CardContainer>
   );
 };
 
-export default MyClaimInfo;
+export default ClaimInfo;
