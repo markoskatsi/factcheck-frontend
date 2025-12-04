@@ -43,6 +43,8 @@ function Login() {
   // View -----------------------------
   return (
     <div className="loginOptions">
+      <h1>Welcome to FactCheck</h1>
+      <h2>Select a user to log in</h2>
       {!users ? (
         <p>{loadingUsersMessage}</p>
       ) : (

@@ -4,10 +4,13 @@ import ClaimItem from "../entities/claims/ClaimItem.jsx";
 import { SourceItem } from "../entities/sources/SourceItem.jsx";
 import { Card, CardContainer } from "../UI/Card.jsx";
 import { Link } from "react-router-dom";
+import { useAuth } from "../auth/useAuth.jsx";
 
 const MyClaimInfo = () => {
   // Initialisation --------------------------------
   const { claimId } = useParams();
+  const { loggedInUser } = useAuth();
+
   const claimEndpoint = `/claims/${claimId}`;
   const sourcesEndpoint = `/sources/claims/${claimId}`;
   // State -----------------------------------------
@@ -29,9 +32,11 @@ const MyClaimInfo = () => {
         ) : (
           <p>No sources attached.</p>
         )}
+        {loggedInUser && (
         <button>
           <Link to={`/addsource/${claimId}`}>Add a source</Link>
-        </button>
+        </button> 
+        )}
       </Card>
     </CardContainer>
   );

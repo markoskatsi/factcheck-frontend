@@ -2,7 +2,18 @@ nav {
   display: flex;
   overflow: hidden;
   background-color: #273847;
-  justify-content: center;
+  justify-content: space-between;
+  align-items: center;
+
+  .navCenter {
+    display: flex;
+    flex: 1;
+    justify-content: center;
+  }
+
+  .navRight {
+    display: flex;
+  }
 
   div.navItem {
     padding: 15px;
