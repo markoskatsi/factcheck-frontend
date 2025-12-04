@@ -1,5 +1,5 @@
 import Form from "../../UI/Form.jsx";
-
+import { useAuth } from "../../auth/useAuth.jsx";
 const emptyClaim = {
   ClaimTitle: "",
   ClaimDescription: "",
@@ -13,6 +13,7 @@ export default function ClaimForm({
   initialClaim = emptyClaim,
 }) {
   // Initialisation --------------------------------
+  const { loggedInUserID } = useAuth();
   const validation = {
     isValid: {
       ClaimTitle: (name) => name.length > 5,
@@ -36,7 +37,7 @@ export default function ClaimForm({
     onCancel
   );
   // Handlers --------------------------------------
-
+  claim.ClaimUserID = loggedInUserID;
   // View ------------------------------------------
   return (
     <Form onSubmit={handleSubmit} onCancel={onCancel}>
