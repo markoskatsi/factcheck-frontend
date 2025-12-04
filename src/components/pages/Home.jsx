@@ -6,9 +6,9 @@ import "./MyClaims.scss";
 
 function Home() {
   // Inititalisation ---------------------------------------
-  const claimsEndpoint = `/claims`;
+  const claimsEndpoint = `/claims/claimstatus/3`;
   // State -------------------------------------------------
-  const [claims, , , ] = useLoad(claimsEndpoint);
+  const [claims, , ,] = useLoad(claimsEndpoint);
   // Context -----------------------------------------------
   // Methods -----------------------------------------------
   // View --------------------------------------------------
@@ -17,17 +17,15 @@ function Home() {
       <h1>Browse Verified Claims</h1>
       {claims ? (
         <CardContainer>
-          {claims
-            .filter((claim) => claim.ClaimClaimstatusID === 3)
-            .map((claim) => (
-              <Link to={`/myclaims/${claim.ClaimID}`} key={claim.ClaimID}>
-                <div className="fixed">
-                  <Card>
-                    <ClaimItem claim={claim} />
-                  </Card>
-                </div>
-              </Link>
-            ))}
+          {claims.map((claim) => (
+            <Link to={`/claims/${claim.ClaimID}`} key={claim.ClaimID}>
+              <div className="fixed">
+                <Card>
+                  <ClaimItem claim={claim} />
+                </Card>
+              </div>
+            </Link>
+          ))}
         </CardContainer>
       ) : (
         <p>No verified claims available.</p>
