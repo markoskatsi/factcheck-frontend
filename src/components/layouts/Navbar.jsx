@@ -25,13 +25,13 @@ function Navbar() {
       </div>
       <div className="navRight">
         {loggedInUser ? (
-          <div className="navItem">
+          <div className="navItem login">
             <NavLink to="/logout" onClick={logout}>
               Logout
             </NavLink>
           </div>
         ) : (
-          <div className="navItem">
+          <div className="navItem login">
             <NavLink to="/login" className={getLinkStyle}>
               Login
             </NavLink>
