@@ -7,8 +7,8 @@ import "./MyClaims.scss";
 
 function MyClaims() {
   // Inititalisation ---------------------------------------
-  const { loggedInUserID } = useAuth();
-  const claimsEndpoint = `/claims/users/${loggedInUserID}`;
+  const { loggedInUser } = useAuth();
+  const claimsEndpoint = `/claims/users/${loggedInUser.UserID}`;
   // State -------------------------------------------------
   const [claims, , , loadingClaimsMessage] = useLoad(claimsEndpoint);
   // Context -----------------------------------------------

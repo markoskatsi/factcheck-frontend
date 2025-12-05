@@ -6,7 +6,6 @@ export const AuthProvider = ({ children }) => {
   //Initialisation ---------------------------
   // State -----------------------------------
   const [loggedInUser, setLoggedInUser] = useState(null);
-  const loggedInUserID = loggedInUser ? loggedInUser.UserID : null;
 
   // Handlers --------------------------------
   const login = (user) => setLoggedInUser(user);
@@ -14,7 +13,7 @@ export const AuthProvider = ({ children }) => {
 
   // View ------------------------------------
   return (
-    <AuthContext.Provider value={{ loggedInUser, loggedInUserID, login, logout }}>
+    <AuthContext.Provider value={{ loggedInUser, login, logout }}>
       {children}
     </AuthContext.Provider>
   );

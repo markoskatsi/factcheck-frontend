@@ -9,7 +9,6 @@ import { useNavigate } from "react-router-dom";
 const ClaimInfo = () => {
   // Initialisation --------------------------------
   const { claimId } = useParams();
-  const { loggedInUserID } = useAuth();
   const navigate = useNavigate();
   const publishedClaimsEndpoint = `/claims/claimstatus/3`;
 

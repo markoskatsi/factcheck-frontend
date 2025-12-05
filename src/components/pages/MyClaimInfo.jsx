@@ -9,7 +9,7 @@ import { useAuth } from "../auth/useAuth.jsx";
 const MyClaimInfo = () => {
   // Initialisation --------------------------------
   const { claimId } = useParams();
-  const { loggedInUserID } = useAuth();
+  const { loggedInUser } = useAuth();
 
   const claimEndpoint = `/claims/${claimId}`;
   const sourcesEndpoint = `/sources/claims/${claimId}`;
@@ -20,7 +20,7 @@ const MyClaimInfo = () => {
   // Handlers --------------------------------------
   // View ------------------------------------------
   if (!claim) return <p>Loading claim details...</p>;
-  if (claim[0]?.ClaimUserID !== loggedInUserID) return <p>Claim not available.</p>;
+  if (claim[0]?.ClaimUserID !== loggedInUser.UserID) return <p>Claim not available.</p>;
   return (
     <CardContainer>
       <Card>

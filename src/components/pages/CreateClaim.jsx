@@ -1,6 +1,6 @@
 import ClaimForm from "../entities/claims/ClaimForm";
 import API from "../api/API.js";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 
 const CreateClaim = () => {
   // Initialisation --------------------------------
@@ -12,7 +12,7 @@ const CreateClaim = () => {
     const claimResponse = await API.post(claimsEndpoint, claim);
     if (claimResponse.isSuccess) {
       navigate("/myclaims");
-    }
+    
     return claimResponse.isSuccess;
   };
 

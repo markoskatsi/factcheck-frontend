@@ -4,7 +4,7 @@ const emptyClaim = {
   ClaimTitle: "",
   ClaimDescription: "",
   ClaimClaimstatusID: 1,
-  ClaimUserID: 1,
+  ClaimUserID: 0,
 };
 
 export default function ClaimForm({
@@ -13,7 +13,7 @@ export default function ClaimForm({
   initialClaim = emptyClaim,
 }) {
   // Initialisation --------------------------------
-  const { loggedInUserID } = useAuth();
+  const { loggedInUser } = useAuth();
   const validation = {
     isValid: {
       ClaimTitle: (name) => name.length > 5,
@@ -37,7 +37,7 @@ export default function ClaimForm({
     onCancel
   );
   // Handlers --------------------------------------
-  claim.ClaimUserID = loggedInUserID;
+  claim.ClaimUserID = loggedInUser.UserID;
   // View ------------------------------------------
   return (
     <Form onSubmit={handleSubmit} onCancel={onCancel}>
