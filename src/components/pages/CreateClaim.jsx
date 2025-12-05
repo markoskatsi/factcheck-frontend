@@ -12,7 +12,7 @@ const CreateClaim = () => {
     const claimResponse = await API.post(claimsEndpoint, claim);
     if (claimResponse.isSuccess) {
       navigate("/myclaims");
-    
+    }
     return claimResponse.isSuccess;
   };
 
