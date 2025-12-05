@@ -22,6 +22,10 @@ nav {
       background-color: #3b82f6;
     }
 
+    &.login a {
+      text-decoration: underline;
+    }
+
     a {
       color: #f9fafb;
       text-decoration: none;
