@@ -3,14 +3,10 @@ import useLoad from "../api/useLoad.js";
 import ClaimItem from "../entities/claims/ClaimItem.jsx";
 import { SourceItem } from "../entities/sources/SourceItem.jsx";
 import { Card, CardContainer } from "../UI/Card.jsx";
-import { useAuth } from "../auth/useAuth.jsx";
-import { useNavigate } from "react-router-dom";
 
 const ClaimInfo = () => {
   // Initialisation --------------------------------
   const { claimId } = useParams();
-  const { loggedInUserID } = useAuth();
-  const navigate = useNavigate();
   const publishedClaimsEndpoint = `/claims/claimstatus/3`;
 
   // State -----------------------------------------
