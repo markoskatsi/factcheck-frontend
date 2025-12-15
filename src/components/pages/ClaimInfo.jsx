@@ -26,7 +26,7 @@ const ClaimInfo = () => {
       <Card>
         <ClaimItem claim={claim} />
         <h3>Attached sources:</h3>
-        {sources ? (
+        {sources && sources.length > 0 ? (
           sources.map((source) => (
             <SourceItem source={source} key={source.SourceID} />
           ))

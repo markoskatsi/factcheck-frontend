@@ -168,7 +168,7 @@ const MyClaimInfo = () => {
           </Action.Tray>
 
           <h3>Attached sources:</h3>
-          {sources ? (
+          {sources && sources.length > 0 ? (
             sources.map((source) => (
               <div className="sourceItem" key={source.SourceID}>
                 <SourceItem source={source} />

@@ -48,9 +48,7 @@ function MyClaims() {
         <ClaimForm onSubmit={handleSubmit} onCancel={handleCancel} />
       )}
 
-      {!claims ? (
-        <p>You have not made any claims</p>
-      ) : (
+      {claims && claims.length > 0 ? (
         <CardContainer>
           {claims.map((claim) => (
             <Link to={`/myclaims/${claim.ClaimID}`} key={claim.ClaimID}>
@@ -62,6 +60,8 @@ function MyClaims() {
             </Link>
           ))}
         </CardContainer>
+      ) : (
+        <p>You have not made any claims</p>
       )}
     </section>
   );
