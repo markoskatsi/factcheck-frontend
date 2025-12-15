@@ -92,7 +92,7 @@ const MyClaimInfo = () => {
       setShowSourceModifyForm(false);
       setShowButton(true);
       setSelectedSource(null);
-      console.log(claimSourcesEndpoint)
+      console.log(claimSourcesEndpoint);
       await loadSources(claimSourcesEndpoint);
     }
     return response.isSuccess;
