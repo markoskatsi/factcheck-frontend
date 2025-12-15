@@ -4,9 +4,11 @@ import ClaimItem from "../entities/claims/ClaimItem.jsx";
 import { SourceItem } from "../entities/sources/SourceItem.jsx";
 import { Card, CardContainer } from "../UI/Card.jsx";
 import SourceForm from "../entities/sources/SourceForm.jsx";
+import ClaimForm from "../entities/claims/ClaimForm.jsx";
 import API from "../api/API.js";
 import { useState } from "react";
 import { useAuth } from "../auth/useAuth.jsx";
+import Action from "../UI/Actions.jsx";
 import "./MyClaimInfo.scss";
 
 const MyClaimInfo = () => {
@@ -16,34 +18,58 @@ const MyClaimInfo = () => {
 
   const claimEndpoint = `/claims/${claimId}`;
   const claimSourcesEndpoint = `/sources/claims/${claimId}`;
+  const putClaimEndpoint = `/claims`;
   const sourcesEndpoint = "/sources";
 
   // State -----------------------------------------
-  const [claim, , ,] = useLoad(claimEndpoint);
+  const [claim, , , loadClaim] = useLoad(claimEndpoint);
   const [sources, , , loadSources] = useLoad(claimSourcesEndpoint);
 
-  const [showForm, setShowForm] = useState(false);
+  const [showSourceForm, setShowSourceForm] = useState(false);
+  const [showClaimForm, setShowClaimForm] = useState(false);
   const [showButton, setShowButton] = useState(true);
 
   // Handlers --------------------------------------
   const handleClick = () => {
-    setShowForm(true);
+    setShowSourceForm(true);
+    setShowClaimForm(false);
     setShowButton(false);
   };
 
   const handleSubmit = async (source) => {
     const sourceResponse = await API.post(sourcesEndpoint, source);
     if (sourceResponse.isSuccess) {
-      setShowForm(false);
+      setShowSourceForm(false);
       await loadSources(claimSourcesEndpoint);
     }
     return sourceResponse.isSuccess;
   };
 
   const handleCancel = () => {
-    setShowForm(false);
+    setShowSourceForm(false);
+    setShowClaimForm(false);
     setShowButton(true);
   };
+
+  const handleModifyClick = () => {
+    setShowClaimForm(true);
+    setShowSourceForm(false);
+    setShowButton(true);
+  };
+
+  const handleModifySubmit = async (claim) => {
+    const respone = await API.put(
+      `${putClaimEndpoint}/${claim.ClaimID}`,
+      claim
+    );
+    if (respone.isSuccess) {
+      setShowClaimForm(false);
+      await loadClaim(claimEndpoint);
+    }
+    return respone.isSuccess;
+  };
+
+  const handleDelete = () => {};
 
   // View ------------------------------------------
   if (!claim) return <p>Loading claim details...</p>;
@@ -51,12 +77,25 @@ const MyClaimInfo = () => {
     return <p>Claim not available.</p>;
   return (
     <>
-      {showForm && (
+      {showSourceForm && (
         <SourceForm onSubmit={handleSubmit} onCancel={handleCancel} />
+      )}
+      {showClaimForm && (
+        <ClaimForm
+          onSubmit={handleModifySubmit}
+          onCancel={handleCancel}
+          initialClaim={claim[0]}
+        />
       )}
       <CardContainer>
         <Card>
           <ClaimItem claim={claim[0]} />
+
+          <Action.Tray>
+            <Action.Modify onClick={handleModifyClick} />
+            <Action.Delete onClick={handleDelete} />
+          </Action.Tray>
+
           <h3>Attached sources:</h3>
           {sources ? (
             sources.map((source) => (
