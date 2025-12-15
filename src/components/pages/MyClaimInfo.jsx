@@ -1,4 +1,4 @@
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import useLoad from "../api/useLoad.js";
 import ClaimItem from "../entities/claims/ClaimItem.jsx";
 import { SourceItem } from "../entities/sources/SourceItem.jsx";
@@ -13,6 +13,7 @@ import "./MyClaimInfo.scss";
 
 const MyClaimInfo = () => {
   // Initialisation --------------------------------
+  const navigate = useNavigate();
   const { claimId } = useParams();
   const { loggedInUserID } = useAuth();
 
@@ -40,6 +41,7 @@ const MyClaimInfo = () => {
     const sourceResponse = await API.post(sourcesEndpoint, source);
     if (sourceResponse.isSuccess) {
       setShowSourceForm(false);
+      setShowButton(true);
       await loadSources(claimSourcesEndpoint);
     }
     return sourceResponse.isSuccess;
@@ -58,18 +60,23 @@ const MyClaimInfo = () => {
   };
 
   const handleModifySubmit = async (claim) => {
-    const respone = await API.put(
+    const response = await API.put(
       `${putClaimEndpoint}/${claim.ClaimID}`,
       claim
     );
-    if (respone.isSuccess) {
+    if (response.isSuccess) {
       setShowClaimForm(false);
       await loadClaim(claimEndpoint);
     }
-    return respone.isSuccess;
+    return response.isSuccess;
   };
 
-  const handleDelete = () => {};
+  const handleDelete = async () => {
+    const deleteResponse = await API.delete(claimEndpoint);
+    if (deleteResponse.isSuccess) {
+      navigate("/myclaims");
+    }
+  };
 
   // View ------------------------------------------
   if (!claim) return <p>Loading claim details...</p>;
