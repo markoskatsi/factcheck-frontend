@@ -32,7 +32,8 @@ const MyClaimInfo = () => {
   const [showClaimForm, setShowClaimForm] = useState(false);
   const [showButton, setShowButton] = useState(true);
   const [selectedSource, setSelectedSource] = useState(null);
-  const [showModal, modalContent, openModal, closeModal] = useModal(false);
+  const [showClaimModal, claimModalContent, openClaimModal, closeClaimModal] = useModal(false);
+  const [showSourceModal, sourceModalContent, openSourceModal, closeSourceModal] = useModal(false);
 
   // Handlers --------------------------------------
   const handleAddSourceClick = () => {
@@ -105,6 +106,7 @@ const MyClaimInfo = () => {
       setShowSourceModifyForm(false);
       setSelectedSource(null);
       setShowButton(true);
+      closeSourceModal();
       await loadSources(claimSourcesEndpoint);
     }
     return deleteResponse.isSuccess;
@@ -118,12 +120,22 @@ const MyClaimInfo = () => {
     setSelectedSource(null);
   };
 
-  const showDeleteModal = () => {
-    openModal(
+  const showClaimDeleteModal = () => {
+    openClaimModal(
       <>
         <p>Are you sure you want to delete this claim?</p>
         <button onClick={handleClaimDelete}>Yes</button>
-        <button onClick={closeModal}>Cancel</button>
+        <button onClick={closeClaimModal}>Cancel</button>
+      </>
+    );
+  };
+
+  const showSourceDeleteModal = (id) => {
+    openSourceModal(
+      <>
+        <p>Are you sure you want to delete this source?</p>
+        <button onClick={() => handleSourceDelete(id)}>Yes</button>
+        <button onClick={closeSourceModal}>Cancel</button>
       </>
     );
   };
@@ -134,8 +146,12 @@ const MyClaimInfo = () => {
     return <p>Claim not available.</p>;
   return (
     <>
-      <Modal show={showModal} title="Delete Claim">
-        {modalContent}
+      <Modal show={showClaimModal} title="Delete Claim">
+        {claimModalContent}
+      </Modal>
+
+      <Modal show={showSourceModal} title="Delete Source">
+        {sourceModalContent}
       </Modal>
 
       {showSourceForm && (
@@ -164,7 +180,7 @@ const MyClaimInfo = () => {
 
           <Action.Tray>
             <Action.Modify onClick={handleClaimModifyClick} />
-            <Action.Delete onClick={() => showDeleteModal(claim)} />
+            <Action.Delete onClick={() => showClaimDeleteModal(claim)} />
           </Action.Tray>
 
           <h3>Attached sources:</h3>
@@ -177,7 +193,7 @@ const MyClaimInfo = () => {
                     onClick={() => handleSourceModifyClick(source)}
                   />
                   <Action.Delete
-                    onClick={() => handleSourceDelete(source.SourceID)}
+                    onClick={() => showSourceDeleteModal(source.SourceID)}
                   />
                 </Action.Tray>
               </div>
