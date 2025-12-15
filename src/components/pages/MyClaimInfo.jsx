@@ -28,8 +28,10 @@ const MyClaimInfo = () => {
   const [sources, , , loadSources] = useLoad(claimSourcesEndpoint);
 
   const [showSourceForm, setShowSourceForm] = useState(false);
+  const [showSourceModifyForm, setShowSourceModifyForm] = useState(false);
   const [showClaimForm, setShowClaimForm] = useState(false);
   const [showButton, setShowButton] = useState(true);
+  const [selectedSource, setSelectedSource] = useState(null);
   const [showModal, modalContent, openModal, closeModal] = useModal(false);
 
   // Handlers --------------------------------------
@@ -74,17 +76,46 @@ const MyClaimInfo = () => {
     }
   };
 
+  const handleSourceModifyClick = (source) => {
+    setSelectedSource(source);
+    setShowSourceModifyForm(true);
+    setShowClaimForm(false);
+    setShowButton(false);
+  };
+
+  const handleSourceModifySubmit = async (source) => {
+    const response = await API.put(
+      `${sourcesEndpoint}/${source.SourceID}`,
+      source
+    );
+    if (response.isSuccess) {
+      setShowSourceModifyForm(false);
+      setShowButton(true);
+      setSelectedSource(null);
+      console.log(claimSourcesEndpoint)
+      await loadSources(claimSourcesEndpoint);
+    }
+    return response.isSuccess;
+  };
+
   const handleSourceDelete = async (id) => {
     const deleteResponse = await API.delete(`${sourcesEndpoint}/${id}`);
     if (deleteResponse.isSuccess) {
+      setShowSourceForm(false);
+      setShowSourceModifyForm(false);
+      setSelectedSource(null);
+      setShowButton(true);
       await loadSources(claimSourcesEndpoint);
     }
+    return deleteResponse.isSuccess;
   };
 
   const handleCancel = () => {
     setShowSourceForm(false);
+    setShowSourceModifyForm(false);
     setShowClaimForm(false);
     setShowButton(true);
+    setSelectedSource(null);
   };
 
   const showDeleteModal = () => {
@@ -111,6 +142,14 @@ const MyClaimInfo = () => {
         <SourceForm onSubmit={handleSourceSubmit} onCancel={handleCancel} />
       )}
 
+      {showSourceModifyForm && (
+        <SourceForm
+          onSubmit={handleSourceModifySubmit}
+          onCancel={handleCancel}
+          initialSource={selectedSource}
+        />
+      )}
+
       {showClaimForm && (
         <ClaimForm
           onSubmit={handleClaimModifySubmit}
@@ -134,6 +173,9 @@ const MyClaimInfo = () => {
               <div className="sourceItem" key={source.SourceID}>
                 <SourceItem source={source} />
                 <Action.Tray>
+                  <Action.Modify
+                    onClick={() => handleSourceModifyClick(source)}
+                  />
                   <Action.Delete
                     onClick={() => handleSourceDelete(source.SourceID)}
                   />
