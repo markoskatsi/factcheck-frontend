@@ -9,6 +9,7 @@ import API from "../api/API.js";
 import { useState } from "react";
 import { useAuth } from "../auth/useAuth.jsx";
 import Action from "../UI/Actions.jsx";
+import { Modal, useModal } from "../UI/Modal.jsx";
 import "./MyClaimInfo.scss";
 
 const MyClaimInfo = () => {
@@ -29,15 +30,16 @@ const MyClaimInfo = () => {
   const [showSourceForm, setShowSourceForm] = useState(false);
   const [showClaimForm, setShowClaimForm] = useState(false);
   const [showButton, setShowButton] = useState(true);
+  const [showModal, modalContent, openModal, closeModal] = useModal(false);
 
   // Handlers --------------------------------------
-  const handleClick = () => {
+  const handleAddSourceClick = () => {
     setShowSourceForm(true);
     setShowClaimForm(false);
     setShowButton(false);
   };
 
-  const handleSubmit = async (source) => {
+  const handleSourceSubmit = async (source) => {
     const sourceResponse = await API.post(sourcesEndpoint, source);
     if (sourceResponse.isSuccess) {
       setShowSourceForm(false);
@@ -45,12 +47,6 @@ const MyClaimInfo = () => {
       await loadSources(claimSourcesEndpoint);
     }
     return sourceResponse.isSuccess;
-  };
-
-  const handleCancel = () => {
-    setShowSourceForm(false);
-    setShowClaimForm(false);
-    setShowButton(true);
   };
 
   const handleModifyClick = () => {
@@ -71,11 +67,27 @@ const MyClaimInfo = () => {
     return response.isSuccess;
   };
 
-  const handleDelete = async () => {
+  const handleClaimDelete = async () => {
     const deleteResponse = await API.delete(claimEndpoint);
     if (deleteResponse.isSuccess) {
       navigate("/myclaims");
     }
+  };
+
+  const handleCancel = () => {
+    setShowSourceForm(false);
+    setShowClaimForm(false);
+    setShowButton(true);
+  };
+
+  const showDeleteModal = () => {
+    openModal(
+      <>
+        <p>Are you sure you want to delete this claim?</p>
+        <button onClick={handleClaimDelete}>Yes</button>
+        <button onClick={closeModal}>Cancel</button>
+      </>
+    );
   };
 
   // View ------------------------------------------
@@ -84,9 +96,14 @@ const MyClaimInfo = () => {
     return <p>Claim not available.</p>;
   return (
     <>
+      <Modal show={showModal} title="Delete Claim">
+        {modalContent}
+      </Modal>
+
       {showSourceForm && (
-        <SourceForm onSubmit={handleSubmit} onCancel={handleCancel} />
+        <SourceForm onSubmit={handleSourceSubmit} onCancel={handleCancel} />
       )}
+
       {showClaimForm && (
         <ClaimForm
           onSubmit={handleModifySubmit}
@@ -94,13 +111,14 @@ const MyClaimInfo = () => {
           initialClaim={claim[0]}
         />
       )}
+
       <CardContainer>
         <Card>
           <ClaimItem claim={claim[0]} />
 
           <Action.Tray>
             <Action.Modify onClick={handleModifyClick} />
-            <Action.Delete onClick={handleDelete} />
+            <Action.Delete onClick={() => showDeleteModal(claim)} />
           </Action.Tray>
 
           <h3>Attached sources:</h3>
@@ -113,7 +131,10 @@ const MyClaimInfo = () => {
           ) : (
             <p>No sources attached.</p>
           )}
-          {showButton && <button onClick={handleClick}>Add a source</button>}
+
+          {showButton && (
+            <button onClick={handleAddSourceClick}>Add a source</button>
+          )}
         </Card>
       </CardContainer>
     </>
