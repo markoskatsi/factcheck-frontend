@@ -49,13 +49,13 @@ const MyClaimInfo = () => {
     return sourceResponse.isSuccess;
   };
 
-  const handleModifyClick = () => {
+  const handleClaimModifyClick = () => {
     setShowClaimForm(true);
     setShowSourceForm(false);
     setShowButton(true);
   };
 
-  const handleModifySubmit = async (claim) => {
+  const handleClaimModifySubmit = async (claim) => {
     const response = await API.put(
       `${putClaimEndpoint}/${claim.ClaimID}`,
       claim
@@ -71,6 +71,13 @@ const MyClaimInfo = () => {
     const deleteResponse = await API.delete(claimEndpoint);
     if (deleteResponse.isSuccess) {
       navigate("/myclaims");
+    }
+  };
+
+  const handleSourceDelete = async (id) => {
+    const deleteResponse = await API.delete(`${sourcesEndpoint}/${id}`);
+    if (deleteResponse.isSuccess) {
+      await loadSources(claimSourcesEndpoint);
     }
   };
 
@@ -106,7 +113,7 @@ const MyClaimInfo = () => {
 
       {showClaimForm && (
         <ClaimForm
-          onSubmit={handleModifySubmit}
+          onSubmit={handleClaimModifySubmit}
           onCancel={handleCancel}
           initialClaim={claim[0]}
         />
@@ -117,7 +124,7 @@ const MyClaimInfo = () => {
           <ClaimItem claim={claim[0]} />
 
           <Action.Tray>
-            <Action.Modify onClick={handleModifyClick} />
+            <Action.Modify onClick={handleClaimModifyClick} />
             <Action.Delete onClick={() => showDeleteModal(claim)} />
           </Action.Tray>
 
@@ -126,6 +133,11 @@ const MyClaimInfo = () => {
             sources.map((source) => (
               <div className="sourceItem" key={source.SourceID}>
                 <SourceItem source={source} />
+                <Action.Tray>
+                  <Action.Delete
+                    onClick={() => handleSourceDelete(source.SourceID)}
+                  />
+                </Action.Tray>
               </div>
             ))
           ) : (
