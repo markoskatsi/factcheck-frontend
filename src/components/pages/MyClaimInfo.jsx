@@ -27,13 +27,20 @@ const MyClaimInfo = () => {
   const [claim, , , loadClaim] = useLoad(claimEndpoint);
   const [sources, , , loadSources] = useLoad(claimSourcesEndpoint);
 
+  const [showStatusChangeMessage, setShowStatusChangeMessage] = useState(false);
   const [showSourceForm, setShowSourceForm] = useState(false);
   const [showSourceModifyForm, setShowSourceModifyForm] = useState(false);
   const [showClaimForm, setShowClaimForm] = useState(false);
   const [showButton, setShowButton] = useState(true);
   const [selectedSource, setSelectedSource] = useState(null);
-  const [showClaimModal, claimModalContent, openClaimModal, closeClaimModal] = useModal(false);
-  const [showSourceModal, sourceModalContent, openSourceModal, closeSourceModal] = useModal(false);
+  const [showClaimModal, claimModalContent, openClaimModal, closeClaimModal] =
+    useModal(false);
+  const [
+    showSourceModal,
+    sourceModalContent,
+    openSourceModal,
+    closeSourceModal,
+  ] = useModal(false);
 
   // Handlers --------------------------------------
   const handleAddSourceClick = () => {
@@ -55,7 +62,10 @@ const MyClaimInfo = () => {
   const handleClaimModifyClick = () => {
     setShowClaimForm(true);
     setShowSourceForm(false);
+    setShowSourceModifyForm(false);
     setShowButton(true);
+    setShowStatusChangeMessage(true);
+    window.scrollTo({ top: 0, left: 0, behavior: "smooth" });
   };
 
   const handleClaimModifySubmit = async (claim) => {
@@ -80,8 +90,11 @@ const MyClaimInfo = () => {
   const handleSourceModifyClick = (source) => {
     setSelectedSource(source);
     setShowSourceModifyForm(true);
+    setShowSourceForm(false);
     setShowClaimForm(false);
     setShowButton(false);
+    setShowStatusChangeMessage(true);
+    window.scrollTo({ top: 0, left: 0, behavior: "smooth" });
   };
 
   const handleSourceModifySubmit = async (source) => {
@@ -118,6 +131,7 @@ const MyClaimInfo = () => {
     setShowClaimForm(false);
     setShowButton(true);
     setSelectedSource(null);
+    setShowStatusChangeMessage(false);
   };
 
   const showClaimDeleteModal = () => {
@@ -153,6 +167,14 @@ const MyClaimInfo = () => {
       <Modal show={showSourceModal} title="Delete Source">
         {sourceModalContent}
       </Modal>
+
+      {showStatusChangeMessage && (
+        <div className="statusChangeMessage">
+          <p style={{ color: "red" }}>
+            Changing claim information will restart the verification process.
+          </p>
+        </div>
+      )}
 
       {showSourceForm && (
         <SourceForm onSubmit={handleSourceSubmit} onCancel={handleCancel} />
