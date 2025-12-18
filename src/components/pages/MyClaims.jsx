@@ -6,6 +6,7 @@ import { useAuth } from "../auth/useAuth.jsx";
 import { useState } from "react";
 import ClaimForm from "../entities/claims/ClaimForm.jsx";
 import API from "../api/API.js";
+import { Modal, useModal } from "../UI/Modal.jsx";
 import "./MyClaims.scss";
 
 function MyClaims() {
@@ -17,28 +18,42 @@ function MyClaims() {
   // State -------------------------------------------------
   const [claims, , loadingClaimsMessage, loadClaims] = useLoad(claimsEndpoint);
   const [showForm, setShowForm] = useState(false);
+  const [showClaimModal, claimModalContent, openClaimModal, closeClaimModal] =
+    useModal(false);
   // Context -----------------------------------------------
   // Methods -----------------------------------------------
   const handleSubmit = async (claim) => {
     const claimResponse = await API.post(allClaimsEndpoint, claim);
     if (claimResponse.isSuccess) {
-      setShowForm(false);
+      // setShowForm(false);
+      closeClaimModal();
       await loadClaims(claimsEndpoint);
     }
     return claimResponse.isSuccess;
   };
 
   const handleCancel = () => {
-    setShowForm(false);
+    // setShowForm(false);
+    closeClaimModal();
   };
 
   const handleClick = () => {
-    setShowForm(true);
+    // setShowForm(true);
+    showAddClaimModal(true);
+  };
+
+  const showAddClaimModal = () => {
+    openClaimModal(
+      <ClaimForm onSubmit={handleSubmit} onCancel={handleCancel} />
+    );
   };
 
   // View --------------------------------------------------
   return (
     <section>
+      <Modal className="Modal" show={showClaimModal} title="Add a Claim">
+        {claimModalContent}
+      </Modal>
       <h1>My Claims</h1>
       {!showForm ? (
         <button className="AddClaim" onClick={handleClick}>
