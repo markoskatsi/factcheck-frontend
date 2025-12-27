@@ -84,7 +84,11 @@ export default function SourceForm({
             <Form.Item
               label="File"
               htmlFor="SourceFilename"
-              advice="Please upload a file"
+              advice={
+                source.SourceFilename
+                  ? `Current file: ${source.SourceFilename}`
+                  : "Please upload a file"
+              }
             >
               <input
                 type="file"
@@ -92,6 +96,11 @@ export default function SourceForm({
                 className="FormInput"
                 onChange={handleChange}
               />
+              {source.SourceFilename && !source.file && (
+                <p style={{ fontSize: "0.9em", color: "#666" }}>
+                  Leave empty to keep the existing file
+                </p>
+              )}
             </Form.Item>
           ) : (
             <Form.Item
