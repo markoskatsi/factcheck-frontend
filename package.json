@@ -11,6 +11,8 @@
     "react-dom": "^19.2.0",
     "react-router-dom": "^7.9.4",
     "react-scripts": "5.0.1",
+    "react-spinner": "^0.2.7",
+    "react-spinners": "^0.17.0",
     "sass": "^1.94.1",
     "web-vitals": "^2.1.4"
   },

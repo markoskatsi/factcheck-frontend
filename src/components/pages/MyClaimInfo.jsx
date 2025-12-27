@@ -10,6 +10,8 @@ import { useState } from "react";
 import { useAuth } from "../auth/useAuth.jsx";
 import Action from "../UI/Actions.jsx";
 import { Modal, useModal } from "../UI/Modal.jsx";
+import { ClipLoader } from "react-spinners";
+
 import "./MyClaimInfo.scss";
 
 const MyClaimInfo = () => {
@@ -33,6 +35,8 @@ const MyClaimInfo = () => {
   const [showClaimForm, setShowClaimForm] = useState(false);
   const [showButton, setShowButton] = useState(true);
   const [selectedSource, setSelectedSource] = useState(null);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+
   const [showClaimModal, claimModalContent, openClaimModal, closeClaimModal] =
     useModal(false);
   const [
@@ -50,25 +54,29 @@ const MyClaimInfo = () => {
   };
 
   const handleSourceSubmit = async (source) => {
-    let data;
-    if (source.file) {
-      data = new FormData();
-      data.append("file", source.file);
-      data.append("SourceFilename", source.SourceFilename);
-      data.append("SourceDescription", source.SourceDescription);
-      data.append("SourceSourcetypeID", source.SourceSourcetypeID);
-      data.append("SourceClaimID", source.SourceClaimID);
-      data.append("SourceURL", source.SourceURL || "");
-    } else {
-      data = source;
+    setIsSubmitting(true);
+    try {
+      let data;
+      if (source.file) {
+        data = new FormData();
+        data.append("file", source.file);
+        data.append("SourceFilename", source.SourceFilename);
+        data.append("SourceDescription", source.SourceDescription);
+        data.append("SourceSourcetypeID", source.SourceSourcetypeID);
+        data.append("SourceClaimID", source.SourceClaimID);
+      } else {
+        data = source;
+      }
+      const sourceResponse = await API.post(sourcesEndpoint, data);
+      if (sourceResponse.isSuccess) {
+        setShowSourceForm(false);
+        setShowButton(true);
+        await loadSources(claimSourcesEndpoint);
+      }
+      return sourceResponse.isSuccess;
+    } finally {
+      setIsSubmitting(false);
     }
-    const sourceResponse = await API.post(sourcesEndpoint, data);
-    if (sourceResponse.isSuccess) {
-      setShowSourceForm(false);
-      setShowButton(true);
-      await loadSources(claimSourcesEndpoint);
-    }
-    return sourceResponse.isSuccess;
   };
 
   const handleClaimModifyClick = () => {
@@ -110,30 +118,36 @@ const MyClaimInfo = () => {
   };
 
   const handleSourceModifySubmit = async (source) => {
-    let data;
-    if (source.file) {
-      data = new FormData();
-      data.append("file", source.file);
-      data.append("SourceID", source.SourceID);
-      data.append("SourceFilename", source.SourceFilename);
-      data.append("SourceDescription", source.SourceDescription);
-      data.append("SourceSourcetypeID", source.SourceSourcetypeID);
-      data.append("SourceClaimID", source.SourceClaimID);
-    } else {
-      data = source;
+    setIsSubmitting(true);
+    try {
+      let data;
+      if (source.file) {
+        data = new FormData();
+        data.append("file", source.file);
+        data.append("SourceID", source.SourceID);
+        data.append("SourceFilename", source.SourceFilename);
+        data.append("SourceDescription", source.SourceDescription);
+        data.append("SourceSourcetypeID", source.SourceSourcetypeID);
+        data.append("SourceClaimID", source.SourceClaimID);
+      } else {
+        data = source;
+      }
+      const response = await API.put(
+        `${sourcesEndpoint}/${source.SourceID}`,
+        data
+      );
+      if (response.isSuccess) {
+        setShowSourceModifyForm(false);
+        setShowButton(true);
+        setShowStatusChangeMessage(false);
+        setSelectedSource(null);
+        console.log(claimSourcesEndpoint);
+        await loadSources(claimSourcesEndpoint);
+      }
+      return response.isSuccess;
+    } finally {
+      setIsSubmitting(false);
     }
-    const response = await API.put(
-      `${sourcesEndpoint}/${source.SourceID}`,
-      data
-    );
-    if (response.isSuccess) {
-      setShowSourceModifyForm(false);
-      setShowButton(true);
-      setSelectedSource(null);
-      console.log(claimSourcesEndpoint);
-      await loadSources(claimSourcesEndpoint);
-    }
-    return response.isSuccess;
   };
 
   const handleSourceDelete = async (id) => {
@@ -184,14 +198,17 @@ const MyClaimInfo = () => {
     return <p>Claim not available.</p>;
   return (
     <>
+      {isSubmitting && (
+        <div className="loadingOverlay">
+          <ClipLoader color="#3498db" size={50} />
+        </div>
+      )}
       <Modal show={showClaimModal} title="Delete Claim">
         {claimModalContent}
       </Modal>
-
       <Modal show={showSourceModal} title="Delete Source">
         {sourceModalContent}
       </Modal>
-
       {showStatusChangeMessage && (
         <div className="statusChangeMessage">
           <p style={{ color: "red" }}>
@@ -199,11 +216,9 @@ const MyClaimInfo = () => {
           </p>
         </div>
       )}
-
       {showSourceForm && (
         <SourceForm onSubmit={handleSourceSubmit} onCancel={handleCancel} />
       )}
-
       {showSourceModifyForm && (
         <SourceForm
           onSubmit={handleSourceModifySubmit}
@@ -211,7 +226,6 @@ const MyClaimInfo = () => {
           initialSource={selectedSource}
         />
       )}
-
       {showClaimForm && (
         <ClaimForm
           onSubmit={handleClaimModifySubmit}
@@ -219,7 +233,6 @@ const MyClaimInfo = () => {
           initialClaim={claim[0]}
         />
       )}
-
       <CardContainer>
         <Card>
           <ClaimItem claim={claim[0]} />
