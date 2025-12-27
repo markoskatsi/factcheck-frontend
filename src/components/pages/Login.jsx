@@ -54,7 +54,7 @@ function Login() {
           </option>
           {users.map((user) => (
             <option key={user.UserID} value={user.UserID}>
-              {user.UserFirstname} ({user.UserType})
+              {user.UserFirstname} {user.UserLastname} ({user.UserUsertypeID})
             </option>
           ))}
         </select>

@@ -50,7 +50,19 @@ const MyClaimInfo = () => {
   };
 
   const handleSourceSubmit = async (source) => {
-    const sourceResponse = await API.post(sourcesEndpoint, source);
+    let data;
+    if (source.file) {
+      data = new FormData();
+      data.append("file", source.file);
+      data.append("SourceFilename", source.SourceFilename);
+      data.append("SourceDescription", source.SourceDescription);
+      data.append("SourceSourcetypeID", source.SourceSourcetypeID);
+      data.append("SourceClaimID", source.SourceClaimID);
+      data.append("SourceURL", source.SourceURL || "");
+    } else {
+      data = source;
+    }
+    const sourceResponse = await API.post(sourcesEndpoint, data);
     if (sourceResponse.isSuccess) {
       setShowSourceForm(false);
       setShowButton(true);
@@ -98,9 +110,21 @@ const MyClaimInfo = () => {
   };
 
   const handleSourceModifySubmit = async (source) => {
+    let data;
+    if (source.file) {
+      data = new FormData();
+      data.append("file", source.file);
+      data.append("SourceID", source.SourceID);
+      data.append("SourceFilename", source.SourceFilename);
+      data.append("SourceDescription", source.SourceDescription);
+      data.append("SourceSourcetypeID", source.SourceSourcetypeID);
+      data.append("SourceClaimID", source.SourceClaimID);
+    } else {
+      data = source;
+    }
     const response = await API.put(
       `${sourcesEndpoint}/${source.SourceID}`,
-      source
+      data
     );
     if (response.isSuccess) {
       setShowSourceModifyForm(false);
