@@ -10,8 +10,7 @@ import { useState } from "react";
 import { useAuth } from "../auth/useAuth.jsx";
 import Action from "../UI/Actions.jsx";
 import { Modal, useModal } from "../UI/Modal.jsx";
-import { ClipLoader } from "react-spinners";
-
+import { Spinner } from "../UI/Spinner.jsx";
 import "./MyClaimInfo.scss";
 
 const MyClaimInfo = () => {
@@ -35,7 +34,7 @@ const MyClaimInfo = () => {
   const [showClaimForm, setShowClaimForm] = useState(false);
   const [showButton, setShowButton] = useState(true);
   const [selectedSource, setSelectedSource] = useState(null);
-  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
 
   const [showClaimModal, claimModalContent, openClaimModal, closeClaimModal] =
     useModal(false);
@@ -54,7 +53,7 @@ const MyClaimInfo = () => {
   };
 
   const handleSourceSubmit = async (source) => {
-    setIsSubmitting(true);
+    setIsLoading(true);
     try {
       let data;
       if (source.file) {
@@ -75,7 +74,7 @@ const MyClaimInfo = () => {
       }
       return sourceResponse.isSuccess;
     } finally {
-      setIsSubmitting(false);
+      setIsLoading(false);
     }
   };
 
@@ -101,7 +100,9 @@ const MyClaimInfo = () => {
   };
 
   const handleClaimDelete = async () => {
+    setIsLoading(true);
     const deleteResponse = await API.delete(claimEndpoint);
+    setIsLoading(false);
     if (deleteResponse.isSuccess) {
       navigate("/myclaims");
     }
@@ -118,7 +119,7 @@ const MyClaimInfo = () => {
   };
 
   const handleSourceModifySubmit = async (source) => {
-    setIsSubmitting(true);
+    setIsLoading(true);
     try {
       let data;
       if (source.file) {
@@ -146,11 +147,12 @@ const MyClaimInfo = () => {
       }
       return response.isSuccess;
     } finally {
-      setIsSubmitting(false);
+      setIsLoading(false);
     }
   };
 
   const handleSourceDelete = async (id) => {
+    setIsLoading(true);
     const deleteResponse = await API.delete(`${sourcesEndpoint}/${id}`);
     if (deleteResponse.isSuccess) {
       setShowSourceForm(false);
@@ -160,6 +162,7 @@ const MyClaimInfo = () => {
       closeSourceModal();
       await loadSources(claimSourcesEndpoint);
     }
+    setIsLoading(false);
     return deleteResponse.isSuccess;
   };
 
@@ -198,11 +201,7 @@ const MyClaimInfo = () => {
     return <p>Claim not available.</p>;
   return (
     <>
-      {isSubmitting && (
-        <div className="loadingOverlay">
-          <ClipLoader color="#3498db" size={50} />
-        </div>
-      )}
+      {isLoading && <Spinner />}
       <Modal show={showClaimModal} title="Delete Claim">
         {claimModalContent}
       </Modal>
