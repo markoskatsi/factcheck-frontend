@@ -8,6 +8,7 @@ import ClaimForm from "../entities/claims/ClaimForm.jsx";
 import API from "../api/API.js";
 import { Modal, useModal } from "../UI/Modal.jsx";
 import "./MyClaims.scss";
+import { Spinner } from "../UI/Spinner.jsx";
 
 function MyClaims() {
   // Inititalisation ---------------------------------------
@@ -17,18 +18,21 @@ function MyClaims() {
 
   // State -------------------------------------------------
   const [claims, , loadingClaimsMessage, loadClaims] = useLoad(claimsEndpoint);
+  const [isLoading, setIsLoading] = useState(false);
   const [showForm, setShowForm] = useState(false);
   const [showClaimModal, claimModalContent, openClaimModal, closeClaimModal] =
     useModal(false);
   // Context -----------------------------------------------
   // Methods -----------------------------------------------
   const handleSubmit = async (claim) => {
+    setIsLoading(true);
     const claimResponse = await API.post(allClaimsEndpoint, claim);
     if (claimResponse.isSuccess) {
       // setShowForm(false);
       closeClaimModal();
       await loadClaims(claimsEndpoint);
     }
+    setIsLoading(false);
     return claimResponse.isSuccess;
   };
 
@@ -51,6 +55,7 @@ function MyClaims() {
   // View --------------------------------------------------
   return (
     <section>
+      {isLoading && <Spinner />}
       <Modal className="Modal" show={showClaimModal} title="Add a Claim">
         {claimModalContent}
       </Modal>
