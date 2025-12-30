@@ -94,6 +94,7 @@ const MyClaimInfo = () => {
     );
     if (response.isSuccess) {
       setShowClaimForm(false);
+      setShowStatusChangeMessage(false);
       await loadClaim(claimEndpoint);
     }
     return response.isSuccess;
