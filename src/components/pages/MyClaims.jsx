@@ -7,6 +7,7 @@ import { useState } from "react";
 import ClaimForm from "../entities/claims/ClaimForm.jsx";
 import API from "../api/API.js";
 import { Modal, useModal } from "../UI/Modal.jsx";
+import { Button } from "../UI/Button.jsx";
 import "./MyClaims.scss";
 import { Spinner } from "../UI/Spinner.jsx";
 
@@ -61,9 +62,7 @@ function MyClaims() {
       </Modal>
       <h1>My Claims</h1>
       {!showForm ? (
-        <button className="AddClaim" onClick={handleClick}>
-          Add New Claim
-        </button>
+        <Button onClick={handleClick}>Add New Claim</Button>
       ) : (
         <ClaimForm onSubmit={handleSubmit} onCancel={handleCancel} />
       )}

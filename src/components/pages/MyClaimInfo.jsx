@@ -11,6 +11,7 @@ import { useAuth } from "../auth/useAuth.jsx";
 import Action from "../UI/Actions.jsx";
 import { Modal, useModal } from "../UI/Modal.jsx";
 import { Spinner } from "../UI/Spinner.jsx";
+import { Button } from "../UI/Button.jsx";
 import "./MyClaimInfo.scss";
 
 const MyClaimInfo = () => {
@@ -29,9 +30,9 @@ const MyClaimInfo = () => {
   const [sources, , , loadSources] = useLoad(claimSourcesEndpoint);
 
   const [showStatusChangeMessage, setShowStatusChangeMessage] = useState(false);
-  const [showSourceForm, setShowSourceForm] = useState(false);
+  const [showSourceAddForm, setShowSourceAddForm] = useState(false);
   const [showSourceModifyForm, setShowSourceModifyForm] = useState(false);
-  const [showClaimForm, setShowClaimForm] = useState(false);
+  const [showClaimModifyForm, setShowClaimModifyForm] = useState(false);
   const [showButton, setShowButton] = useState(true);
   const [selectedSource, setSelectedSource] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
@@ -47,40 +48,37 @@ const MyClaimInfo = () => {
 
   // Handlers --------------------------------------
   const handleAddSourceClick = () => {
-    setShowSourceForm(true);
-    setShowClaimForm(false);
+    setShowSourceAddForm(true);
+    setShowClaimModifyForm(false);
     setShowButton(false);
   };
 
   const handleSourceSubmit = async (source) => {
     setIsLoading(true);
-    try {
-      let data;
-      if (source.file) {
-        data = new FormData();
-        data.append("file", source.file);
-        data.append("SourceFilename", source.SourceFilename);
-        data.append("SourceDescription", source.SourceDescription);
-        data.append("SourceSourcetypeID", source.SourceSourcetypeID);
-        data.append("SourceClaimID", source.SourceClaimID);
-      } else {
-        data = source;
-      }
-      const sourceResponse = await API.post(sourcesEndpoint, data);
-      if (sourceResponse.isSuccess) {
-        setShowSourceForm(false);
-        setShowButton(true);
-        await loadSources(claimSourcesEndpoint);
-      }
-      return sourceResponse.isSuccess;
-    } finally {
-      setIsLoading(false);
+    let data;
+    if (source.file) {
+      data = new FormData();
+      data.append("file", source.file);
+      data.append("SourceFilename", source.SourceFilename);
+      data.append("SourceDescription", source.SourceDescription);
+      data.append("SourceSourcetypeID", source.SourceSourcetypeID);
+      data.append("SourceClaimID", source.SourceClaimID);
+    } else {
+      data = source;
     }
+    const sourceResponse = await API.post(sourcesEndpoint, data);
+    if (sourceResponse.isSuccess) {
+      setShowSourceAddForm(false);
+      setShowButton(true);
+      await loadSources(claimSourcesEndpoint);
+    }
+    setIsLoading(false);
+    return sourceResponse.isSuccess;
   };
 
   const handleClaimModifyClick = () => {
-    setShowClaimForm(true);
-    setShowSourceForm(false);
+    setShowClaimModifyForm(true);
+    setShowSourceAddForm(false);
     setShowSourceModifyForm(false);
     setShowButton(true);
     setShowStatusChangeMessage(true);
@@ -88,15 +86,17 @@ const MyClaimInfo = () => {
   };
 
   const handleClaimModifySubmit = async (claim) => {
+    setIsLoading(true);
     const response = await API.put(
       `${putClaimEndpoint}/${claim.ClaimID}`,
       claim
     );
     if (response.isSuccess) {
-      setShowClaimForm(false);
+      setShowClaimModifyForm(false);
       setShowStatusChangeMessage(false);
       await loadClaim(claimEndpoint);
     }
+    setIsLoading(false);
     return response.isSuccess;
   };
 
@@ -112,8 +112,8 @@ const MyClaimInfo = () => {
   const handleSourceModifyClick = (source) => {
     setSelectedSource(source);
     setShowSourceModifyForm(true);
-    setShowSourceForm(false);
-    setShowClaimForm(false);
+    setShowSourceAddForm(false);
+    setShowClaimModifyForm(false);
     setShowButton(false);
     setShowStatusChangeMessage(true);
     window.scrollTo({ top: 0, left: 0, behavior: "smooth" });
@@ -121,42 +121,41 @@ const MyClaimInfo = () => {
 
   const handleSourceModifySubmit = async (source) => {
     setIsLoading(true);
-    try {
-      let data;
-      if (source.file) {
-        data = new FormData();
-        data.append("file", source.file);
-        data.append("SourceID", source.SourceID);
-        data.append("SourceFilename", source.SourceFilename);
-        data.append("SourceDescription", source.SourceDescription);
-        data.append("SourceSourcetypeID", source.SourceSourcetypeID);
-        data.append("SourceClaimID", source.SourceClaimID);
-      } else {
-        data = source;
-      }
-      const response = await API.put(
-        `${sourcesEndpoint}/${source.SourceID}`,
-        data
-      );
-      if (response.isSuccess) {
-        setShowSourceModifyForm(false);
-        setShowButton(true);
-        setShowStatusChangeMessage(false);
-        setSelectedSource(null);
-        console.log(claimSourcesEndpoint);
-        await loadSources(claimSourcesEndpoint);
-      }
-      return response.isSuccess;
-    } finally {
-      setIsLoading(false);
+    let data;
+    if (!source.SourceURL && !source.file) {
     }
+    if (source.file) {
+      data = new FormData();
+      data.append("file", source.file);
+      data.append("SourceID", source.SourceID);
+      data.append("SourceFilename", source.SourceFilename);
+      data.append("SourceDescription", source.SourceDescription);
+      data.append("SourceSourcetypeID", source.SourceSourcetypeID);
+      data.append("SourceClaimID", source.SourceClaimID);
+    } else {
+      data = source;
+    }
+    const response = await API.put(
+      `${sourcesEndpoint}/${source.SourceID}`,
+      data
+    );
+    if (response.isSuccess) {
+      setShowSourceModifyForm(false);
+      setShowButton(true);
+      setShowStatusChangeMessage(false);
+      setSelectedSource(null);
+      console.log(claimSourcesEndpoint);
+      await loadSources(claimSourcesEndpoint);
+    }
+    setIsLoading(false);
+    return response.isSuccess;
   };
 
   const handleSourceDelete = async (id) => {
     setIsLoading(true);
     const deleteResponse = await API.delete(`${sourcesEndpoint}/${id}`);
     if (deleteResponse.isSuccess) {
-      setShowSourceForm(false);
+      setShowSourceAddForm(false);
       setShowSourceModifyForm(false);
       setSelectedSource(null);
       setShowButton(true);
@@ -168,9 +167,9 @@ const MyClaimInfo = () => {
   };
 
   const handleCancel = () => {
-    setShowSourceForm(false);
+    setShowSourceAddForm(false);
     setShowSourceModifyForm(false);
-    setShowClaimForm(false);
+    setShowClaimModifyForm(false);
     setShowButton(true);
     setSelectedSource(null);
     setShowStatusChangeMessage(false);
@@ -180,8 +179,8 @@ const MyClaimInfo = () => {
     openClaimModal(
       <>
         <p>Are you sure you want to delete this claim?</p>
-        <button onClick={handleClaimDelete}>Yes</button>
-        <button onClick={closeClaimModal}>Cancel</button>
+        <Button onClick={handleClaimDelete}>Yes</Button>
+        <Button onClick={closeClaimModal}>Cancel</Button>
       </>
     );
   };
@@ -190,8 +189,8 @@ const MyClaimInfo = () => {
     openSourceModal(
       <>
         <p>Are you sure you want to delete this source?</p>
-        <button onClick={() => handleSourceDelete(id)}>Yes</button>
-        <button onClick={closeSourceModal}>Cancel</button>
+        <Button onClick={() => handleSourceDelete(id)}>Yes</Button>
+        <Button onClick={closeSourceModal}>Cancel</Button>
       </>
     );
   };
@@ -216,7 +215,7 @@ const MyClaimInfo = () => {
           </p>
         </div>
       )}
-      {showSourceForm && (
+      {showSourceAddForm && (
         <SourceForm onSubmit={handleSourceSubmit} onCancel={handleCancel} />
       )}
       {showSourceModifyForm && (
@@ -226,7 +225,7 @@ const MyClaimInfo = () => {
           initialSource={selectedSource}
         />
       )}
-      {showClaimForm && (
+      {showClaimModifyForm && (
         <ClaimForm
           onSubmit={handleClaimModifySubmit}
           onCancel={handleCancel}
@@ -262,7 +261,10 @@ const MyClaimInfo = () => {
           )}
 
           {showButton && (
-            <button onClick={handleAddSourceClick}>Add a source</button>
+            <>
+              <Button onClick={handleAddSourceClick}>Add a source</Button>
+              {/* <button onClick={handleAddSourceClick}>Add a source</button> */}
+            </>
           )}
         </Card>
       </CardContainer>
