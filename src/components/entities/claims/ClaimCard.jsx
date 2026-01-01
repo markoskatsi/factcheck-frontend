@@ -3,6 +3,7 @@ import { SourceItem } from "../sources/SourceItem.jsx";
 import Action from "../../UI/Actions.jsx";
 import { Button } from "../../UI/Button.jsx";
 import { Card, CardContainer } from "../../UI/Card.jsx";
+import "./ClaimCard.scss";
 
 function ClaimCard({
   claim,
