@@ -1,16 +1,13 @@
 import { useNavigate, useParams } from "react-router-dom";
 import useLoad from "../api/useLoad.js";
-import ClaimItem from "../entities/claims/ClaimItem.jsx";
-import { SourceItem } from "../entities/sources/SourceItem.jsx";
-import { Card, CardContainer } from "../UI/Card.jsx";
 import SourceForm from "../entities/sources/SourceForm.jsx";
 import ClaimForm from "../entities/claims/ClaimForm.jsx";
 import API from "../api/API.js";
 import { useState } from "react";
 import { useAuth } from "../auth/useAuth.jsx";
-import Action from "../UI/Actions.jsx";
 import { Modal, useModal } from "../UI/Modal.jsx";
 import { Spinner } from "../UI/Spinner.jsx";
+import ClaimCard from "../entities/claims/ClaimCard.jsx";
 import { Button } from "../UI/Button.jsx";
 import "./MyClaimInfo.scss";
 
@@ -232,42 +229,17 @@ const MyClaimInfo = () => {
           initialClaim={claim[0]}
         />
       )}
-      <CardContainer>
-        <Card>
-          <ClaimItem claim={claim[0]} />
-
-          <Action.Tray>
-            <Action.Modify onClick={handleClaimModifyClick} />
-            <Action.Delete onClick={() => showClaimDeleteModal(claim)} />
-          </Action.Tray>
-
-          <h3>Attached sources:</h3>
-          {sources && sources.length > 0 ? (
-            sources.map((source) => (
-              <div className="sourceItem" key={source.SourceID}>
-                <SourceItem source={source} />
-                <Action.Tray>
-                  <Action.Modify
-                    onClick={() => handleSourceModifyClick(source)}
-                  />
-                  <Action.Delete
-                    onClick={() => showSourceDeleteModal(source.SourceID)}
-                  />
-                </Action.Tray>
-              </div>
-            ))
-          ) : (
-            <p>No sources attached.</p>
-          )}
-
-          {showButton && (
-            <>
-              <Button onClick={handleAddSourceClick}>Add a source</Button>
-              {/* <button onClick={handleAddSourceClick}>Add a source</button> */}
-            </>
-          )}
-        </Card>
-      </CardContainer>
+      <ClaimCard
+        claim={claim[0]}
+        sources={sources}
+        showButton={showButton}
+        onAddSource={handleAddSourceClick}
+        onClaimModify={handleClaimModifyClick}
+        onClaimDelete={() => showClaimDeleteModal(claim)}
+        onSourceModify={handleSourceModifyClick}
+        onSourceDelete={showSourceDeleteModal}
+        loggedInUserID={loggedInUserID}
+      />
     </>
   );
 };
