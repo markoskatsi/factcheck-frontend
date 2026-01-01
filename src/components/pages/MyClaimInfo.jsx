@@ -9,7 +9,6 @@ import { Modal, useModal } from "../UI/Modal.jsx";
 import { Spinner } from "../UI/Spinner.jsx";
 import ClaimCard from "../entities/claims/ClaimCard.jsx";
 import { Button } from "../UI/Button.jsx";
-import "./MyClaimInfo.scss";
 
 const MyClaimInfo = () => {
   // Initialisation --------------------------------
