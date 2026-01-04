@@ -8,7 +8,7 @@ import { useAuth } from "../auth/useAuth.jsx";
 import { Modal, useModal } from "../UI/Modal.jsx";
 import { Spinner } from "../UI/Spinner.jsx";
 import ClaimCard from "../entities/claims/ClaimCard.jsx";
-import { Button } from "../UI/Button.jsx";
+import { Button, ButtonTray } from "../UI/Button.jsx";
 
 const MyClaimInfo = () => {
   // Initialisation --------------------------------
@@ -175,8 +175,12 @@ const MyClaimInfo = () => {
     openClaimModal(
       <>
         <p>Are you sure you want to delete this claim?</p>
-        <Button onClick={handleClaimDelete}>Yes</Button>
-        <Button onClick={closeClaimModal}>Cancel</Button>
+        <ButtonTray>
+          <Button onClick={handleClaimDelete} variant="darkDanger">
+            Delete
+          </Button>
+          <Button onClick={closeClaimModal}>Cancel</Button>
+        </ButtonTray>
       </>
     );
   };
@@ -185,8 +189,12 @@ const MyClaimInfo = () => {
     openSourceModal(
       <>
         <p>Are you sure you want to delete this source?</p>
-        <Button onClick={() => handleSourceDelete(id)}>Yes</Button>
-        <Button onClick={closeSourceModal}>Cancel</Button>
+        <ButtonTray>
+          <Button onClick={() => handleSourceDelete(id)} variant="darkDanger">
+            Delete
+          </Button>
+          <Button onClick={closeSourceModal}>Cancel</Button>
+        </ButtonTray>
       </>
     );
   };
