@@ -22,10 +22,6 @@ function ClaimCard({
       <Card>
         <ClaimItem claim={claim} />
         {isOwner && (
-          // <Action.Tray>
-          //   <Action.Modify onClick={onClaimModify} />
-          //   <Action.Delete onClick={onClaimDelete} />
-          // </Action.Tray>
           <ButtonTray>
             <Button onClick={onClaimModify} variant="secondary">
               <Icon.Pen />
