@@ -4,4 +4,17 @@
   padding: 15px;
   margin-bottom: 15px;
   background: rgba(0, 0, 0, 0.1);
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  min-height: 160px;
+  position: relative;
+}
+
+.sourceItem .buttonTray {
+  display: flex;
+  flex-direction: row;
+  align-items: flex-end;
+  justify-content: flex-end;
+  margin-top: auto;
 }

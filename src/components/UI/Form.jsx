@@ -1,4 +1,5 @@
-import Action from "./Actions.jsx";
+import Icon from "./Icons.jsx";
+import { Button, ButtonTray } from "./Button.jsx";
 import { useState } from "react";
 import "./Form.scss";
 
@@ -17,14 +18,16 @@ export default function Form({ children, onSubmit, onCancel }) {
   return (
     <form className="Form Bordered" encType="multipart/form-data">
       <div className="FormTray">{children}</div>
-      <Action.Tray>
-        <Action.Add
-          showText
-          buttonText={"Submit record"}
-          onClick={handleSubmit}
-        />
-        <Action.Cancel showText buttonText={"Cancel"} onClick={handleCancel} />
-      </Action.Tray>
+      <ButtonTray>
+        <Button onClick={handleSubmit}>
+          <Icon.Tick />
+          Submit record
+        </Button>
+        <Button onClick={handleCancel} variant="darkDanger">
+          <Icon.Cross />
+          Cancel
+        </Button>
+      </ButtonTray>
     </form>
   );
 }
