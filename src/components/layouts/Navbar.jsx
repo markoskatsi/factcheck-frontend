@@ -1,5 +1,6 @@
 import { NavLink } from "react-router-dom";
 import { useAuth } from "../auth/useAuth";
+import NavItem from "../UI/NavItem.jsx";
 import "./Navbar.scss";
 
 function Navbar() {
@@ -10,32 +11,32 @@ function Navbar() {
   return (
     <nav>
       <div className="navCenter">
-        <div className="navItem">
+        <NavItem>
           <NavLink to="/" className={getLinkStyle}>
             Home
           </NavLink>
-        </div>
+        </NavItem>
         {loggedInUser && (
-          <div className="navItem">
+          <NavItem>
             <NavLink to="/myclaims" className={getLinkStyle}>
               My Claims
             </NavLink>
-          </div>
+          </NavItem>
         )}
       </div>
       <div className="navRight">
         {loggedInUser ? (
-          <div className="navItem login">
+          <NavItem className="login">
             <NavLink to="/logout" onClick={logout}>
               Logout
             </NavLink>
-          </div>
+          </NavItem>
         ) : (
-          <div className="navItem login">
+          <NavItem className="login">
             <NavLink to="/login" className={getLinkStyle}>
               Login
             </NavLink>
-          </div>
+          </NavItem>
         )}
       </div>
     </nav>
