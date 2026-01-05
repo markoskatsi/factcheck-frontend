@@ -141,6 +141,17 @@ function Trash() {
   );
 }
 
+function Upload() {
+  return (
+    <Icon className="IconUpload">
+      <img
+        src="https://img.icons8.com/?size=1000&id=cWhjh7IgpFHy&format=png&color=000000"
+        alt="Upload icon"
+      />
+    </Icon>
+  );
+}
+
 function Acknowledge() {
   return (
     <p className="IconAcknowledge">
@@ -166,4 +177,5 @@ Icon.RedCross = RedCross;
 Icon.RedHeart = RedHeart;
 Icon.Tick = Tick;
 Icon.Trash = Trash;
+Icon.Upload = Upload;
 Icon.Acknowledge = Acknowledge;
