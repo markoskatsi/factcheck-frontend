@@ -9,7 +9,7 @@ export const Dropzone = ({ onDrop, selectedFile }) => {
   return (
     <div
       {...getRootProps()}
-      className={`dropzone${isDragActive ? " dropzone--active" : ""}`}
+      className={`dropzone${isDragActive || selectedFile ? " dropzone--active" : ""}`}
     >
       <input {...getInputProps()} />
       {selectedFile ? (
