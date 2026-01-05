@@ -1,5 +1,6 @@
 import Form from "../../UI/Form.jsx";
 import useLoad from "../../api/useLoad.js";
+import { Dropzone } from "../../UI/Dropzone.jsx";
 import { useParams } from "react-router-dom";
 
 const emptySource = {
@@ -46,6 +47,15 @@ export default function SourceForm({
   const [sourceTypes, , loadingTypesMessage] = useLoad(sourceTypesEndpoint);
 
   // Handlers --------------------------------------
+  const handleFileDrop = (files) => {
+    handleChange({
+      target: {
+        name: "file",
+        value: files[0],
+        files: files,
+      },
+    });
+  };
   // View ------------------------------------------
   return (
     <Form onSubmit={handleSubmit} onCancel={onCancel}>
@@ -90,12 +100,7 @@ export default function SourceForm({
                   : "Please upload a file"
               }
             >
-              <input
-                type="file"
-                name="file"
-                className="FormInput"
-                onChange={handleChange}
-              />
+              <Dropzone onDrop={handleFileDrop} selectedFile={source.file} />
               {source.SourceFilename && !source.file && (
                 <p style={{ fontSize: "0.9em", color: "#666" }}>
                   Leave empty to keep the existing file
