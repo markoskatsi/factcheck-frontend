@@ -2,24 +2,25 @@ import useLoad from "../api/useLoad.js";
 import { CardContainer, Card } from "../UI/Card.jsx";
 import ClaimItem from "../entities/claims/ClaimItem.jsx";
 import { Link } from "react-router-dom";
-import { useState } from "react";
 import "./MyClaims.scss";
 import { Spinner } from "../UI/Spinner.jsx";
+import { useAuth } from "../auth/useAuth.jsx";
+import PageNotFound from "./404.jsx";
 
 function AvailableClaims() {
   // Inititalisation ---------------------------------------
   const claimsEndpoint = `/claims/claimstatus/1`;
+  const { loggedInUser } = useAuth();
 
   // State -------------------------------------------------
-  const [claims, , loadingClaimsMessage, loadClaims] = useLoad(claimsEndpoint);
-  
-  const [isLoading, setIsLoading] = useState(false);
+  const [claims, ,] = useLoad(claimsEndpoint);
+
   // Context -----------------------------------------------
   // Methods -----------------------------------------------
   // View --------------------------------------------------
+  if (loggedInUser?.UserUsertypeID !== 2) return <PageNotFound />;
   return (
     <section>
-      {isLoading && <Spinner />}
       <h1>Available Claims</h1>
       {claims && claims.length > 0 ? (
         <CardContainer>
