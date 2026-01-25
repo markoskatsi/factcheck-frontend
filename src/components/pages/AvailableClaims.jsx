@@ -12,6 +12,7 @@ function AvailableClaims() {
 
   // State -------------------------------------------------
   const [claims, , loadingClaimsMessage, loadClaims] = useLoad(claimsEndpoint);
+  
   const [isLoading, setIsLoading] = useState(false);
   // Context -----------------------------------------------
   // Methods -----------------------------------------------
