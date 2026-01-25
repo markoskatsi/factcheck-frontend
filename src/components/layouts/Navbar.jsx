@@ -24,11 +24,18 @@ function Navbar() {
           </NavItem>
         )}
         {loggedInUser?.UserUsertypeID === 2 && (
-          <NavItem>
-            <NavLink to="/availableclaims" className={getLinkStyle}>
-              Available Claims
-            </NavLink>
-          </NavItem>
+          <>
+            <NavItem>
+              <NavLink to="/availableclaims" className={getLinkStyle}>
+                Available Claims
+              </NavLink>
+            </NavItem>
+            <NavItem>
+              <NavLink to="/mytasks" className={getLinkStyle}>
+                My Tasks
+              </NavLink>
+            </NavItem>
+          </>
         )}
       </div>
       <div className="navRight">
