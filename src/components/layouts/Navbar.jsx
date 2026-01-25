@@ -23,6 +23,11 @@ function Navbar() {
             </NavLink>
           </NavItem>
         )}
+        <NavItem>
+          <NavLink to="/availableclaims" className={getLinkStyle}>
+            Available Claims
+          </NavLink>
+        </NavItem>
       </div>
       <div className="navRight">
         {loggedInUser ? (
