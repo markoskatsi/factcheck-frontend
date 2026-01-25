@@ -1,28 +1,36 @@
 import { useParams } from "react-router-dom";
 import useLoad from "../api/useLoad.js";
-import ClaimItem from "../entities/claims/ClaimItem.jsx";
-import { SourceItem } from "../entities/sources/SourceItem.jsx";
-import { Card, CardContainer } from "../UI/Card.jsx";
 import ClaimCard from "../entities/claims/ClaimCard.jsx";
+import { useAuth } from "../auth/useAuth.jsx";
+import { Button } from "../UI/Button.jsx";
 
 const ClaimInfo = () => {
   // Initialisation --------------------------------
   const { claimId } = useParams();
-  const publishedClaimsEndpoint = `/claims/claimstatus/3`;
+  const { loggedInUser } = useAuth();
+  console.log(loggedInUser);
+  const claimsEndpoint = `/claims`;
 
   // State -----------------------------------------
-  const [publishedClaims, , ,] = useLoad(publishedClaimsEndpoint);
+  const [claims, , ,] = useLoad(claimsEndpoint);
   const [sources, , ,] = useLoad(`/sources/claims/${claimId}`);
 
   // Handlers --------------------------------------
-  const claim = publishedClaims?.find(
-    (claim) => claim.ClaimID === parseInt(claimId)
-  );
+  const claim = claims?.find((claim) => claim.ClaimID === parseInt(claimId));
 
   // View ------------------------------------------
-  if (!publishedClaims) return <p>Loading...</p>;
+  if (!claims) return <p>Loading...</p>;
   if (!claim) return <p>Claim not available.</p>;
-  return <ClaimCard claim={claim} sources={sources} />;
+  return (
+    <>
+      {loggedInUser?.UserUsertypeID === 2 && (
+        <Button variant="secondary">
+          Assign claim
+        </Button>
+      )}
+      <ClaimCard claim={claim} sources={sources} />
+    </>
+  );
 };
 
 export default ClaimInfo;
