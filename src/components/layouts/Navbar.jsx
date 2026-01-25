@@ -16,18 +16,20 @@ function Navbar() {
             Home
           </NavLink>
         </NavItem>
-        {loggedInUser && (
+        {loggedInUser?.UserUsertypeID === 1 && (
           <NavItem>
             <NavLink to="/myclaims" className={getLinkStyle}>
               My Claims
             </NavLink>
           </NavItem>
         )}
-        <NavItem>
-          <NavLink to="/availableclaims" className={getLinkStyle}>
-            Available Claims
-          </NavLink>
-        </NavItem>
+        {loggedInUser?.UserUsertypeID === 2 && (
+          <NavItem>
+            <NavLink to="/availableclaims" className={getLinkStyle}>
+              Available Claims
+            </NavLink>
+          </NavItem>
+        )}
       </div>
       <div className="navRight">
         {loggedInUser ? (
