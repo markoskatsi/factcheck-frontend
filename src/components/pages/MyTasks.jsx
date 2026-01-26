@@ -17,8 +17,7 @@ function MyTasks() {
   const assignedClaimsEndpoint = `/assignments/users/${loggedInUserID}`;
 
   // State -------------------------------------------------
-  const [claims, , ] =
-    useLoad(assignedClaimsEndpoint);
+  const [claims, ,] = useLoad(assignedClaimsEndpoint);
   // Context -----------------------------------------------
   // Methods -----------------------------------------------
 
@@ -30,7 +29,10 @@ function MyTasks() {
       {claims && claims.length > 0 ? (
         <CardContainer>
           {claims.map((claim) => (
-            <Link to={`/mytasks/${claim.ClaimID}`} key={claim.ClaimID}>
+            <Link
+              to={`/mytasks/${claim.AssignmentClaimID}`}
+              key={claim.AssignmentClaimID}
+            >
               <div className="fixed">
                 <Card>
                   <ClaimItem claim={claim} />
