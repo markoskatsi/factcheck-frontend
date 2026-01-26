@@ -14,12 +14,11 @@ import { Spinner } from "../UI/Spinner.jsx";
 function MyTasks() {
   // Inititalisation ---------------------------------------
   const { loggedInUserID } = useAuth();
-  const assignmentsEndpoint = `/assignments/users/${loggedInUserID}`;
+  const assignedClaimsEndpoint = `/assignments/users/${loggedInUserID}`;
 
   // State -------------------------------------------------
   const [claims, , ] =
-    useLoad(assignmentsEndpoint);
-
+    useLoad(assignedClaimsEndpoint);
   // Context -----------------------------------------------
   // Methods -----------------------------------------------
 
