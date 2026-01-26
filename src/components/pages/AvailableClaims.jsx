@@ -9,12 +9,11 @@ import PageNotFound from "./404.jsx";
 
 function AvailableClaims() {
   // Inititalisation ---------------------------------------
-  const claimsEndpoint = `/claims/claimstatus/1`;
+  const availableClaimsEndpoint = `/claims/claimstatus/2`;
   const { loggedInUser } = useAuth();
 
   // State -------------------------------------------------
-  const [claims, ,] = useLoad(claimsEndpoint);
-
+  const [claims, ,] = useLoad(availableClaimsEndpoint);
   // Context -----------------------------------------------
   // Methods -----------------------------------------------
   // View --------------------------------------------------
