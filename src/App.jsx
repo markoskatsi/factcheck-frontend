@@ -24,7 +24,8 @@ function App() {
             <Route path="/myclaims/:claimId" element={<MyClaimInfo />} />
             <Route path="/availableclaims" element={<AvailableClaims />} />
             <Route path="/availableclaims/:claimId" element={<ClaimInfo />} />
-            <Route path="/mytasks/" element={<MyTasks />} />
+            <Route path="/mytasks" element={<MyTasks />} />
+            <Route path="/mytasks/:claimId" element={<ClaimInfo />} />
             <Route path="/login" element={<Login />} />
             <Route path="/logout" element={<Login />} />
             <Route path="*" element={<PageNotFound />} />
