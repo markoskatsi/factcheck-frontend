@@ -32,7 +32,7 @@ const ClaimInfo = () => {
   const isAssignedToUser = assignedClaims?.some(
     (claim) =>
       claim.AssignmentClaimID === parseInt(claimId) &&
-      claim.AssignmentUserID === loggedInUser.UserID,
+      claim.AssignmentUserID === loggedInUser?.UserID,
   );
 
   const handleAssignment = async () => {
@@ -40,7 +40,7 @@ const ClaimInfo = () => {
     setIsLoading(true);
     const assignmentResponse = await API.post(`/assignments`, {
       AssignmentClaimID: claim.ClaimID,
-      AssignmentUserID: loggedInUser.UserID,
+      AssignmentUserID: loggedInUser?.UserID,
     });
     const response = await API.put(`/claims/${claim.ClaimID}`, {
       ...claim,

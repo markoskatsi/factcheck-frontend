@@ -6,7 +6,7 @@ import "./MyClaims.scss";
 
 function Home() {
   // Inititalisation ---------------------------------------
-  const claimsEndpoint = `/claims/claimstatus/3`;
+  const claimsEndpoint = `/claims/claimstatus/5`;
   // State -------------------------------------------------
   const [claims, , ,] = useLoad(claimsEndpoint);
   // Context -----------------------------------------------
