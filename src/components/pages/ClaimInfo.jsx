@@ -13,12 +13,13 @@ const ClaimInfo = () => {
   const { claimId } = useParams();
   const { loggedInUser } = useAuth();
   const claimsEndpoint = `/claims`;
+  const assignedClaimsEndpoint = `/assignments`;
 
   // State -----------------------------------------
   const [claims, , ,] = useLoad(claimsEndpoint);
   const [sources, , ,] = useLoad(`/sources/claims/${claimId}`);
+  const [assignedClaims, , ,] = useLoad(assignedClaimsEndpoint);
   const [isLoading, setIsLoading] = useState(false);
-
   const [
     showAssignModal,
     assignModalContent,
@@ -28,16 +29,25 @@ const ClaimInfo = () => {
 
   // Handlers --------------------------------------
   const claim = claims?.find((claim) => claim.ClaimID === parseInt(claimId));
+  const isAssignedToUser = assignedClaims?.some(
+    (claim) =>
+      claim.AssignmentClaimID === parseInt(claimId) &&
+      claim.AssignmentUserID === loggedInUser.UserID,
+  );
 
   const handleAssignment = async () => {
     closeAssignModal();
     setIsLoading(true);
-    const response = await API.post(`/assignments`, {
+    const assignmentResponse = await API.post(`/assignments`, {
       AssignmentClaimID: claim.ClaimID,
       AssignmentUserID: loggedInUser.UserID,
     });
+    const response = await API.put(`/claims/${claim.ClaimID}`, {
+      ...claim,
+      ClaimClaimstatusID: 3,
+    });
     setIsLoading(false);
-    return response.isSuccess;
+    return assignmentResponse.isSuccess && response.isSuccess;
   };
 
   // View ------------------------------------------
@@ -63,10 +73,16 @@ const ClaimInfo = () => {
       <Modal className="Modal" show={showAssignModal} title="Assign Claim">
         {assignModalContent}
       </Modal>
-      {loggedInUser?.UserUsertypeID === 2 && (
+      {!isAssignedToUser && loggedInUser?.UserUsertypeID === 2 && (
         <Button variant="secondary" onClick={confrimAssignmentModal}>
           Assign claim
         </Button>
+      )}
+      {isAssignedToUser && (
+        <ButtonTray>
+          <Button>Begin Work</Button>
+          <Button variant="darkDanger">Abandon Claim</Button>
+        </ButtonTray>
       )}
       <ClaimCard claim={claim} sources={sources} />
     </>

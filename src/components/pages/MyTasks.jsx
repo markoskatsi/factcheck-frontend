@@ -3,13 +3,8 @@ import { CardContainer, Card } from "../UI/Card.jsx";
 import ClaimItem from "../entities/claims/ClaimItem.jsx";
 import { Link } from "react-router-dom";
 import { useAuth } from "../auth/useAuth.jsx";
-import { useState } from "react";
-import ClaimForm from "../entities/claims/ClaimForm.jsx";
-import API from "../api/API.js";
-import { Modal, useModal } from "../UI/Modal.jsx";
-import { Button } from "../UI/Button.jsx";
 import "./MyClaims.scss";
-import { Spinner } from "../UI/Spinner.jsx";
+import { useState } from "react";
 
 function MyTasks() {
   // Inititalisation ---------------------------------------
@@ -20,7 +15,6 @@ function MyTasks() {
   const [claims, ,] = useLoad(assignedClaimsEndpoint);
   // Context -----------------------------------------------
   // Methods -----------------------------------------------
-
   // View --------------------------------------------------
   return (
     <section>
