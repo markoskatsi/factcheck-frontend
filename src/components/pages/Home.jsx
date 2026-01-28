@@ -20,9 +20,7 @@ function Home() {
           {claims.map((claim) => (
             <Link to={`/claims/${claim.ClaimID}`} key={claim.ClaimID}>
               <div className="fixed">
-                <Card>
-                  <ClaimItem claim={claim} />
-                </Card>
+                <ClaimItem claim={claim} />
               </div>
             </Link>
           ))}

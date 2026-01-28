@@ -1,15 +1,28 @@
 import { formatDateTime } from "../../utils/dateUtils.jsx";
+import { Button, ButtonTray } from "../../UI/Button.jsx";
+import Icon from "../../UI/Icons.jsx";
+import { Card } from "../../UI/Card.jsx";
 
-export function ClaimItem({ claim }) {
+export function ClaimItem({ claim, isOwner, onClaimModify, onClaimDelete }) {
   return (
-    <div key={claim.ClaimID}>
+    <Card key={claim.ClaimID}>
       <h3>{claim.ClaimTitle}</h3>
       <p>{claim.ClaimDescription}</p>
       <p className="status">Status: {claim.ClaimstatusName}</p>
       <p style={{ marginBottom: 20 }}>
         Date Created: {formatDateTime(claim.ClaimCreated)}
       </p>
-    </div>
+      {isOwner && (
+        <ButtonTray>
+          <Button onClick={onClaimModify} variant="secondary">
+            <Icon.Pen />
+          </Button>
+          <Button onClick={onClaimDelete} variant="danger">
+            <Icon.Trash />
+          </Button>
+        </ButtonTray>
+      )}
+    </Card>
   );
 }
 export default ClaimItem;

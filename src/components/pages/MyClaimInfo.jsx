@@ -7,7 +7,9 @@ import { useState } from "react";
 import { useAuth } from "../auth/useAuth.jsx";
 import { Modal, useModal } from "../UI/Modal.jsx";
 import { Spinner } from "../UI/Spinner.jsx";
-import ClaimCard from "../entities/claims/ClaimCard.jsx";
+import { Card, CardContainer } from "../UI/Card.jsx";
+import ClaimItem from "../entities/claims/ClaimItem.jsx";
+import SourcesItem from "../entities/sources/SourcesItem.jsx";
 import { Button, ButtonTray } from "../UI/Button.jsx";
 
 const MyClaimInfo = () => {
@@ -85,7 +87,7 @@ const MyClaimInfo = () => {
     setIsLoading(true);
     const response = await API.put(
       `${putClaimEndpoint}/${claim.ClaimID}`,
-      claim
+      claim,
     );
     if (response.isSuccess) {
       setShowClaimModifyForm(false);
@@ -133,7 +135,7 @@ const MyClaimInfo = () => {
     }
     const response = await API.put(
       `${sourcesEndpoint}/${source.SourceID}`,
-      data
+      data,
     );
     if (response.isSuccess) {
       setShowSourceModifyForm(false);
@@ -181,7 +183,7 @@ const MyClaimInfo = () => {
           </Button>
           <Button onClick={closeClaimModal}>Cancel</Button>
         </ButtonTray>
-      </>
+      </>,
     );
   };
 
@@ -195,12 +197,15 @@ const MyClaimInfo = () => {
           </Button>
           <Button onClick={closeSourceModal}>Cancel</Button>
         </ButtonTray>
-      </>
+      </>,
     );
   };
 
   // View ------------------------------------------
   if (!claim) return <p>Loading claim details...</p>;
+
+  const isOwner = loggedInUserID && claim[0]?.ClaimUserID === loggedInUserID;
+
   if (claim[0]?.ClaimUserID !== loggedInUserID)
     return <p>Claim not available.</p>;
   return (
@@ -236,16 +241,21 @@ const MyClaimInfo = () => {
           initialClaim={claim[0]}
         />
       )}
-      <ClaimCard
+
+      <ClaimItem
         claim={claim[0]}
+        isOwner={isOwner}
+        onClaimModify={handleClaimModifyClick}
+        onClaimDelete={() => showClaimDeleteModal(claim[0])}
+      />
+      <h3>Attached sources:</h3>
+      <SourcesItem
         sources={sources}
+        isOwner={isOwner}
+        onSourceModify={handleSourceModifyClick}
+        onSourceDelete={() => showSourceDeleteModal()}
         showButton={showButton}
         onAddSource={handleAddSourceClick}
-        onClaimModify={handleClaimModifyClick}
-        onClaimDelete={() => showClaimDeleteModal(claim)}
-        onSourceModify={handleSourceModifyClick}
-        onSourceDelete={showSourceDeleteModal}
-        loggedInUserID={loggedInUserID}
       />
     </>
   );
