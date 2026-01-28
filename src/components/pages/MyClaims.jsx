@@ -72,9 +72,7 @@ function MyClaims() {
           {claims.map((claim) => (
             <Link to={`/myclaims/${claim.ClaimID}`} key={claim.ClaimID}>
               <div className="fixed">
-                <Card>
                   <ClaimItem claim={claim} />
-                </Card>
               </div>
             </Link>
           ))}

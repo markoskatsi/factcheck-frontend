@@ -1,7 +1,8 @@
 import { useParams } from "react-router-dom";
 import useLoad from "../api/useLoad.js";
-import ClaimCard from "../entities/claims/ClaimCard.jsx";
 import { useAuth } from "../auth/useAuth.jsx";
+import ClaimItem from "../entities/claims/ClaimItem.jsx";
+import SourcesItem from "../entities/sources/SourcesItem.jsx";
 import API from "../api/API.js";
 import { Modal, useModal } from "../UI/Modal.jsx";
 import { useState } from "react";
@@ -84,7 +85,8 @@ const ClaimInfo = () => {
           <Button variant="darkDanger">Abandon Claim</Button>
         </ButtonTray>
       )}
-      <ClaimCard claim={claim} sources={sources} />
+      <ClaimItem claim={claim} />
+      <SourcesItem sources={sources} />
     </>
   );
 };
