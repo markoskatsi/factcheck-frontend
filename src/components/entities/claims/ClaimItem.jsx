@@ -9,7 +9,7 @@ export function ClaimItem({ claim, isOwner, onClaimModify, onClaimDelete }) {
       <h3>{claim.ClaimTitle}</h3>
       <p>{claim.ClaimDescription}</p>
       <p className="status">Status: {claim.ClaimstatusName}</p>
-      <p style={{ marginBottom: 20 }}>
+      <p>
         Date Created: {formatDateTime(claim.ClaimCreated)}
       </p>
       {isOwner && (

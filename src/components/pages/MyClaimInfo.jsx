@@ -241,22 +241,23 @@ const MyClaimInfo = () => {
           initialClaim={claim[0]}
         />
       )}
-
-      <ClaimItem
-        claim={claim[0]}
-        isOwner={isOwner}
-        onClaimModify={handleClaimModifyClick}
-        onClaimDelete={() => showClaimDeleteModal(claim[0])}
-      />
-      <h3>Attached sources:</h3>
-      <SourcesItem
-        sources={sources}
-        isOwner={isOwner}
-        onSourceModify={handleSourceModifyClick}
-        onSourceDelete={() => showSourceDeleteModal()}
-        showButton={showButton}
-        onAddSource={handleAddSourceClick}
-      />
+      <Card className="claim-details-card">
+        <ClaimItem
+          claim={claim[0]}
+          isOwner={isOwner}
+          onClaimModify={handleClaimModifyClick}
+          onClaimDelete={() => showClaimDeleteModal(claim[0])}
+        />
+        <h3>Attached sources:</h3>
+        <SourcesItem
+          sources={sources}
+          isOwner={isOwner}
+          onSourceModify={handleSourceModifyClick}
+          onSourceDelete={() => showSourceDeleteModal()}
+          showButton={showButton}
+          onAddSource={handleAddSourceClick}
+        />
+      </Card>
     </>
   );
 };
