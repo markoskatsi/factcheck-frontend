@@ -8,6 +8,7 @@ import { Modal, useModal } from "../UI/Modal.jsx";
 import { useState } from "react";
 import { Button, ButtonTray } from "../UI/Button.jsx";
 import { Spinner } from "../UI/Spinner.jsx";
+import { Card } from "../UI/Card.jsx";
 
 const ClaimInfo = () => {
   // Initialisation --------------------------------
@@ -74,19 +75,23 @@ const ClaimInfo = () => {
       <Modal className="Modal" show={showAssignModal} title="Assign Claim">
         {assignModalContent}
       </Modal>
-      {!isAssignedToUser && loggedInUser?.UserUsertypeID === 2 && (
-        <Button variant="secondary" onClick={confrimAssignmentModal}>
-          Assign claim
-        </Button>
-      )}
+
       {isAssignedToUser && (
         <ButtonTray>
           <Button>Begin Work</Button>
           <Button variant="darkDanger">Abandon Claim</Button>
         </ButtonTray>
       )}
-      <ClaimItem claim={claim} />
-      <SourcesItem sources={sources} />
+      <Card className="claim-details-card">
+        {!isAssignedToUser && loggedInUser?.UserUsertypeID === 2 && (
+          <Button variant="secondary" onClick={confrimAssignmentModal}>
+            Assign claim
+          </Button>
+        )}
+        <ClaimItem claim={claim} />
+        <h3>Attached sources:</h3>
+        <SourcesItem sources={sources} />
+      </Card>
     </>
   );
 };

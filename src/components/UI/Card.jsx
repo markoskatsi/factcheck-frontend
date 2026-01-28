@@ -10,7 +10,7 @@ export function CardContainer(props) {
 
 export function Card(props) {
   return(
-    <div className="card">
+    <div className={`card ${props.className || ''}`}>
       {props.children}
     </div>
   );

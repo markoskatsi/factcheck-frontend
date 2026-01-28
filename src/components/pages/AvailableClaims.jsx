@@ -26,9 +26,7 @@ function AvailableClaims() {
           {claims.map((claim) => (
             <Link to={`/availableclaims/${claim.ClaimID}`} key={claim.ClaimID}>
               <div className="fixed">
-                <Card>
                   <ClaimItem claim={claim} />
-                </Card>
               </div>
             </Link>
           ))}

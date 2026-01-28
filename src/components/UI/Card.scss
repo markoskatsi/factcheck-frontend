@@ -20,13 +20,6 @@ div.card {
     width: 400px;
   }
 
-  &:hover {
-    transform: translateY(-5px);
-    border-color: rgba(41, 231, 205, 0.4);
-    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
-    transition: all 0.4s ease;
-  }
-
   h3 {
     font-size: 1.2rem;
     font-weight: 600;
@@ -38,7 +31,7 @@ div.card {
     font-size: 0.9rem;
     line-height: 1.5;
     color: #d0d0d0;
-    margin-bottom: 50px;
+    margin-bottom: 10px;
 
     &.status {
       display: inline-block;
@@ -60,6 +53,47 @@ div.card {
     &:hover {
       text-decoration: underline;
     }
+  }
+}
+
+div.card.claim-details-card {
+  max-width: 50%;
+  margin: 0 auto;
+  background: #34495e;
+  padding: 15px;
+
+  .card {
+    &:hover {
+      transform: translateY(-5px);
+      border-color: rgba(41, 231, 205, 0.4);
+      box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
+      transition: all 0.4s ease;
+    }
+  }
+
+  h3 {
+    margin-top: 20px;
+    margin-bottom: 10px;
+
+    &:first-child {
+      margin-top: 0;
+    }
+  }
+
+  p {
+    margin-bottom: 8px;
+
+    &:last-of-type {
+      margin-bottom: 12px;
+    }
+  }
+
+  @media (max-width: 1200px) {
+    max-width: 70%;
+  }
+
+  @media (max-width: 768px) {
+    max-width: 100%;
   }
 }
 

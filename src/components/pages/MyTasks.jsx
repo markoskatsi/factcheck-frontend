@@ -28,9 +28,7 @@ function MyTasks() {
               key={claim.AssignmentClaimID}
             >
               <div className="fixed">
-                <Card>
                   <ClaimItem claim={claim} />
-                </Card>
               </div>
             </Link>
           ))}
