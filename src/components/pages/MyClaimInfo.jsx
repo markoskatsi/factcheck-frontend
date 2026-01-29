@@ -27,28 +27,39 @@ const MyClaimInfo = () => {
   const [claim, , , loadClaim] = useLoad(claimEndpoint);
   const [sources, , , loadSources] = useLoad(claimSourcesEndpoint);
 
-  const [showStatusChangeMessage, setShowStatusChangeMessage] = useState(false);
-  const [showSourceAddForm, setShowSourceAddForm] = useState(false);
-  const [showSourceModifyForm, setShowSourceModifyForm] = useState(false);
-  const [showClaimModifyForm, setShowClaimModifyForm] = useState(false);
   const [showButton, setShowButton] = useState(true);
   const [selectedSource, setSelectedSource] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
 
-  const [showClaimModal, claimModalContent, openClaimModal, closeClaimModal] =
-    useModal(false);
   const [
-    showSourceModal,
-    sourceModalContent,
-    openSourceModal,
-    closeSourceModal,
+    showClaimDeleteModal,
+    claimDeleteModalContent,
+    openClaimDeleteModal,
+    closeClaimDeleteModal,
+  ] = useModal(false);
+  const [
+    showClaimModifyModal,
+    claimModifyModalContent,
+    openClaimModifyModal,
+    closeClaimModifyModal,
+  ] = useModal(false);
+  const [
+    showSourceAddModal,
+    sourceAddModalContent,
+    openSourceAddModal,
+    closeSourceAddModal,
+  ] = useModal(false);
+  const [
+    showSourceModifyModal,
+    sourceModifyModalContent,
+    openSourceModifyModal,
+    closeSourceModifyModal,
   ] = useModal(false);
 
   // Handlers --------------------------------------
   const handleAddSourceClick = () => {
-    setShowSourceAddForm(true);
-    setShowClaimModifyForm(false);
     setShowButton(false);
+    addSourceModal();
   };
 
   const handleSourceSubmit = async (source) => {
@@ -66,8 +77,8 @@ const MyClaimInfo = () => {
     }
     const sourceResponse = await API.post(sourcesEndpoint, data);
     if (sourceResponse.isSuccess) {
-      setShowSourceAddForm(false);
       setShowButton(true);
+      closeSourceAddModal();
       await loadSources(claimSourcesEndpoint);
     }
     setIsLoading(false);
@@ -75,12 +86,8 @@ const MyClaimInfo = () => {
   };
 
   const handleClaimModifyClick = () => {
-    setShowClaimModifyForm(true);
-    setShowSourceAddForm(false);
-    setShowSourceModifyForm(false);
     setShowButton(true);
-    setShowStatusChangeMessage(true);
-    window.scrollTo({ top: 0, left: 0, behavior: "smooth" });
+    modifyClaimModal();
   };
 
   const handleClaimModifySubmit = async (claim) => {
@@ -90,8 +97,7 @@ const MyClaimInfo = () => {
       claim,
     );
     if (response.isSuccess) {
-      setShowClaimModifyForm(false);
-      setShowStatusChangeMessage(false);
+      closeClaimModifyModal();
       await loadClaim(claimEndpoint);
     }
     setIsLoading(false);
@@ -109,12 +115,8 @@ const MyClaimInfo = () => {
 
   const handleSourceModifyClick = (source) => {
     setSelectedSource(source);
-    setShowSourceModifyForm(true);
-    setShowSourceAddForm(false);
-    setShowClaimModifyForm(false);
     setShowButton(false);
-    setShowStatusChangeMessage(true);
-    window.scrollTo({ top: 0, left: 0, behavior: "smooth" });
+    modifySourceModal(source);
   };
 
   const handleSourceModifySubmit = async (source) => {
@@ -138,10 +140,9 @@ const MyClaimInfo = () => {
       data,
     );
     if (response.isSuccess) {
-      setShowSourceModifyForm(false);
       setShowButton(true);
-      setShowStatusChangeMessage(false);
       setSelectedSource(null);
+      closeSourceModifyModal();
       console.log(claimSourcesEndpoint);
       await loadSources(claimSourcesEndpoint);
     }
@@ -153,11 +154,9 @@ const MyClaimInfo = () => {
     setIsLoading(true);
     const deleteResponse = await API.delete(`${sourcesEndpoint}/${id}`);
     if (deleteResponse.isSuccess) {
-      setShowSourceAddForm(false);
-      setShowSourceModifyForm(false);
       setSelectedSource(null);
       setShowButton(true);
-      closeSourceModal();
+      closeSourceAddModal();
       await loadSources(claimSourcesEndpoint);
     }
     setIsLoading(false);
@@ -165,37 +164,69 @@ const MyClaimInfo = () => {
   };
 
   const handleCancel = () => {
-    setShowSourceAddForm(false);
-    setShowSourceModifyForm(false);
-    setShowClaimModifyForm(false);
+    closeSourceAddModal();
+    closeSourceModifyModal();
+    closeClaimModifyModal();
     setShowButton(true);
     setSelectedSource(null);
-    setShowStatusChangeMessage(false);
   };
 
-  const showClaimDeleteModal = () => {
-    openClaimModal(
+  const deleteClaimModal = () => {
+    openClaimDeleteModal(
       <>
         <p>Are you sure you want to delete this claim?</p>
         <ButtonTray>
           <Button onClick={handleClaimDelete} variant="darkDanger">
             Delete
           </Button>
-          <Button onClick={closeClaimModal}>Cancel</Button>
+          <Button onClick={closeClaimDeleteModal}>Cancel</Button>
         </ButtonTray>
       </>,
     );
   };
 
-  const showSourceDeleteModal = (id) => {
-    openSourceModal(
+  const modifyClaimModal = () => {
+    openClaimModifyModal(
+      <>
+        <div className="statusChangeMessage">
+          <p style={{ color: "red" }}>
+            Changing claim information will restart the verification process.
+          </p>
+        </div>
+        <ClaimForm
+          onSubmit={handleClaimModifySubmit}
+          onCancel={handleCancel}
+          initialClaim={claim[0]}
+        />
+      </>,
+    );
+  };
+
+  const addSourceModal = () => {
+    openSourceAddModal(
+      <SourceForm onSubmit={handleSourceSubmit} onCancel={handleCancel} />,
+    );
+  };
+
+  const modifySourceModal = (source) => {
+    openSourceModifyModal(
+      <SourceForm
+        onSubmit={handleSourceModifySubmit}
+        onCancel={handleCancel}
+        initialSource={source}
+      />,
+    );
+  };
+
+  const deleteSourceModal = (id) => {
+    openSourceAddModal(
       <>
         <p>Are you sure you want to delete this source?</p>
         <ButtonTray>
           <Button onClick={() => handleSourceDelete(id)} variant="darkDanger">
             Delete
           </Button>
-          <Button onClick={closeSourceModal}>Cancel</Button>
+          <Button onClick={closeSourceAddModal}>Cancel</Button>
         </ButtonTray>
       </>,
     );
@@ -211,49 +242,31 @@ const MyClaimInfo = () => {
   return (
     <>
       {isLoading && <Spinner />}
-      <Modal show={showClaimModal} title="Delete Claim">
-        {claimModalContent}
+      <Modal show={showClaimDeleteModal} title="Delete Claim">
+        {claimDeleteModalContent}
       </Modal>
-      <Modal show={showSourceModal} title="Delete Source">
-        {sourceModalContent}
+      <Modal show={showSourceAddModal} title="Add Source">
+        {sourceAddModalContent}
       </Modal>
-      {showStatusChangeMessage && (
-        <div className="statusChangeMessage">
-          <p style={{ color: "red" }}>
-            Changing claim information will restart the verification process.
-          </p>
-        </div>
-      )}
-      {showSourceAddForm && (
-        <SourceForm onSubmit={handleSourceSubmit} onCancel={handleCancel} />
-      )}
-      {showSourceModifyForm && (
-        <SourceForm
-          onSubmit={handleSourceModifySubmit}
-          onCancel={handleCancel}
-          initialSource={selectedSource}
-        />
-      )}
-      {showClaimModifyForm && (
-        <ClaimForm
-          onSubmit={handleClaimModifySubmit}
-          onCancel={handleCancel}
-          initialClaim={claim[0]}
-        />
-      )}
+      <Modal show={showSourceModifyModal} title="Modify Source">
+        {sourceModifyModalContent}
+      </Modal>
+      <Modal show={showClaimModifyModal} title="Modify Claim">
+        {claimModifyModalContent}
+      </Modal>
       <Card className="claim-details-card">
         <ClaimItem
           claim={claim[0]}
           isOwner={isOwner}
           onClaimModify={handleClaimModifyClick}
-          onClaimDelete={() => showClaimDeleteModal(claim[0])}
+          onClaimDelete={() => deleteClaimModal(claim[0])}
         />
         <h3>Attached sources:</h3>
         <SourcesItem
           sources={sources}
           isOwner={isOwner}
           onSourceModify={handleSourceModifyClick}
-          onSourceDelete={() => showSourceDeleteModal()}
+          onSourceDelete={deleteSourceModal}
           showButton={showButton}
           onAddSource={handleAddSourceClick}
         />
