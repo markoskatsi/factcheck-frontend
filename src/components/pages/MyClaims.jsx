@@ -20,7 +20,6 @@ function MyClaims() {
   // State -------------------------------------------------
   const [claims, , loadingClaimsMessage, loadClaims] = useLoad(claimsEndpoint);
   const [isLoading, setIsLoading] = useState(false);
-  const [showForm, setShowForm] = useState(false);
   const [showClaimModal, claimModalContent, openClaimModal, closeClaimModal] =
     useModal(false);
   // Context -----------------------------------------------
@@ -29,7 +28,6 @@ function MyClaims() {
     setIsLoading(true);
     const claimResponse = await API.post(allClaimsEndpoint, claim);
     if (claimResponse.isSuccess) {
-      // setShowForm(false);
       closeClaimModal();
       await loadClaims(claimsEndpoint);
     }
@@ -38,18 +36,16 @@ function MyClaims() {
   };
 
   const handleCancel = () => {
-    // setShowForm(false);
     closeClaimModal();
   };
 
   const handleClick = () => {
-    // setShowForm(true);
     showAddClaimModal(true);
   };
 
   const showAddClaimModal = () => {
     openClaimModal(
-      <ClaimForm onSubmit={handleSubmit} onCancel={handleCancel} />
+      <ClaimForm onSubmit={handleSubmit} onCancel={handleCancel} />,
     );
   };
 
@@ -61,18 +57,14 @@ function MyClaims() {
         {claimModalContent}
       </Modal>
       <h1>My Claims</h1>
-      {!showForm ? (
-        <Button onClick={handleClick}>Add New Claim</Button>
-      ) : (
-        <ClaimForm onSubmit={handleSubmit} onCancel={handleCancel} />
-      )}
+      <Button onClick={handleClick}>Add New Claim</Button>
 
       {claims && claims.length > 0 ? (
         <CardContainer>
           {claims.map((claim) => (
             <Link to={`/myclaims/${claim.ClaimID}`} key={claim.ClaimID}>
               <div className="fixed">
-                  <ClaimItem claim={claim} />
+                <ClaimItem claim={claim} />
               </div>
             </Link>
           ))}

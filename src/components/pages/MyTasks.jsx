@@ -4,7 +4,6 @@ import ClaimItem from "../entities/claims/ClaimItem.jsx";
 import { Link } from "react-router-dom";
 import { useAuth } from "../auth/useAuth.jsx";
 import "./MyClaims.scss";
-import { useState } from "react";
 
 function MyTasks() {
   // Inititalisation ---------------------------------------
