@@ -1,4 +1,4 @@
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import useLoad from "../api/useLoad.js";
 import { useAuth } from "../auth/useAuth.jsx";
 import ClaimItem from "../entities/claims/ClaimItem.jsx";
@@ -14,13 +14,16 @@ const ClaimInfo = () => {
   // Initialisation --------------------------------
   const { claimId } = useParams();
   const { loggedInUser } = useAuth();
+  const navigate = useNavigate();
   const claimsEndpoint = `/claims`;
   const assignedClaimsEndpoint = `/assignments`;
 
   // State -----------------------------------------
-  const [claims, , ,] = useLoad(claimsEndpoint);
+  const [claims, , , reloadClaims] = useLoad(claimsEndpoint);
   const [sources, , ,] = useLoad(`/sources/claims/${claimId}`);
-  const [assignedClaims, , ,] = useLoad(assignedClaimsEndpoint);
+  const [assignedClaims, , , reloadAssignedClaims] = useLoad(
+    assignedClaimsEndpoint,
+  );
   const [isLoading, setIsLoading] = useState(false);
   const [
     showAssignModal,
@@ -48,8 +51,32 @@ const ClaimInfo = () => {
       ...claim,
       ClaimClaimstatusID: 3,
     });
+    await reloadAssignedClaims(assignedClaimsEndpoint);
+    await reloadClaims(claimsEndpoint);
     setIsLoading(false);
+    navigate(`/mytasks/${claim.ClaimID}`);
     return assignmentResponse.isSuccess && response.isSuccess;
+  };
+
+  const handleAbandon = async () => {
+    setIsLoading(true);
+    const assignmentToDelete = assignedClaims.find(
+      (assignment) =>
+        assignment.AssignmentClaimID === claim.ClaimID &&
+        assignment.AssignmentUserID === loggedInUser?.UserID,
+    );
+    const deleteResponse = await API.delete(
+      `/assignments/${assignmentToDelete.AssignmentID}`,
+    );
+    const response = await API.put(`/claims/${claim.ClaimID}`, {
+      ...claim,
+      ClaimClaimstatusID: 2,
+    });
+    await reloadAssignedClaims(assignedClaimsEndpoint);
+    await reloadClaims(claimsEndpoint);
+    setIsLoading(false);
+    navigate(`/mytasks`);
+    return deleteResponse.isSuccess && response.isSuccess;
   };
 
   // View ------------------------------------------
@@ -79,7 +106,9 @@ const ClaimInfo = () => {
       {isAssignedToUser && (
         <ButtonTray>
           <Button>Begin Work</Button>
-          <Button variant="darkDanger">Abandon Claim</Button>
+          <Button variant="darkDanger" onClick={handleAbandon}>
+            Abandon Claim
+          </Button>
         </ButtonTray>
       )}
       <Card className="claim-details-card">
