@@ -112,11 +112,13 @@ const ClaimInfo = () => {
         </ButtonTray>
       )}
       <Card className="claim-details-card">
-        {!isAssignedToUser && loggedInUser?.UserUsertypeID === 2 && (
-          <Button variant="secondary" onClick={confrimAssignmentModal}>
-            Assign claim
-          </Button>
-        )}
+        {!isAssignedToUser &&
+          loggedInUser?.UserUsertypeID === 2 &&
+          claim.ClaimClaimstatusID === 2 && (
+            <Button variant="secondary" onClick={confrimAssignmentModal}>
+              Assign claim
+            </Button>
+          )}
         <ClaimItem claim={claim} />
         <h3>Attached sources:</h3>
         <SourcesItem sources={sources} />
