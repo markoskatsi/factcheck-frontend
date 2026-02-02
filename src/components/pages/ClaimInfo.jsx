@@ -1,8 +1,7 @@
 import { useNavigate, useParams } from "react-router-dom";
 import useLoad from "../api/useLoad.js";
 import { useAuth } from "../auth/useAuth.jsx";
-import ClaimItem from "../entities/claims/ClaimItem.jsx";
-import SourcesItem from "../entities/sources/SourcesItem.jsx";
+import ClaimAndSources from "../entities/claims/ClaimAndSources.jsx";
 import API from "../api/API.js";
 import { Modal, useModal } from "../UI/Modal.jsx";
 import { useState } from "react";
@@ -111,18 +110,14 @@ const ClaimInfo = () => {
           </Button>
         </ButtonTray>
       )}
-      <Card className="claim-details-card">
-        {!isAssignedToUser &&
-          loggedInUser?.UserUsertypeID === 2 &&
-          claim.ClaimClaimstatusID === 2 && (
-            <Button variant="secondary" onClick={confrimAssignmentModal}>
-              Assign claim
-            </Button>
-          )}
-        <ClaimItem claim={claim} />
-        <h3>Attached sources:</h3>
-        <SourcesItem sources={sources} />
-      </Card>
+      {!isAssignedToUser &&
+        loggedInUser?.UserUsertypeID === 2 &&
+        claim.ClaimClaimstatusID === 2 && (
+          <Button variant="secondary" onClick={confrimAssignmentModal}>
+            Assign claim
+          </Button>
+        )}
+      <ClaimAndSources claim={claim} sources={sources} />
     </>
   );
 };
