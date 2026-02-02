@@ -1,7 +1,4 @@
 import useLoad from "../api/useLoad.js";
-import { CardContainer, Card } from "../UI/Card.jsx";
-import ClaimItem from "../entities/claims/ClaimItem.jsx";
-import { Link } from "react-router-dom";
 import { useAuth } from "../auth/useAuth.jsx";
 import { useState } from "react";
 import ClaimForm from "../entities/claims/ClaimForm.jsx";
@@ -10,6 +7,7 @@ import { Modal, useModal } from "../UI/Modal.jsx";
 import { Button } from "../UI/Button.jsx";
 import "./MyClaims.scss";
 import { Spinner } from "../UI/Spinner.jsx";
+import ClaimsItem from "../entities/claims/ClaimsItem.jsx";
 
 function MyClaims() {
   // Inititalisation ---------------------------------------
@@ -18,7 +16,7 @@ function MyClaims() {
   const allClaimsEndpoint = "/claims";
 
   // State -------------------------------------------------
-  const [claims, , loadingClaimsMessage, loadClaims] = useLoad(claimsEndpoint);
+  const [claims, , , loadClaims] = useLoad(claimsEndpoint);
   const [isLoading, setIsLoading] = useState(false);
   const [showClaimModal, claimModalContent, openClaimModal, closeClaimModal] =
     useModal(false);
@@ -59,19 +57,7 @@ function MyClaims() {
       <h1>My Claims</h1>
       <Button onClick={handleClick}>Add New Claim</Button>
 
-      {claims && claims.length > 0 ? (
-        <CardContainer>
-          {claims.map((claim) => (
-            <Link to={`/myclaims/${claim.ClaimID}`} key={claim.ClaimID}>
-              <div className="fixed">
-                <ClaimItem claim={claim} />
-              </div>
-            </Link>
-          ))}
-        </CardContainer>
-      ) : (
-        <p>You have not made any claims</p>
-      )}
+      <ClaimsItem claims={claims} basePath="/myclaims" />
     </section>
   );
 }

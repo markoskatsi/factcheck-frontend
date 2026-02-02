@@ -3,6 +3,7 @@ import { CardContainer, Card } from "../UI/Card.jsx";
 import ClaimItem from "../entities/claims/ClaimItem.jsx";
 import { Link } from "react-router-dom";
 import "./MyClaims.scss";
+import ClaimsItem from "../entities/claims/ClaimsItem.jsx";
 
 function Home() {
   // Inititalisation ---------------------------------------
@@ -15,19 +16,7 @@ function Home() {
   return (
     <section>
       <h1>Browse Verified Claims</h1>
-      {claims ? (
-        <CardContainer>
-          {claims.map((claim) => (
-            <Link to={`/claims/${claim.ClaimID}`} key={claim.ClaimID}>
-              <div className="fixed">
-                <ClaimItem claim={claim} />
-              </div>
-            </Link>
-          ))}
-        </CardContainer>
-      ) : (
-        <p>No verified claims available.</p>
-      )}
+      <ClaimsItem claims={claims} basePath="/claims" />
     </section>
   );
 }

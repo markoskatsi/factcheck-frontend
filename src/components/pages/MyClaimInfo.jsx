@@ -7,9 +7,7 @@ import { useState } from "react";
 import { useAuth } from "../auth/useAuth.jsx";
 import { Modal, useModal } from "../UI/Modal.jsx";
 import { Spinner } from "../UI/Spinner.jsx";
-import { Card, CardContainer } from "../UI/Card.jsx";
-import ClaimItem from "../entities/claims/ClaimItem.jsx";
-import SourcesItem from "../entities/sources/SourcesItem.jsx";
+import ClaimAndSources from "../entities/claims/ClaimAndSources.jsx";
 import { Button, ButtonTray } from "../UI/Button.jsx";
 
 const MyClaimInfo = () => {
@@ -28,7 +26,6 @@ const MyClaimInfo = () => {
   const [sources, , , loadSources] = useLoad(claimSourcesEndpoint);
 
   const [showButton, setShowButton] = useState(true);
-  const [selectedSource, setSelectedSource] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
 
   const [
@@ -114,7 +111,6 @@ const MyClaimInfo = () => {
   };
 
   const handleSourceModifyClick = (source) => {
-    setSelectedSource(source);
     setShowButton(false);
     modifySourceModal(source);
   };
@@ -141,7 +137,6 @@ const MyClaimInfo = () => {
     );
     if (response.isSuccess) {
       setShowButton(true);
-      setSelectedSource(null);
       closeSourceModifyModal();
       console.log(claimSourcesEndpoint);
       await loadSources(claimSourcesEndpoint);
@@ -154,7 +149,6 @@ const MyClaimInfo = () => {
     setIsLoading(true);
     const deleteResponse = await API.delete(`${sourcesEndpoint}/${id}`);
     if (deleteResponse.isSuccess) {
-      setSelectedSource(null);
       setShowButton(true);
       closeSourceAddModal();
       await loadSources(claimSourcesEndpoint);
@@ -168,7 +162,6 @@ const MyClaimInfo = () => {
     closeSourceModifyModal();
     closeClaimModifyModal();
     setShowButton(true);
-    setSelectedSource(null);
   };
 
   const deleteClaimModal = () => {
@@ -254,23 +247,17 @@ const MyClaimInfo = () => {
       <Modal show={showClaimModifyModal} title="Modify Claim">
         {claimModifyModalContent}
       </Modal>
-      <Card className="claim-details-card">
-        <ClaimItem
-          claim={claim[0]}
-          isOwner={isOwner}
-          onClaimModify={handleClaimModifyClick}
-          onClaimDelete={() => deleteClaimModal(claim[0])}
-        />
-        <h3>Attached sources:</h3>
-        <SourcesItem
-          sources={sources}
-          isOwner={isOwner}
-          onSourceModify={handleSourceModifyClick}
-          onSourceDelete={deleteSourceModal}
-          showButton={showButton}
-          onAddSource={handleAddSourceClick}
-        />
-      </Card>
+      <ClaimAndSources
+        claim={claim[0]}
+        sources={sources}
+        isOwner={isOwner}
+        onClaimModify={handleClaimModifyClick}
+        onClaimDelete={() => deleteClaimModal(claim[0])}
+        onSourceModify={handleSourceModifyClick}
+        onSourceDelete={deleteSourceModal}
+        showButton={showButton}
+        onAddSource={handleAddSourceClick}
+      />
     </>
   );
 };

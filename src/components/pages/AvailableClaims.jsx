@@ -6,6 +6,7 @@ import "./MyClaims.scss";
 import { Spinner } from "../UI/Spinner.jsx";
 import { useAuth } from "../auth/useAuth.jsx";
 import PageNotFound from "./404.jsx";
+import ClaimsItem from "../entities/claims/ClaimsItem.jsx";
 
 function AvailableClaims() {
   // Inititalisation ---------------------------------------
@@ -21,19 +22,7 @@ function AvailableClaims() {
   return (
     <section>
       <h1>Available Claims</h1>
-      {claims && claims.length > 0 ? (
-        <CardContainer>
-          {claims.map((claim) => (
-            <Link to={`/availableclaims/${claim.ClaimID}`} key={claim.ClaimID}>
-              <div className="fixed">
-                  <ClaimItem claim={claim} />
-              </div>
-            </Link>
-          ))}
-        </CardContainer>
-      ) : (
-        <p>No available claims found</p>
-      )}
+      <ClaimsItem claims={claims} basePath="/availableclaims" />
     </section>
   );
 }
