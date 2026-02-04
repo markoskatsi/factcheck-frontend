@@ -19,10 +19,10 @@ export default function SourceForm({
   const sourceWithClaim = { ...initialSource, SourceClaimID: claimId };
   const validation = {
     isValid: {
-      SourceURL: (url) => url === "" || url.startsWith("http"),
+      SourceURL: (url) => !url || url.startsWith("http"),
       SourceSourcetypeID: (type) => type !== 0,
       SourceDescription: (desc) => desc.length > 10,
-      file: (file) => file instanceof File,
+      file: (file) => !file || file instanceof File,
     },
     errorMessage: {
       SourceURL: "Source URL is invalid",
@@ -41,7 +41,7 @@ export default function SourceForm({
     conformance,
     validation,
     onSubmit,
-    onCancel
+    onCancel,
   );
 
   const [sourceTypes, , loadingTypesMessage] = useLoad(sourceTypesEndpoint);

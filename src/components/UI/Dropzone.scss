@@ -8,13 +8,35 @@
   flex-direction: column;
   align-items: center;
   cursor: pointer;
-  .Icon,
-  img {
+  .uploadImg {
     display: flex;
+    flex-direction: column;
     align-items: center;
     justify-content: center;
-    width: 70px;
-    height: 70px;
+    gap: 0.5rem;
+    img {
+      width: 100px;
+      height: 100px;
+    }
+  }
+  .selectedFile {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    position: relative;
+    padding: 0.5rem 0;
+    p {
+      margin: 0;
+      line-height: 1;
+    }
+    button {
+      position: absolute;
+      right: 0;
+      top: 50%;
+      transform: translateY(-50%);
+    }
   }
   &.dropzone--active {
     border-color: #007bff;

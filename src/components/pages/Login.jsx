@@ -1,6 +1,5 @@
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../auth/useAuth.jsx";
-import Action from "../UI/Actions.jsx";
 import Icon from "../UI/Icons.jsx";
 import { Button } from "../UI/Button.jsx";
 import useLoad from "../api/useLoad.js";
