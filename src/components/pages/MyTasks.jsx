@@ -18,23 +18,7 @@ function MyTasks() {
   return (
     <section>
       <h1>My Tasks</h1>
-
-      {claims && claims.length > 0 ? (
-        <CardContainer>
-          {claims.map((claim) => (
-            <Link
-              to={`/mytasks/${claim.AssignmentClaimID}`}
-              key={claim.AssignmentClaimID}
-            >
-              <div className="fixed">
-                  <ClaimItem claim={claim} />
-              </div>
-            </Link>
-          ))}
-        </CardContainer>
-      ) : (
-        <p>You have no tasks assigned</p>
-      )}
+      <ClaimsMap claims={claims} basePath="/mytasks" />
     </section>
   );
 }
