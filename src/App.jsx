@@ -1,5 +1,4 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
-import { useState, createContext, useContext } from "react";
 import Layout from "./components/layouts/Layout";
 import Home from "./components/pages/Home";
 import MyClaims from "./components/pages/MyClaims";
