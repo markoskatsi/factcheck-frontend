@@ -7,7 +7,6 @@ import { Modal, useModal } from "../UI/Modal.jsx";
 import { useState } from "react";
 import { Button, ButtonTray } from "../UI/Button.jsx";
 import { Spinner } from "../UI/Spinner.jsx";
-import { Card } from "../UI/Card.jsx";
 
 const ClaimInfo = () => {
   // Initialisation --------------------------------
@@ -24,12 +23,8 @@ const ClaimInfo = () => {
     assignedClaimsEndpoint,
   );
   const [isLoading, setIsLoading] = useState(false);
-  const [
-    showAssignModal,
-    assignModalContent,
-    openAssignModal,
-    closeAssignModal,
-  ] = useModal(false);
+  const [showModal, modalContent, modalTitle, openModal, closeModal] =
+    useModal(false);
 
   // Handlers --------------------------------------
   const claim = claims?.find((claim) => claim.ClaimID === parseInt(claimId));
@@ -40,7 +35,7 @@ const ClaimInfo = () => {
   );
 
   const handleAssignment = async () => {
-    closeAssignModal();
+    closeModal();
     setIsLoading(true);
     const assignmentResponse = await API.post(`/assignments`, {
       AssignmentClaimID: claim.ClaimID,
@@ -80,16 +75,17 @@ const ClaimInfo = () => {
 
   // View ------------------------------------------
   const confrimAssignmentModal = () => {
-    openAssignModal(
+    openModal(
       <div>
         <p>Are you sure you want to assign this claim?</p>
         <ButtonTray>
           <Button onClick={handleAssignment} variant="secondary">
             Yes
           </Button>
-          <Button onClick={closeAssignModal}>No</Button>
+          <Button onClick={closeModal}>No</Button>
         </ButtonTray>
       </div>,
+      "Assign Claim",
     );
   };
 
@@ -98,8 +94,8 @@ const ClaimInfo = () => {
   return (
     <>
       {isLoading && <Spinner />}
-      <Modal className="Modal" show={showAssignModal} title="Assign Claim">
-        {assignModalContent}
+      <Modal className="Modal" show={showModal} title={modalTitle}>
+        {modalContent}
       </Modal>
 
       {isAssignedToUser && (

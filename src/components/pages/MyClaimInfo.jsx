@@ -9,6 +9,7 @@ import { Modal, useModal } from "../UI/Modal.jsx";
 import { Spinner } from "../UI/Spinner.jsx";
 import ClaimAndSources from "../entities/claims/ClaimAndSources.jsx";
 import { Button, ButtonTray } from "../UI/Button.jsx";
+import "./MyClaimInfo.scss";
 
 const MyClaimInfo = () => {
   // Initialisation --------------------------------
@@ -24,41 +25,11 @@ const MyClaimInfo = () => {
   // State -----------------------------------------
   const [claim, , , loadClaim] = useLoad(claimEndpoint);
   const [sources, , , loadSources] = useLoad(claimSourcesEndpoint);
-
-  const [showButton, setShowButton] = useState(true);
   const [isLoading, setIsLoading] = useState(false);
-
-  const [
-    showClaimDeleteModal,
-    claimDeleteModalContent,
-    openClaimDeleteModal,
-    closeClaimDeleteModal,
-  ] = useModal(false);
-  const [
-    showClaimModifyModal,
-    claimModifyModalContent,
-    openClaimModifyModal,
-    closeClaimModifyModal,
-  ] = useModal(false);
-  const [
-    showSourceAddModal,
-    sourceAddModalContent,
-    openSourceAddModal,
-    closeSourceAddModal,
-  ] = useModal(false);
-  const [
-    showSourceModifyModal,
-    sourceModifyModalContent,
-    openSourceModifyModal,
-    closeSourceModifyModal,
-  ] = useModal(false);
+  const [showModal, modalContent, modalTitle, openModal, closeModal] =
+    useModal(false);
 
   // Handlers --------------------------------------
-  const handleAddSourceClick = () => {
-    setShowButton(false);
-    addSourceModal();
-  };
-
   const handleSourceSubmit = async (source) => {
     setIsLoading(true);
     let data;
@@ -74,17 +45,11 @@ const MyClaimInfo = () => {
     }
     const sourceResponse = await API.post(sourcesEndpoint, data);
     if (sourceResponse.isSuccess) {
-      setShowButton(true);
-      closeSourceAddModal();
+      closeModal();
       await loadSources(claimSourcesEndpoint);
     }
     setIsLoading(false);
     return sourceResponse.isSuccess;
-  };
-
-  const handleClaimModifyClick = () => {
-    setShowButton(true);
-    modifyClaimModal();
   };
 
   const handleClaimModifySubmit = async (claim) => {
@@ -94,7 +59,7 @@ const MyClaimInfo = () => {
       claim,
     );
     if (response.isSuccess) {
-      closeClaimModifyModal();
+      closeModal();
       await loadClaim(claimEndpoint);
     }
     setIsLoading(false);
@@ -108,11 +73,6 @@ const MyClaimInfo = () => {
     if (deleteResponse.isSuccess) {
       navigate("/myclaims");
     }
-  };
-
-  const handleSourceModifyClick = (source) => {
-    setShowButton(false);
-    modifySourceModal(source);
   };
 
   const handleSourceModifySubmit = async (source) => {
@@ -136,8 +96,7 @@ const MyClaimInfo = () => {
       data,
     );
     if (response.isSuccess) {
-      setShowButton(true);
-      closeSourceModifyModal();
+      closeModal();
       console.log(claimSourcesEndpoint);
       await loadSources(claimSourcesEndpoint);
     }
@@ -149,8 +108,7 @@ const MyClaimInfo = () => {
     setIsLoading(true);
     const deleteResponse = await API.delete(`${sourcesEndpoint}/${id}`);
     if (deleteResponse.isSuccess) {
-      setShowButton(true);
-      closeSourceAddModal();
+      closeModal();
       await loadSources(claimSourcesEndpoint);
     }
     setIsLoading(false);
@@ -158,28 +116,26 @@ const MyClaimInfo = () => {
   };
 
   const handleCancel = () => {
-    closeSourceAddModal();
-    closeSourceModifyModal();
-    closeClaimModifyModal();
-    setShowButton(true);
+    closeModal();
   };
 
   const deleteClaimModal = () => {
-    openClaimDeleteModal(
+    openModal(
       <>
         <p>Are you sure you want to delete this claim?</p>
         <ButtonTray>
           <Button onClick={handleClaimDelete} variant="darkDanger">
             Delete
           </Button>
-          <Button onClick={closeClaimDeleteModal}>Cancel</Button>
+          <Button onClick={closeModal}>Cancel</Button>
         </ButtonTray>
       </>,
+      "Delete Claim",
     );
   };
 
   const modifyClaimModal = () => {
-    openClaimModifyModal(
+    openModal(
       <>
         <div className="statusChangeMessage">
           <p style={{ color: "red" }}>
@@ -192,71 +148,69 @@ const MyClaimInfo = () => {
           initialClaim={claim[0]}
         />
       </>,
+      "Modify Claim",
     );
   };
 
   const addSourceModal = () => {
-    openSourceAddModal(
+    openModal(
       <SourceForm onSubmit={handleSourceSubmit} onCancel={handleCancel} />,
+      "Add Source",
     );
   };
 
   const modifySourceModal = (source) => {
-    openSourceModifyModal(
+    openModal(
       <SourceForm
         onSubmit={handleSourceModifySubmit}
         onCancel={handleCancel}
         initialSource={source}
       />,
+      "Modify Source",
     );
   };
 
   const deleteSourceModal = (id) => {
-    openSourceAddModal(
+    openModal(
       <>
         <p>Are you sure you want to delete this source?</p>
         <ButtonTray>
           <Button onClick={() => handleSourceDelete(id)} variant="darkDanger">
             Delete
           </Button>
-          <Button onClick={closeSourceAddModal}>Cancel</Button>
+          <Button onClick={closeModal}>Cancel</Button>
         </ButtonTray>
       </>,
+      "Delete Source",
     );
   };
 
   // View ------------------------------------------
   if (!claim) return <p>Loading claim details...</p>;
-
-  const isOwner = loggedInUserID && claim[0]?.ClaimUserID === loggedInUserID;
-
   if (claim[0]?.ClaimUserID !== loggedInUserID)
     return <p>Claim not available.</p>;
   return (
     <>
       {isLoading && <Spinner />}
-      <Modal show={showClaimDeleteModal} title="Delete Claim">
-        {claimDeleteModalContent}
-      </Modal>
-      <Modal show={showSourceAddModal} title="Add Source">
-        {sourceAddModalContent}
-      </Modal>
-      <Modal show={showSourceModifyModal} title="Modify Source">
-        {sourceModifyModalContent}
-      </Modal>
-      <Modal show={showClaimModifyModal} title="Modify Claim">
-        {claimModifyModalContent}
+      <Modal
+        show={showModal}
+        title={modalTitle}
+        modalPaneClass={
+          modalTitle.includes("Modify") || modalTitle.includes("Add")
+            ? "Modal"
+            : ""
+        }
+      >
+        {modalContent}
       </Modal>
       <ClaimAndSources
         claim={claim[0]}
         sources={sources}
-        isOwner={isOwner}
-        onClaimModify={handleClaimModifyClick}
+        onClaimModify={modifyClaimModal}
         onClaimDelete={() => deleteClaimModal(claim[0])}
-        onSourceModify={handleSourceModifyClick}
+        onSourceModify={modifySourceModal}
         onSourceDelete={deleteSourceModal}
-        showButton={showButton}
-        onAddSource={handleAddSourceClick}
+        onAddSource={addSourceModal}
       />
     </>
   );

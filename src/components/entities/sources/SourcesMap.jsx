@@ -1,15 +1,13 @@
-import { SourceItem } from "./SourceItem.jsx";
+import SourceItem from "./SourceItem.jsx";
 import { Button, ButtonTray } from "../../UI/Button.jsx";
 import Icon from "../../UI/Icons.jsx";
 import { Card } from "../../UI/Card.jsx";
-import "./SourcesItem.scss";
+import "./SourcesMap.scss";
 
-const SourcesItem = ({
+const SourcesMap = ({
   sources,
-  isOwner,
   onSourceModify,
   onSourceDelete,
-  showButton,
   onAddSource,
 }) => {
   return (
@@ -19,7 +17,7 @@ const SourcesItem = ({
           {sources.map((source) => (
             <Card key={source.SourceID}>
               <SourceItem source={source} />
-              {isOwner && (
+              {onSourceModify && onSourceDelete && (
                 <ButtonTray>
                   <Button
                     onClick={() => onSourceModify(source)}
@@ -41,7 +39,7 @@ const SourcesItem = ({
       ) : (
         <p>No sources attached.</p>
       )}
-      {isOwner && showButton && (
+      {onAddSource && (
         <Button
           onClick={onAddSource}
           variant="secondary"
@@ -54,4 +52,4 @@ const SourcesItem = ({
   );
 };
 
-export default SourcesItem;
+export default SourcesMap;

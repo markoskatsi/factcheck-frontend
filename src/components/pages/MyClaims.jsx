@@ -7,7 +7,7 @@ import { Modal, useModal } from "../UI/Modal.jsx";
 import { Button } from "../UI/Button.jsx";
 import "./MyClaims.scss";
 import { Spinner } from "../UI/Spinner.jsx";
-import ClaimsItem from "../entities/claims/ClaimsItem.jsx";
+import ClaimsItem from "../entities/claims/ClaimsMap.jsx";
 
 function MyClaims() {
   // Inititalisation ---------------------------------------
@@ -18,7 +18,7 @@ function MyClaims() {
   // State -------------------------------------------------
   const [claims, , , loadClaims] = useLoad(claimsEndpoint);
   const [isLoading, setIsLoading] = useState(false);
-  const [showClaimModal, claimModalContent, openClaimModal, closeClaimModal] =
+  const [showModal, claimModalContent, claimModalTitle, openModal, closeModal] =
     useModal(false);
   // Context -----------------------------------------------
   // Methods -----------------------------------------------
@@ -26,24 +26,17 @@ function MyClaims() {
     setIsLoading(true);
     const claimResponse = await API.post(allClaimsEndpoint, claim);
     if (claimResponse.isSuccess) {
-      closeClaimModal();
+      closeModal();
       await loadClaims(claimsEndpoint);
     }
     setIsLoading(false);
     return claimResponse.isSuccess;
   };
 
-  const handleCancel = () => {
-    closeClaimModal();
-  };
-
-  const handleClick = () => {
-    showAddClaimModal(true);
-  };
-
   const showAddClaimModal = () => {
-    openClaimModal(
-      <ClaimForm onSubmit={handleSubmit} onCancel={handleCancel} />,
+    openModal(
+      <ClaimForm onSubmit={handleSubmit} onCancel={() => closeModal()} />,
+      "Add a Claim",
     );
   };
 
@@ -51,12 +44,11 @@ function MyClaims() {
   return (
     <section>
       {isLoading && <Spinner />}
-      <Modal className="Modal" show={showClaimModal} title="Add a Claim">
+      <Modal show={showModal} title={claimModalTitle}>
         {claimModalContent}
       </Modal>
       <h1>My Claims</h1>
-      <Button onClick={handleClick}>Add New Claim</Button>
-
+      <Button onClick={() => showAddClaimModal()}>Add New Claim</Button>
       <ClaimsItem claims={claims} basePath="/myclaims" />
     </section>
   );
