@@ -21,12 +21,17 @@ export function Modal({ show, title, modalPaneClass, children }) {
 export function useModal(isOpen, initialContent = null) {
   // Initialisations -----------------------------
   // State ---------------------------------------
-  const [state, setState] = useState({ show: isOpen, content: initialContent });
+  const [state, setState] = useState({
+    show: isOpen,
+    content: initialContent,
+    title: "",
+  });
 
   // Handlers ------------------------------------
-  const open = (content) => setState({ show: true, content });
+  const open = (content, title = "") =>
+    setState({ show: true, content, title });
   const close = () => setState({ ...state, show: false });
 
   // Return --------------------------------------
-  return [state.show, state.content, open, close];
+  return [state.show, state.content, state.title, open, close];
 }

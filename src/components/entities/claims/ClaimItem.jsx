@@ -3,7 +3,7 @@ import { Button, ButtonTray } from "../../UI/Button.jsx";
 import Icon from "../../UI/Icons.jsx";
 import { Card } from "../../UI/Card.jsx";
 
-export function ClaimItem({ claim, isOwner, onClaimModify, onClaimDelete }) {
+export function ClaimItem({ claim, onClaimModify, onClaimDelete }) {
   return (
     <Card key={claim.ClaimID}>
       <h3>{claim.ClaimTitle}</h3>
@@ -12,7 +12,7 @@ export function ClaimItem({ claim, isOwner, onClaimModify, onClaimDelete }) {
       <p>
         Date Created: {formatDateTime(claim.ClaimCreated)}
       </p>
-      {isOwner && (
+      {onClaimModify && onClaimDelete && (
         <ButtonTray>
           <Button onClick={onClaimModify} variant="secondary">
             <Icon.Pen />

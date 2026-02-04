@@ -1,12 +1,8 @@
 import useLoad from "../api/useLoad.js";
-import { CardContainer, Card } from "../UI/Card.jsx";
-import ClaimItem from "../entities/claims/ClaimItem.jsx";
-import { Link } from "react-router-dom";
 import "./MyClaims.scss";
-import { Spinner } from "../UI/Spinner.jsx";
 import { useAuth } from "../auth/useAuth.jsx";
 import PageNotFound from "./404.jsx";
-import ClaimsItem from "../entities/claims/ClaimsItem.jsx";
+import ClaimsMap from "../entities/claims/ClaimsMap.jsx";
 
 function AvailableClaims() {
   // Inititalisation ---------------------------------------
@@ -22,7 +18,7 @@ function AvailableClaims() {
   return (
     <section>
       <h1>Available Claims</h1>
-      <ClaimsItem claims={claims} basePath="/availableclaims" />
+      <ClaimsMap claims={claims} basePath="/availableclaims" />
     </section>
   );
 }

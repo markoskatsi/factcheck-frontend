@@ -2,7 +2,7 @@ import { Link } from "react-router-dom";
 import ClaimItem from "./ClaimItem.jsx";
 import { CardContainer } from "../../UI/Card.jsx";
 
-const ClaimsItem = ({ claims, basePath = "" }) => {
+const ClaimsMap = ({ claims, basePath = "" }) => {
   return (
     <div>
       {claims && claims.length > 0 ? (
@@ -22,4 +22,4 @@ const ClaimsItem = ({ claims, basePath = "" }) => {
   );
 };
 
-export default ClaimsItem;
+export default ClaimsMap;

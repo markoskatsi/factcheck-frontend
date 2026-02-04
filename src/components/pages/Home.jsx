@@ -1,9 +1,6 @@
 import useLoad from "../api/useLoad.js";
-import { CardContainer, Card } from "../UI/Card.jsx";
-import ClaimItem from "../entities/claims/ClaimItem.jsx";
-import { Link } from "react-router-dom";
 import "./MyClaims.scss";
-import ClaimsItem from "../entities/claims/ClaimsItem.jsx";
+import ClaimsMap from "../entities/claims/ClaimsMap.jsx";
 
 function Home() {
   // Inititalisation ---------------------------------------
@@ -16,7 +13,7 @@ function Home() {
   return (
     <section>
       <h1>Browse Verified Claims</h1>
-      <ClaimsItem claims={claims} basePath="/claims" />
+      <ClaimsMap claims={claims} basePath="/claims" />
     </section>
   );
 }
