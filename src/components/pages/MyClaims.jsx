@@ -7,7 +7,7 @@ import { Modal, useModal } from "../UI/Modal.jsx";
 import { Button } from "../UI/Button.jsx";
 import "./MyClaims.scss";
 import { Spinner } from "../UI/Spinner.jsx";
-import ClaimsItem from "../entities/claims/ClaimsMap.jsx";
+import ClaimsMap from "../entities/claims/ClaimsMap.jsx";
 
 function MyClaims() {
   // Inititalisation ---------------------------------------
@@ -49,7 +49,7 @@ function MyClaims() {
       </Modal>
       <h1>My Claims</h1>
       <Button onClick={() => showAddClaimModal()}>Add New Claim</Button>
-      <ClaimsItem claims={claims} basePath="/myclaims" />
+      <ClaimsMap claims={claims} basePath="/myclaims" />
     </section>
   );
 }
