@@ -4,7 +4,7 @@ import ClaimsMap from "../entities/claims/ClaimsMap.jsx";
 
 function Home() {
   // Inititalisation ---------------------------------------
-  const claimsEndpoint = `/claims/claimstatus/5`;
+  const claimsEndpoint = `/claims/claimstatus/5?orderby=ClaimCreated%20desc`;
   // State -------------------------------------------------
   const [claims, , ,] = useLoad(claimsEndpoint);
   // Context -----------------------------------------------

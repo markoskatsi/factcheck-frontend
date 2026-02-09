@@ -18,7 +18,7 @@ const MyClaimInfo = () => {
   const { loggedInUserID } = useAuth();
 
   const claimEndpoint = `/claims/${claimId}`;
-  const claimSourcesEndpoint = `/sources/claims/${claimId}`;
+  const claimSourcesEndpoint = `/sources/claims/${claimId}?orderby=SourceCreated%20desc`;
   const putClaimEndpoint = `/claims`;
   const sourcesEndpoint = "/sources";
 

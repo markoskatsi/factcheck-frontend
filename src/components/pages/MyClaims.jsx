@@ -12,7 +12,7 @@ import ClaimsMap from "../entities/claims/ClaimsMap.jsx";
 function MyClaims() {
   // Inititalisation ---------------------------------------
   const { loggedInUserID } = useAuth();
-  const claimsEndpoint = `/claims/users/${loggedInUserID}`;
+  const claimsEndpoint = `/claims/users/${loggedInUserID}?orderby=ClaimCreated%20desc`;
   const allClaimsEndpoint = "/claims";
 
   // State -------------------------------------------------

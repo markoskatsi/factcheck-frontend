@@ -6,7 +6,7 @@ import "./MyClaims.scss";
 function MyTasks() {
   // Inititalisation ---------------------------------------
   const { loggedInUserID } = useAuth();
-  const assignedClaimsEndpoint = `/assignments/users/${loggedInUserID}`;
+  const assignedClaimsEndpoint = `/assignments/users/${loggedInUserID}?orderby=AssignmentCreated%20desc`;
 
   // State -------------------------------------------------
   const [claims, ,] = useLoad(assignedClaimsEndpoint);

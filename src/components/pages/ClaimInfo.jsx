@@ -14,11 +14,12 @@ const ClaimInfo = () => {
   const { loggedInUser } = useAuth();
   const navigate = useNavigate();
   const claimsEndpoint = `/claims`;
-  const assignedClaimsEndpoint = `/assignments`;
+  const assignedClaimsEndpoint = `/assignments?orderby=AssignmentCreated%20desc`;
+  const claimSourcesEndpoint = `/sources/claims/${claimId}?orderby=SourceCreated%20desc`;
 
   // State -----------------------------------------
   const [claims, , , reloadClaims] = useLoad(claimsEndpoint);
-  const [sources, , ,] = useLoad(`/sources/claims/${claimId}`);
+  const [sources, , ,] = useLoad(claimSourcesEndpoint);
   const [assignedClaims, , , reloadAssignedClaims] = useLoad(
     assignedClaimsEndpoint,
   );

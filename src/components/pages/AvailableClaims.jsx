@@ -6,7 +6,7 @@ import ClaimsMap from "../entities/claims/ClaimsMap.jsx";
 
 function AvailableClaims() {
   // Inititalisation ---------------------------------------
-  const availableClaimsEndpoint = `/claims/claimstatus/2`;
+  const availableClaimsEndpoint = `/claims/claimstatus/2?orderby=ClaimCreated%20desc`;
   const { loggedInUser } = useAuth();
 
   // State -------------------------------------------------
