@@ -7,13 +7,16 @@ const ClaimsMap = ({ claims, basePath = "" }) => {
     <div>
       {claims && claims.length > 0 ? (
         <CardContainer>
-          {claims.map((claim) => (
-            <Link to={`${basePath}/${claim.ClaimID}`} key={claim.ClaimID}>
-              <div className="fixed">
-                <ClaimItem claim={claim} />
-              </div>
-            </Link>
-          ))}
+          {claims.map((claim) => {
+            const id = claim.AssignmentClaimID || claim.ClaimID;
+            return (
+              <Link to={`${basePath}/${id}`} key={id}>
+                <div className="fixed">
+                  <ClaimItem claim={claim} />
+                </div>
+              </Link>
+            );
+          })}
         </CardContainer>
       ) : (
         <p>No claims found</p>
