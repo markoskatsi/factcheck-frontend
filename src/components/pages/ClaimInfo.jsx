@@ -7,6 +7,10 @@ import { Modal, useModal } from "../UI/Modal.jsx";
 import { useState } from "react";
 import { Button, ButtonTray } from "../UI/Button.jsx";
 import { Spinner } from "../UI/Spinner.jsx";
+import AnnotationForm from "../entities/annotations/AnnotationForm.jsx";
+import "./MyClaimInfo.scss";
+import { CardContainer } from "../UI/Card.jsx";
+import AnnotationItem from "../entities/annotations/AnnotationItem.jsx";
 
 const ClaimInfo = () => {
   // Initialisation --------------------------------
@@ -19,6 +23,7 @@ const ClaimInfo = () => {
 
   // State -----------------------------------------
   const [claims, , , reloadClaims] = useLoad(claimsEndpoint);
+  const [annotation, , , ] = useLoad(`/annotations/claims/${claimId}`);
   const [sources, , ,] = useLoad(claimSourcesEndpoint);
   const [assignedClaims, , , reloadAssignedClaims] = useLoad(
     assignedClaimsEndpoint,
@@ -90,6 +95,10 @@ const ClaimInfo = () => {
     );
   };
 
+  const addAnnotationsModal = () => {
+    openModal(<AnnotationForm onCancel={closeModal}/>, "Add Annotations");
+  };
+
   if (!claims) return <p>Loading...</p>;
   if (!claim) return <p>Claim not available.</p>;
   return (
@@ -99,14 +108,19 @@ const ClaimInfo = () => {
         {modalContent}
       </Modal>
 
-      {isAssignedToUser && (
-        <ButtonTray>
-          <Button>Begin Work</Button>
-          <Button variant="darkDanger" onClick={handleAbandon}>
-            Abandon Claim
-          </Button>
-        </ButtonTray>
-      )}
+      <ButtonTray>
+        <Button onClick={addAnnotationsModal} variant="secondary">
+          Add Annotations
+        </Button>
+        <Button>
+          Add Evidence
+        </Button>
+      </ButtonTray>
+
+      <CardContainer>
+        <AnnotationItem annotation={annotation}/>
+      </CardContainer>
+      
       {!isAssignedToUser &&
         loggedInUser?.UserUsertypeID === 2 &&
         claim.ClaimClaimstatusID === 2 && (
@@ -115,6 +129,13 @@ const ClaimInfo = () => {
           </Button>
         )}
       <ClaimAndSources claim={claim} sources={sources} />
+      {isAssignedToUser && (
+        <ButtonTray>
+          <Button variant="darkDanger" onClick={handleAbandon}>
+            Abandon Claim
+          </Button>
+        </ButtonTray>
+      )}
     </>
   );
 };
