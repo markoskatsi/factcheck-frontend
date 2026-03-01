@@ -124,7 +124,7 @@ const ClaimInfo = () => {
     );
   };
 
-  const confrimAssignmentModal = () => {
+  const confirmAssignmentModal = () => {
     openModal(
       <div>
         <p>Are you sure you want to assign this claim?</p>
@@ -167,39 +167,42 @@ const ClaimInfo = () => {
         {modalContent}
       </Modal>
 
-      {annotation && annotation.length > 0 && (
-        <CardContainer>
-          <AnnotationItem
-            annotation={annotation[0]}
-            onAnnotationDelete={deleteAnnotationModal}
-          />
-        </CardContainer>
-      )}
-
-      <ButtonTray>
-        {!annotation && (
-          <Button onClick={addAnnotationsModal} variant="secondary">
-            Add Annotations
-          </Button>
-        )}
-        <Button>Add Evidence</Button>
-      </ButtonTray>
-
-      {!isAssignedToUser &&
-        loggedInUser?.UserUsertypeID === 2 &&
-        claim.ClaimClaimstatusID === 2 && (
-          <Button variant="secondary" onClick={confrimAssignmentModal}>
-            Assign claim
-          </Button>
-        )}
-      <ClaimAndSources claim={claim} sources={sources} />
-      {isAssignedToUser && (
+      <div className="claimInfoWrapper">
         <ButtonTray>
-          <Button variant="darkDanger" onClick={handleAbandon}>
-            Abandon Claim
-          </Button>
+          {!annotation && (
+            <Button onClick={addAnnotationsModal} variant="secondary">
+              Add Annotations
+            </Button>
+          )}
+          <Button>Add Evidence</Button>
+          {!isAssignedToUser && (
+            <Button variant="secondary" onClick={confirmAssignmentModal}>
+              Assign claim
+            </Button>
+          )}
+          {isAssignedToUser && (
+            <Button variant="darkDanger" onClick={handleAbandon}>
+              Abandon Claim
+            </Button>
+          )}
         </ButtonTray>
-      )}
+
+        <div className="claimLayout">
+          <div className="claimMain">
+            <ClaimAndSources claim={claim} sources={sources} />
+          </div>
+          <div className="claimSidebar">
+            {annotation && annotation.length > 0 && (
+              <CardContainer>
+                <AnnotationItem
+                  annotation={annotation[0]}
+                  onAnnotationDelete={deleteAnnotationModal}
+                />
+              </CardContainer>
+            )}
+          </div>
+        </div>
+      </div>
     </>
   );
 };
