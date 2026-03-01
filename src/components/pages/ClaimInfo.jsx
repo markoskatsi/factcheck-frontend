@@ -169,21 +169,23 @@ const ClaimInfo = () => {
 
       <div className="claimInfoWrapper">
         <ButtonTray>
-          {!annotation && (
-            <Button onClick={addAnnotationsModal} variant="secondary">
-              Add Annotations
-            </Button>
-          )}
-          <Button>Add Evidence</Button>
-          {!isAssignedToUser && (
+          {!isAssignedToUser && claim.ClaimClaimstatusID === 2 && (
             <Button variant="secondary" onClick={confirmAssignmentModal}>
               Assign claim
             </Button>
           )}
           {isAssignedToUser && (
-            <Button variant="darkDanger" onClick={handleAbandon}>
-              Abandon Claim
-            </Button>
+            <>
+              {!annotation && (
+                <Button onClick={addAnnotationsModal} variant="secondary">
+                  Add Annotations
+                </Button>
+              )}
+              <Button>Add Evidence</Button>
+              <Button variant="darkDanger" onClick={handleAbandon}>
+                Abandon Claim
+              </Button>
+            </>
           )}
         </ButtonTray>
 
