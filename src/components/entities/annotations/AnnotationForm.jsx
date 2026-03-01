@@ -1,5 +1,4 @@
 import Form from "../../UI/Form.jsx";
-import { useAuth } from "../../auth/useAuth.jsx";
 const emptyAnnotation = {
   AnnotationTitle: "",
   AnnotationDescription: "",
@@ -12,19 +11,18 @@ export default function AnnotationForm({
   initialAnnotation = emptyAnnotation,
 }) {
   // Initialisation --------------------------------
-  const { loggedInUserID } = useAuth();
   const validation = {
     isValid: {
-      // AnnotationTitle: (name) => name.length > 5,
-      AnnotationDescription: (desc) => desc.length > 10,
+      AnnotationTitle: (name) => name.length >= 8,
+      AnnotationDescription: (desc) => desc.length >= 20,
     },
     errorMessage: {
-      AnnotationTitle: "Annotation title is too short",
-      AnnotationDescription: "Please enter more notes",
+      AnnotationTitle: "Annotation title must be at least 8 characters",
+      AnnotationDescription: "Description must be at least 20 characters",
     },
   };
 
-  const conformance = ["AnnotationUserID", "AnnotationAssignmentID"];
+  const conformance = ["AnnotationAssignmentID"];
 
   // State -----------------------------------------
 
@@ -36,11 +34,10 @@ export default function AnnotationForm({
     onCancel,
   );
   // Handlers --------------------------------------
-  annotation.AnnotationUserID = loggedInUserID;
   // View ------------------------------------------
   return (
     <Form onSubmit={handleSubmit} onCancel={onCancel}>
-      {/* <Form.Item
+      <Form.Item
         label="Annotation title"
         htmlFor="AnnotationTitle"
         advice="Please enter the title"
@@ -53,10 +50,10 @@ export default function AnnotationForm({
           value={annotation.AnnotationTitle}
           onChange={handleChange}
         />
-      </Form.Item> */}
+      </Form.Item>
 
       <Form.Item
-        label="Notes"
+        label="Annotation description"
         htmlFor="AnnotationDescription"
         advice="Please enter the description"
         error={errors.AnnotationDescription}

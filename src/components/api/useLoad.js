@@ -9,9 +9,10 @@ const useLoad = (endpoint) => {
   // Methods -------------------------------------
   const loadRecords = async (endpoint) => {
     const response = await API.get(endpoint);
-    response.isSuccess
-      ? setRecords(response.result)
-      : setLoadingMessage(response.message);
+    response.isSuccess 
+    ? setRecords(response.result) 
+    : setRecords(null);
+      setLoadingMessage(response.message);
   };
 
   useEffect(() => {

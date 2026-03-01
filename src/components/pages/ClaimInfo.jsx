@@ -17,23 +17,27 @@ const ClaimInfo = () => {
   const { claimId } = useParams();
   const { loggedInUser } = useAuth();
   const navigate = useNavigate();
+
   const claimsEndpoint = `/claims`;
-  const assignedClaimsEndpoint = `/assignments?orderby=AssignmentCreated%20desc`;
+  const assignedClaimsEndpoint = `/assignments`;
   const claimSourcesEndpoint = `/sources/claims/${claimId}?orderby=SourceCreated%20desc`;
+  const annotationClaimEndpoint = `/annotations/claims/${claimId}`;
 
   // State -----------------------------------------
   const [claims, , , reloadClaims] = useLoad(claimsEndpoint);
-  const [annotation, , , ] = useLoad(`/annotations/claims/${claimId}`);
+  const [annotation, , , reloadAnnotation] = useLoad(annotationClaimEndpoint);
   const [sources, , ,] = useLoad(claimSourcesEndpoint);
   const [assignedClaims, , , reloadAssignedClaims] = useLoad(
     assignedClaimsEndpoint,
   );
+
   const [isLoading, setIsLoading] = useState(false);
   const [showModal, modalContent, modalTitle, openModal, closeModal] =
     useModal(false);
 
   // Handlers --------------------------------------
   const claim = claims?.find((claim) => claim.ClaimID === parseInt(claimId));
+
   const isAssignedToUser = assignedClaims?.some(
     (claim) =>
       claim.AssignmentClaimID === parseInt(claimId) &&
@@ -79,7 +83,47 @@ const ClaimInfo = () => {
     return deleteResponse.isSuccess && response.isSuccess;
   };
 
+  const handleAddAnnotation = async (annotation) => {
+    setIsLoading(true);
+    const response = await API.post(`/annotations`, annotation);
+    if (response.isSuccess) {
+      await reloadAnnotation(annotationClaimEndpoint);
+      closeModal();
+    }
+    setIsLoading(false);
+    return response.isSuccess;
+  };
+
+  const handleAnnotationDelete = async () => {
+    setIsLoading(true);
+    console.log("Deleting annotation:", annotation[0].AnnotationID);
+    const deleteResponse = await API.delete(
+      `/annotations/${annotation[0].AnnotationID}`,
+    );
+    if (deleteResponse.isSuccess) {
+      await reloadAnnotation(annotationClaimEndpoint);
+      closeModal();
+    }
+    setIsLoading(false);
+    return deleteResponse.isSuccess;
+  };
+
   // View ------------------------------------------
+  const deleteAnnotationModal = () => {
+    openModal(
+      <>
+        <p>Are you sure you want to delete this annotation?</p>
+        <ButtonTray>
+          <Button onClick={handleAnnotationDelete} variant="darkDanger">
+            Delete
+          </Button>
+          <Button onClick={closeModal}>Cancel</Button>
+        </ButtonTray>
+      </>,
+      "Delete Annotation",
+    );
+  };
+
   const confrimAssignmentModal = () => {
     openModal(
       <div>
@@ -96,7 +140,22 @@ const ClaimInfo = () => {
   };
 
   const addAnnotationsModal = () => {
-    openModal(<AnnotationForm onCancel={closeModal}/>, "Add Annotations");
+    const assignmentID = assignedClaims?.find(
+      (assignment) =>
+        assignment.AssignmentClaimID === claim.ClaimID &&
+        assignment.AssignmentUserID === loggedInUser?.UserID,
+    )?.AssignmentID;
+
+    openModal(
+      <AnnotationForm
+        onSubmit={handleAddAnnotation}
+        onCancel={closeModal}
+        initialAnnotation={{
+          AnnotationAssignmentID: assignmentID,
+        }}
+      />,
+      "Add Annotations",
+    );
   };
 
   if (!claims) return <p>Loading...</p>;
@@ -108,19 +167,24 @@ const ClaimInfo = () => {
         {modalContent}
       </Modal>
 
+      {annotation && annotation.length > 0 && (
+        <CardContainer>
+          <AnnotationItem
+            annotation={annotation[0]}
+            onAnnotationDelete={deleteAnnotationModal}
+          />
+        </CardContainer>
+      )}
+
       <ButtonTray>
-        <Button onClick={addAnnotationsModal} variant="secondary">
-          Add Annotations
-        </Button>
-        <Button>
-          Add Evidence
-        </Button>
+        {!annotation && (
+          <Button onClick={addAnnotationsModal} variant="secondary">
+            Add Annotations
+          </Button>
+        )}
+        <Button>Add Evidence</Button>
       </ButtonTray>
 
-      <CardContainer>
-        <AnnotationItem annotation={annotation}/>
-      </CardContainer>
-      
       {!isAssignedToUser &&
         loggedInUser?.UserUsertypeID === 2 &&
         claim.ClaimClaimstatusID === 2 && (

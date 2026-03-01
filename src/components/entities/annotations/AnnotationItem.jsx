@@ -5,19 +5,19 @@ import { Card } from "../../UI/Card.jsx";
 
 export function AnnotationItem({
   annotation,
-  onAnnotationModify,
-  onAnnotationDelete,
+  // onAnnotationModify,
+  onAnnotationDelete
 }) {
   return (
     <Card key={annotation.AnnotationID}>
       <h3>{annotation.AnnotationTitle}</h3>
       <p>{annotation.AnnotationDescription}</p>
       <p>Date Created: {formatDateTime(annotation.AnnotationCreated)}</p>
-      {onAnnotationModify && onAnnotationDelete && (
+      { onAnnotationDelete && (
         <ButtonTray>
-          <Button onClick={onAnnotationModify} variant="secondary">
+          {/* <Button onClick={onAnnotationModify} variant="secondary">
             <Icon.Pen />
-          </Button>
+          </Button> */}
           <Button onClick={onAnnotationDelete} variant="danger">
             <Icon.Trash />
           </Button>
