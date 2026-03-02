@@ -8,9 +8,10 @@ import { useState } from "react";
 import { Button, ButtonTray } from "../UI/Button.jsx";
 import { Spinner } from "../UI/Spinner.jsx";
 import AnnotationForm from "../entities/annotations/AnnotationForm.jsx";
-import "./MyClaimInfo.scss";
 import { CardContainer } from "../UI/Card.jsx";
 import AnnotationItem from "../entities/annotations/AnnotationItem.jsx";
+import EvidenceForm from "../entities/evidence/EvidenceForm.jsx";
+import "./MyClaimInfo.scss";
 
 const ClaimInfo = () => {
   // Initialisation --------------------------------
@@ -22,6 +23,7 @@ const ClaimInfo = () => {
   const assignedClaimsEndpoint = `/assignments`;
   const claimSourcesEndpoint = `/sources/claims/${claimId}?orderby=SourceCreated%20desc`;
   const annotationClaimEndpoint = `/annotations/claims/${claimId}`;
+  const evidenceEndpoint = `/evidence`;
 
   // State -----------------------------------------
   const [claims, , , reloadClaims] = useLoad(claimsEndpoint);
@@ -81,6 +83,17 @@ const ClaimInfo = () => {
     setIsLoading(false);
     navigate(`/mytasks`);
     return deleteResponse.isSuccess && response.isSuccess;
+  };
+
+   const handleAddEvidence = async (evidence) => {
+    setIsLoading(true);
+    const response = await API.post(`/evidence`, evidence);
+    if (response.isSuccess) {
+      await reloadAnnotation(evidenceEndpoint);
+      closeModal();
+    }
+    setIsLoading(false);
+    return response.isSuccess;
   };
 
   const handleAddAnnotation = async (annotation) => {
@@ -182,6 +195,21 @@ const ClaimInfo = () => {
     );
   };
 
+  const addEvidenceModal = () => {
+    const annotationID = annotation?.[0]?.AnnotationID;
+
+    openModal(
+      <EvidenceForm
+        onSubmit={handleAddEvidence}
+        onCancel={closeModal}
+        initialEvidence={{
+          EvidenceAnnotationID: annotationID,
+        }}
+      />,
+      "Add Evidence",
+    );
+  };
+
   // View ------------------------------------------
 
   if (!claims) return <p>Loading...</p>;
@@ -207,7 +235,9 @@ const ClaimInfo = () => {
                   Add Annotations
                 </Button>
               )}
-              <Button>Add Evidence</Button>
+              <Button onClick={addEvidenceModal} variant="secondary">
+                Add Evidence
+              </Button>
               <Button
                 variant="darkDanger"
                 disabled={annotation && annotation.length > 0}
