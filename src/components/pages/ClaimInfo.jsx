@@ -32,7 +32,7 @@ const ClaimInfo = () => {
     assignedClaimsEndpoint,
   );
   const [evidences, , , reloadEvidences] = useLoad(evidenceEndpoint);
-
+  // const [claim, , , reloadClaim] = useLoad(`/claims/${claimId}`);
   const [isLoading, setIsLoading] = useState(false);
   const [showModal, modalContent, modalTitle, openModal, closeModal] =
     useModal(false);
@@ -45,6 +45,8 @@ const ClaimInfo = () => {
       claim.AssignmentClaimID === parseInt(claimId) &&
       claim.AssignmentUserID === loggedInUser?.UserID,
   );
+
+  const canEdit = claim?.ClaimClaimstatusID === 2;
 
   const handleAssignment = async () => {
     closeModal();
@@ -190,6 +192,19 @@ const ClaimInfo = () => {
     return deleteResponse.isSuccess;
   };
 
+  const handleSubmitWork = async () => {
+    setIsLoading(true);
+    const response = await API.put(`/claims/${claimId}`, {
+      ...claim,
+      ClaimClaimstatusID: 3,
+    });
+    if (response.isSuccess) {
+      closeModal();
+      await reloadClaims(claimsEndpoint);
+    }
+    setIsLoading(false);
+  };
+
   const deleteAnnotationModal = () => {
     openModal(
       <>
@@ -291,6 +306,21 @@ const ClaimInfo = () => {
     );
   };
 
+  const submitWorkModal = () => {
+    openModal(
+      <>
+        <p>Are you sure you want to submit your work on this claim?</p>
+        <ButtonTray>
+          <Button onClick={handleSubmitWork} variant="secondary">
+            Yes
+          </Button>
+          <Button onClick={closeModal}>No</Button>
+        </ButtonTray>
+      </>,
+      "Submit Work",
+    );
+  };
+
   // View ------------------------------------------
 
   if (!claims) return <p>Loading...</p>;
@@ -303,32 +333,39 @@ const ClaimInfo = () => {
       </Modal>
 
       <div className="claimInfoWrapper">
-        <ButtonTray>
-          {!isAssignedToUser && claim.ClaimClaimstatusID === 2 && (
-            <Button variant="secondary" onClick={confirmAssignmentModal}>
-              Assign claim
-            </Button>
-          )}
-          {isAssignedToUser && (
-            <>
-              {!annotation && (
-                <Button onClick={addAnnotationsModal} variant="secondary">
-                  Add Annotations
+        {canEdit && (
+          <ButtonTray>
+            {!isAssignedToUser && (
+              <Button variant="secondary" onClick={confirmAssignmentModal}>
+                Assign claim
+              </Button>
+            )}
+            {isAssignedToUser && (
+              <>
+                {!annotation && (
+                  <Button onClick={addAnnotationsModal} variant="secondary">
+                    Add Annotations
+                  </Button>
+                )}
+                <Button onClick={addEvidenceModal} variant="secondary">
+                  Add Evidence
                 </Button>
-              )}
-              <Button onClick={addEvidenceModal} variant="secondary">
-                Add Evidence
-              </Button>
-              <Button
-                variant="darkDanger"
-                disabled={annotation && annotation.length > 0}
-                onClick={handleAbandon}
-              >
-                Abandon Claim
-              </Button>
-            </>
-          )}
-        </ButtonTray>
+                {annotation && evidences && (
+                  <Button onClick={submitWorkModal} variant="secondary">
+                    Submit Work
+                  </Button>
+                )}
+                <Button
+                  variant="darkDanger"
+                  disabled={annotation && annotation.length > 0}
+                  onClick={handleAbandon}
+                >
+                  Abandon Claim
+                </Button>
+              </>
+            )}
+          </ButtonTray>
+        )}
 
         <div className="claimLayout">
           <div className="claimMain">
@@ -342,10 +379,14 @@ const ClaimInfo = () => {
                 <AnnotationAndEvidence
                   annotation={annotation[0]}
                   evidences={evidences}
-                  onAnnotationModify={modifyAnnotationModal}
-                  onAnnotationDelete={deleteAnnotationModal}
-                  onEvidenceModify={modifyEvidenceModal}
-                  onEvidenceDelete={deleteEvidenceModal}
+                  onAnnotationModify={
+                    canEdit ? modifyAnnotationModal : undefined
+                  }
+                  onAnnotationDelete={
+                    canEdit ? deleteAnnotationModal : undefined
+                  }
+                  onEvidenceModify={canEdit ? modifyEvidenceModal : undefined}
+                  onEvidenceDelete={canEdit ? deleteEvidenceModal : undefined}
                 />
               </>
             )}

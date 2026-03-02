@@ -55,7 +55,7 @@ export default function EvidenceForm({
   };
   // View ------------------------------------------
   return (
-    <Form onSubmit={handleSubmit} onCancel={onCancel}>
+    <Form onSubmit={handleSubmit} onCancel={onCancel} submitText="Save evidence">
       <Form.Item
         label="Evidence type"
         htmlFor="EvidenceEvidencetypeID"
