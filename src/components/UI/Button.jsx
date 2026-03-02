@@ -9,9 +9,15 @@ export function Button({
   onClick,
   type = "button",
   variant = "primary",
+  disabled = false,
 }) {
   return (
-    <button className={`button ${variant}`} onClick={onClick} type={type}>
+    <button
+      className={`button ${variant}`}
+      onClick={onClick}
+      type={type}
+      disabled={disabled}
+    >
       {children}
     </button>
   );

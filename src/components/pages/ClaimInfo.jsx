@@ -94,6 +94,20 @@ const ClaimInfo = () => {
     return response.isSuccess;
   };
 
+  const handleModifyAnnotation = async (annotation) => {
+    setIsLoading(true);
+    const response = await API.put(
+      `/annotations/${annotation.AnnotationID}`,
+      annotation,
+    );
+    if (response.isSuccess) {
+      await reloadAnnotation(annotationClaimEndpoint);
+      closeModal();
+    }
+    setIsLoading(false);
+    return response.isSuccess;
+  };
+
   const handleAnnotationDelete = async () => {
     setIsLoading(true);
     console.log("Deleting annotation:", annotation[0].AnnotationID);
@@ -108,7 +122,6 @@ const ClaimInfo = () => {
     return deleteResponse.isSuccess;
   };
 
-  // View ------------------------------------------
   const deleteAnnotationModal = () => {
     openModal(
       <>
@@ -158,6 +171,19 @@ const ClaimInfo = () => {
     );
   };
 
+  const modifyAnnotationModal = () => {
+    openModal(
+      <AnnotationForm
+        onSubmit={handleModifyAnnotation}
+        onCancel={closeModal}
+        initialAnnotation={annotation[0]}
+      />,
+      "Modify Annotation",
+    );
+  };
+
+  // View ------------------------------------------
+
   if (!claims) return <p>Loading...</p>;
   if (!claim) return <p>Claim not available.</p>;
   return (
@@ -182,7 +208,11 @@ const ClaimInfo = () => {
                 </Button>
               )}
               <Button>Add Evidence</Button>
-              <Button variant="darkDanger" onClick={handleAbandon}>
+              <Button
+                variant="darkDanger"
+                disabled={annotation && annotation.length > 0}
+                onClick={handleAbandon}
+              >
                 Abandon Claim
               </Button>
             </>
@@ -198,6 +228,7 @@ const ClaimInfo = () => {
               <CardContainer>
                 <AnnotationItem
                   annotation={annotation[0]}
+                  onAnnotationModify={modifyAnnotationModal}
                   onAnnotationDelete={deleteAnnotationModal}
                 />
               </CardContainer>

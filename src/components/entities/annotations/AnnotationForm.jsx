@@ -1,6 +1,5 @@
 import Form from "../../UI/Form.jsx";
 const emptyAnnotation = {
-  AnnotationTitle: "",
   AnnotationDescription: "",
   AnnotationAssignmentID: 1,
 };
@@ -13,11 +12,9 @@ export default function AnnotationForm({
   // Initialisation --------------------------------
   const validation = {
     isValid: {
-      AnnotationTitle: (name) => name.length >= 8,
       AnnotationDescription: (desc) => desc.length >= 20,
     },
     errorMessage: {
-      AnnotationTitle: "Annotation title must be at least 8 characters",
       AnnotationDescription: "Description must be at least 20 characters",
     },
   };
@@ -38,24 +35,9 @@ export default function AnnotationForm({
   return (
     <Form onSubmit={handleSubmit} onCancel={onCancel} submitText="Save annotation">
       <Form.Item
-        label="Annotation title"
-        htmlFor="AnnotationTitle"
-        advice="Please enter the title"
-        error={errors.AnnotationTitle}
-      >
-        <input
-          className="FormInput"
-          type="text"
-          name="AnnotationTitle"
-          value={annotation.AnnotationTitle}
-          onChange={handleChange}
-        />
-      </Form.Item>
-
-      <Form.Item
-        label="Annotation description"
+        label="Annotations"
         htmlFor="AnnotationDescription"
-        advice="Please enter the description"
+        advice="Please enter some notes"
         error={errors.AnnotationDescription}
       >
         <textarea
