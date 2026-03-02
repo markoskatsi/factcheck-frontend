@@ -31,7 +31,7 @@ const EvidencesMap = ({ evidences, onEvidenceModify, onEvidenceDelete }) => {
           ))}
         </div>
       ) : (
-        <p>No evidences attached.</p>
+        <p>No evidence attached.</p>
       )}
     </div>
   );

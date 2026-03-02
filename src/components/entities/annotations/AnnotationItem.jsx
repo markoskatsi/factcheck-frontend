@@ -10,7 +10,7 @@ export function AnnotationItem({
 }) {
   return (
     <Card key={annotation.AnnotationID}>
-      <p>{annotation.AnnotationDescription}</p>
+      <h3>{annotation.AnnotationDescription}</h3>
       <p>Date Created: {formatDateTime(annotation.AnnotationCreated)}</p>
       {onAnnotationDelete && (
         <ButtonTray>

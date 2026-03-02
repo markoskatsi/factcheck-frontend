@@ -8,10 +8,8 @@ import { useState } from "react";
 import { Button, ButtonTray } from "../UI/Button.jsx";
 import { Spinner } from "../UI/Spinner.jsx";
 import AnnotationForm from "../entities/annotations/AnnotationForm.jsx";
-import { CardContainer } from "../UI/Card.jsx";
-import AnnotationItem from "../entities/annotations/AnnotationItem.jsx";
+import AnnotationAndEvidence from "../entities/annotations/AnnotationAndEvidence.jsx";
 import EvidenceForm from "../entities/evidence/EvidenceForm.jsx";
-import EvidencesMap from "../entities/evidence/EvidencesMap.jsx";
 import "./MyClaimInfo.scss";
 
 const ClaimInfo = () => {
@@ -334,22 +332,22 @@ const ClaimInfo = () => {
 
         <div className="claimLayout">
           <div className="claimMain">
+            <h2>Claim</h2>
             <ClaimAndSources claim={claim} sources={sources} />
           </div>
           <div className="claimSidebar">
             {annotation && annotation.length > 0 && (
-              <CardContainer>
-                <AnnotationItem
+              <>
+                <h2>Your Work</h2>
+                <AnnotationAndEvidence
                   annotation={annotation[0]}
+                  evidences={evidences}
                   onAnnotationModify={modifyAnnotationModal}
                   onAnnotationDelete={deleteAnnotationModal}
-                />
-                <EvidencesMap
-                  evidences={evidences}
                   onEvidenceModify={modifyEvidenceModal}
                   onEvidenceDelete={deleteEvidenceModal}
                 />
-              </CardContainer>
+              </>
             )}
           </div>
         </div>
