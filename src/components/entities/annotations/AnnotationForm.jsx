@@ -36,7 +36,7 @@ export default function AnnotationForm({
   // Handlers --------------------------------------
   // View ------------------------------------------
   return (
-    <Form onSubmit={handleSubmit} onCancel={onCancel}>
+    <Form onSubmit={handleSubmit} onCancel={onCancel} submitText="Save annotation">
       <Form.Item
         label="Annotation title"
         htmlFor="AnnotationTitle"

@@ -3,7 +3,12 @@ import { Button, ButtonTray } from "./Button.jsx";
 import { useState } from "react";
 import "./Form.scss";
 
-export default function Form({ children, onSubmit, onCancel }) {
+export default function Form({
+  children,
+  onSubmit,
+  onCancel,
+  submitText = "Submit record",
+}) {
   // Initialisation --------------------------------
   // State -----------------------------------------
   // Handlers --------------------------------------
@@ -21,7 +26,7 @@ export default function Form({ children, onSubmit, onCancel }) {
       <ButtonTray>
         <Button onClick={handleSubmit}>
           <Icon.Tick />
-          Submit record
+          {submitText}
         </Button>
         <Button onClick={handleCancel} variant="darkDanger">
           <Icon.Cross />
@@ -54,7 +59,7 @@ function useForm(
   conformance,
   { isValid, errorMessage },
   onSubmit,
-  onCancel
+  onCancel,
 ) {
   // Initialisation --------------------------------
   // State -----------------------------------------
@@ -65,8 +70,8 @@ function useForm(
         ...accum,
         [key]: null,
       }),
-      {}
-    )
+      {},
+    ),
   );
   // Handlers --------------------------------------
   const handleChange = (event) => {
