@@ -11,6 +11,7 @@ import AnnotationForm from "../entities/annotations/AnnotationForm.jsx";
 import { CardContainer } from "../UI/Card.jsx";
 import AnnotationItem from "../entities/annotations/AnnotationItem.jsx";
 import EvidenceForm from "../entities/evidence/EvidenceForm.jsx";
+import EvidencesMap from "../entities/evidence/EvidencesMap.jsx";
 import "./MyClaimInfo.scss";
 
 const ClaimInfo = () => {
@@ -31,6 +32,9 @@ const ClaimInfo = () => {
   const [sources, , ,] = useLoad(claimSourcesEndpoint);
   const [assignedClaims, , , reloadAssignedClaims] = useLoad(
     assignedClaimsEndpoint,
+  );
+  const [evidences, , , reloadEvidences] = useLoad(
+    evidenceEndpoint,
   );
 
   const [isLoading, setIsLoading] = useState(false);
@@ -85,11 +89,11 @@ const ClaimInfo = () => {
     return deleteResponse.isSuccess && response.isSuccess;
   };
 
-   const handleAddEvidence = async (evidence) => {
+  const handleAddEvidence = async (evidence) => {
     setIsLoading(true);
     const response = await API.post(`/evidence`, evidence);
     if (response.isSuccess) {
-      await reloadAnnotation(evidenceEndpoint);
+      await reloadEvidences(evidenceEndpoint);
       closeModal();
     }
     setIsLoading(false);
@@ -261,6 +265,7 @@ const ClaimInfo = () => {
                   onAnnotationModify={modifyAnnotationModal}
                   onAnnotationDelete={deleteAnnotationModal}
                 />
+                <EvidencesMap evidences={evidences} />
               </CardContainer>
             )}
           </div>

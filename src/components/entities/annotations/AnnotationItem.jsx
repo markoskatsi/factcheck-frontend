@@ -6,13 +6,13 @@ import { Card } from "../../UI/Card.jsx";
 export function AnnotationItem({
   annotation,
   onAnnotationModify,
-  onAnnotationDelete
+  onAnnotationDelete,
 }) {
   return (
     <Card key={annotation.AnnotationID}>
       <p>{annotation.AnnotationDescription}</p>
       <p>Date Created: {formatDateTime(annotation.AnnotationCreated)}</p>
-      { onAnnotationDelete && (
+      {onAnnotationDelete && (
         <ButtonTray>
           <Button onClick={onAnnotationModify} variant="secondary">
             <Icon.Pen />

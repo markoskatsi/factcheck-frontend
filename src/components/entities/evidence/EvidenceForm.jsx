@@ -1,7 +1,6 @@
 import Form from "../../UI/Form.jsx";
 import useLoad from "../../api/useLoad.js";
 import { Dropzone } from "../../UI/Dropzone.jsx";
-import { useParams } from "react-router-dom";
 
 const emptyEvidence = {
   EvidenceDescription: "",
@@ -15,11 +14,6 @@ export default function EvidenceForm({
   initialEvidence = emptyEvidence,
 }) {
   // Initialisation --------------------------------
-  // const { annotationId } = useParams();
-  // const evidenceWithClaim = {
-  //   ...initialEvidence,
-  //   EvidenceAnnotationID: annotationId,
-  // };
   const validation = {
     isValid: {
       EvidenceURL: (url) => !url || url.startsWith("http"),
