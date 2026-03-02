@@ -1,3 +1,41 @@
 .ModalPane.Modal {
   width: 600px;
 }
+
+.ModalPane.NotesModal {
+  width: 400px;
+}
+
+.claimInfoWrapper {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 20px;
+
+  .buttonTray {
+    justify-content: flex-start;
+    margin-bottom: 10px;
+  }
+}
+
+.claimLayout {
+  display: flex;
+  gap: 20px;
+  align-items: stretch;
+  margin-top: 20px;
+
+  .claimMain,
+  .claimSidebar {
+    flex: 1;
+    min-width: 0;
+  }
+
+  @media (max-width: 1024px) {
+    flex-direction: column;
+
+    .claimMain,
+    .claimSidebar {
+      flex: 1 1 100%;
+      width: 100%;
+    }
+  }
+}

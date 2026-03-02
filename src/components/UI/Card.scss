@@ -5,6 +5,11 @@ div.cardContainer {
   gap: 20px;
   max-width: 1400px;
   margin: 0 auto;
+
+  .claimLayout & {
+    padding: 0;
+    max-width: none;
+  }
 }
 
 div.card {
@@ -18,6 +23,11 @@ div.card {
   .cardContainer & {
     flex: 0 0 400px;
     width: 400px;
+  }
+
+  .claimLayout .cardContainer & {
+    flex: 1 1 100%;
+    width: 100%;
   }
 
   h3 {
@@ -61,6 +71,11 @@ div.card.claim-details-card {
   margin: 0 auto;
   background: #34495e;
   padding: 15px;
+
+  .claimLayout & {
+    max-width: none;
+    margin: 0;
+  }
 
   .card {
     &:hover {

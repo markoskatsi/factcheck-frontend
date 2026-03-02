@@ -61,3 +61,8 @@
     background: #733030ea;
   }
 }
+
+.button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}

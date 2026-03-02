@@ -7,33 +7,46 @@ import { Modal, useModal } from "../UI/Modal.jsx";
 import { useState } from "react";
 import { Button, ButtonTray } from "../UI/Button.jsx";
 import { Spinner } from "../UI/Spinner.jsx";
+import AnnotationForm from "../entities/annotations/AnnotationForm.jsx";
+import AnnotationAndEvidence from "../entities/annotations/AnnotationAndEvidence.jsx";
+import EvidenceForm from "../entities/evidence/EvidenceForm.jsx";
+import "./MyClaimInfo.scss";
 
 const ClaimInfo = () => {
   // Initialisation --------------------------------
   const { claimId } = useParams();
   const { loggedInUser } = useAuth();
   const navigate = useNavigate();
+
   const claimsEndpoint = `/claims`;
-  const assignedClaimsEndpoint = `/assignments?orderby=AssignmentCreated%20desc`;
+  const assignedClaimsEndpoint = `/assignments`;
   const claimSourcesEndpoint = `/sources/claims/${claimId}?orderby=SourceCreated%20desc`;
+  const annotationClaimEndpoint = `/annotations/claims/${claimId}`;
+  const evidenceEndpoint = `/evidence`;
 
   // State -----------------------------------------
   const [claims, , , reloadClaims] = useLoad(claimsEndpoint);
+  const [annotation, , , reloadAnnotation] = useLoad(annotationClaimEndpoint);
   const [sources, , ,] = useLoad(claimSourcesEndpoint);
   const [assignedClaims, , , reloadAssignedClaims] = useLoad(
     assignedClaimsEndpoint,
   );
+  const [evidences, , , reloadEvidences] = useLoad(evidenceEndpoint);
+  // const [claim, , , reloadClaim] = useLoad(`/claims/${claimId}`);
   const [isLoading, setIsLoading] = useState(false);
   const [showModal, modalContent, modalTitle, openModal, closeModal] =
     useModal(false);
 
   // Handlers --------------------------------------
   const claim = claims?.find((claim) => claim.ClaimID === parseInt(claimId));
+
   const isAssignedToUser = assignedClaims?.some(
     (claim) =>
       claim.AssignmentClaimID === parseInt(claimId) &&
       claim.AssignmentUserID === loggedInUser?.UserID,
   );
+
+  const canEdit = claim?.ClaimClaimstatusID === 2;
 
   const handleAssignment = async () => {
     closeModal();
@@ -74,8 +87,140 @@ const ClaimInfo = () => {
     return deleteResponse.isSuccess && response.isSuccess;
   };
 
-  // View ------------------------------------------
-  const confrimAssignmentModal = () => {
+  const handleAddEvidence = async (evidence) => {
+    setIsLoading(true);
+    let data;
+    if (!evidence.EvidenceURL && !evidence.file) {
+    }
+    if (evidence.file) {
+      data = new FormData();
+      data.append("file", evidence.file);
+      data.append("EvidenceID", evidence.EvidenceID);
+      data.append("EvidenceFilename", evidence.EvidenceFilename);
+      data.append("EvidenceDescription", evidence.EvidenceDescription);
+      data.append("EvidenceEvidencetypeID", evidence.EvidenceEvidencetypeID);
+      data.append("EvidenceAnnotationID", evidence.EvidenceAnnotationID);
+    } else {
+      data = evidence;
+    }
+    const response = await API.post(`${evidenceEndpoint}`, data);
+    if (response.isSuccess) {
+      closeModal();
+      console.log(evidenceEndpoint);
+      await reloadEvidences(evidenceEndpoint);
+    }
+    setIsLoading(false);
+    return response.isSuccess;
+  };
+
+  const handleModifyEvidence = async (evidence) => {
+    setIsLoading(true);
+    let data;
+    if (!evidence.EvidenceURL && !evidence.file) {
+    }
+    if (evidence.file) {
+      data = new FormData();
+      data.append("file", evidence.file);
+      data.append("EvidenceID", evidence.EvidenceID);
+      data.append("EvidenceFilename", evidence.EvidenceFilename);
+      data.append("EvidenceDescription", evidence.EvidenceDescription);
+      data.append("EvidenceEvidencetypeID", evidence.EvidenceEvidencetypeID);
+      data.append("EvidenceAnnotationID", evidence.EvidenceAnnotationID);
+    } else {
+      data = evidence;
+    }
+    const response = await API.put(
+      `${evidenceEndpoint}/${evidence.EvidenceID}`,
+      data,
+    );
+    if (response.isSuccess) {
+      closeModal();
+      console.log(evidenceEndpoint);
+      await reloadEvidences(evidenceEndpoint);
+    }
+    setIsLoading(false);
+    return response.isSuccess;
+  };
+
+  const handleDeleteEvidence = async (id) => {
+    setIsLoading(true);
+    const deleteResponse = await API.delete(`${evidenceEndpoint}/${id}`);
+    if (deleteResponse.isSuccess) {
+      closeModal();
+      await reloadEvidences(evidenceEndpoint);
+    }
+    setIsLoading(false);
+    return deleteResponse.isSuccess;
+  };
+
+  const handleAddAnnotation = async (annotation) => {
+    setIsLoading(true);
+    const response = await API.post(`/annotations`, annotation);
+    if (response.isSuccess) {
+      await reloadAnnotation(annotationClaimEndpoint);
+      closeModal();
+    }
+    setIsLoading(false);
+    return response.isSuccess;
+  };
+
+  const handleModifyAnnotation = async (annotation) => {
+    setIsLoading(true);
+    const response = await API.put(
+      `/annotations/${annotation.AnnotationID}`,
+      annotation,
+    );
+    if (response.isSuccess) {
+      await reloadAnnotation(annotationClaimEndpoint);
+      closeModal();
+    }
+    setIsLoading(false);
+    return response.isSuccess;
+  };
+
+  const handleAnnotationDelete = async () => {
+    setIsLoading(true);
+    console.log("Deleting annotation:", annotation[0].AnnotationID);
+    const deleteResponse = await API.delete(
+      `/annotations/${annotation[0].AnnotationID}`,
+    );
+    if (deleteResponse.isSuccess) {
+      await reloadAnnotation(annotationClaimEndpoint);
+      closeModal();
+    }
+    setIsLoading(false);
+    return deleteResponse.isSuccess;
+  };
+
+  const handleSubmitWork = async () => {
+    setIsLoading(true);
+    const response = await API.put(`/claims/${claimId}`, {
+      ...claim,
+      ClaimClaimstatusID: 3,
+    });
+    if (response.isSuccess) {
+      closeModal();
+      await reloadClaims(claimsEndpoint);
+    }
+    setIsLoading(false);
+  };
+
+  const deleteAnnotationModal = () => {
+    openModal(
+      <>
+        <p>Are you sure you want to delete this annotation?</p>
+        <ButtonTray>
+          <Button onClick={handleAnnotationDelete} variant="darkDanger">
+            Delete
+          </Button>
+          <Button onClick={closeModal}>Cancel</Button>
+        </ButtonTray>
+      </>,
+      "Delete Annotation",
+    );
+  };
+
+  const confirmAssignmentModal = () => {
     openModal(
       <div>
         <p>Are you sure you want to assign this claim?</p>
@@ -90,6 +235,94 @@ const ClaimInfo = () => {
     );
   };
 
+  const addAnnotationsModal = () => {
+    const assignmentID = assignedClaims?.find(
+      (assignment) =>
+        assignment.AssignmentClaimID === claim.ClaimID &&
+        assignment.AssignmentUserID === loggedInUser?.UserID,
+    )?.AssignmentID;
+
+    openModal(
+      <AnnotationForm
+        onSubmit={handleAddAnnotation}
+        onCancel={closeModal}
+        initialAnnotation={{
+          AnnotationAssignmentID: assignmentID,
+        }}
+      />,
+      "Add Annotations",
+    );
+  };
+
+  const modifyAnnotationModal = () => {
+    openModal(
+      <AnnotationForm
+        onSubmit={handleModifyAnnotation}
+        onCancel={closeModal}
+        initialAnnotation={annotation[0]}
+      />,
+      "Modify Annotation",
+    );
+  };
+
+  const addEvidenceModal = () => {
+    const annotationID = annotation?.[0]?.AnnotationID;
+
+    openModal(
+      <EvidenceForm
+        onSubmit={handleAddEvidence}
+        onCancel={closeModal}
+        initialEvidence={{
+          EvidenceAnnotationID: annotationID,
+        }}
+      />,
+      "Add Evidence",
+    );
+  };
+
+  const modifyEvidenceModal = (evidence) => {
+    openModal(
+      <EvidenceForm
+        onSubmit={handleModifyEvidence}
+        onCancel={closeModal}
+        initialEvidence={evidence}
+      />,
+      "Modify Evidence",
+    );
+  };
+
+  const deleteEvidenceModal = (id) => {
+    openModal(
+      <>
+        <p>Are you sure you want to delete this evidence?</p>
+        <ButtonTray>
+          <Button onClick={() => handleDeleteEvidence(id)} variant="darkDanger">
+            Delete
+          </Button>
+          <Button onClick={closeModal}>Cancel</Button>
+        </ButtonTray>
+      </>,
+      "Delete Evidence",
+    );
+  };
+
+  const submitWorkModal = () => {
+    openModal(
+      <>
+        <p>Are you sure you want to submit your work on this claim?</p>
+        <ButtonTray>
+          <Button onClick={handleSubmitWork} variant="secondary">
+            Yes
+          </Button>
+          <Button onClick={closeModal}>No</Button>
+        </ButtonTray>
+      </>,
+      "Submit Work",
+    );
+  };
+
+  // View ------------------------------------------
+
   if (!claims) return <p>Loading...</p>;
   if (!claim) return <p>Claim not available.</p>;
   return (
@@ -99,22 +332,67 @@ const ClaimInfo = () => {
         {modalContent}
       </Modal>
 
-      {isAssignedToUser && (
-        <ButtonTray>
-          <Button>Begin Work</Button>
-          <Button variant="darkDanger" onClick={handleAbandon}>
-            Abandon Claim
-          </Button>
-        </ButtonTray>
-      )}
-      {!isAssignedToUser &&
-        loggedInUser?.UserUsertypeID === 2 &&
-        claim.ClaimClaimstatusID === 2 && (
-          <Button variant="secondary" onClick={confrimAssignmentModal}>
-            Assign claim
-          </Button>
+      <div className="claimInfoWrapper">
+        {canEdit && (
+          <ButtonTray>
+            {!isAssignedToUser && (
+              <Button variant="secondary" onClick={confirmAssignmentModal}>
+                Assign claim
+              </Button>
+            )}
+            {isAssignedToUser && (
+              <>
+                {!annotation && (
+                  <Button onClick={addAnnotationsModal} variant="secondary">
+                    Add Annotations
+                  </Button>
+                )}
+                <Button onClick={addEvidenceModal} variant="secondary">
+                  Add Evidence
+                </Button>
+                {annotation && evidences && (
+                  <Button onClick={submitWorkModal} variant="secondary">
+                    Submit Work
+                  </Button>
+                )}
+                <Button
+                  variant="darkDanger"
+                  disabled={annotation && annotation.length > 0}
+                  onClick={handleAbandon}
+                >
+                  Abandon Claim
+                </Button>
+              </>
+            )}
+          </ButtonTray>
         )}
-      <ClaimAndSources claim={claim} sources={sources} />
+
+        <div className="claimLayout">
+          <div className="claimMain">
+            <h2>Claim</h2>
+            <ClaimAndSources claim={claim} sources={sources} />
+          </div>
+          <div className="claimSidebar">
+            {annotation && annotation.length > 0 && (
+              <>
+                <h2>Your Work</h2>
+                <AnnotationAndEvidence
+                  annotation={annotation[0]}
+                  evidences={evidences}
+                  onAnnotationModify={
+                    canEdit ? modifyAnnotationModal : undefined
+                  }
+                  onAnnotationDelete={
+                    canEdit ? deleteAnnotationModal : undefined
+                  }
+                  onEvidenceModify={canEdit ? modifyEvidenceModal : undefined}
+                  onEvidenceDelete={canEdit ? deleteEvidenceModal : undefined}
+                />
+              </>
+            )}
+          </div>
+        </div>
+      </div>
     </>
   );
 };
