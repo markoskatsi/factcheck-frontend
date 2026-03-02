@@ -33,9 +33,7 @@ const ClaimInfo = () => {
   const [assignedClaims, , , reloadAssignedClaims] = useLoad(
     assignedClaimsEndpoint,
   );
-  const [evidences, , , reloadEvidences] = useLoad(
-    evidenceEndpoint,
-  );
+  const [evidences, , , reloadEvidences] = useLoad(evidenceEndpoint);
 
   const [isLoading, setIsLoading] = useState(false);
   const [showModal, modalContent, modalTitle, openModal, closeModal] =
@@ -91,13 +89,68 @@ const ClaimInfo = () => {
 
   const handleAddEvidence = async (evidence) => {
     setIsLoading(true);
-    const response = await API.post(`/evidence`, evidence);
+    let data;
+    if (!evidence.EvidenceURL && !evidence.file) {
+    }
+    if (evidence.file) {
+      data = new FormData();
+      data.append("file", evidence.file);
+      data.append("EvidenceID", evidence.EvidenceID);
+      data.append("EvidenceFilename", evidence.EvidenceFilename);
+      data.append("EvidenceDescription", evidence.EvidenceDescription);
+      data.append("EvidenceEvidencetypeID", evidence.EvidenceEvidencetypeID);
+      data.append("EvidenceAnnotationID", evidence.EvidenceAnnotationID);
+    } else {
+      data = evidence;
+    }
+    const response = await API.post(`${evidenceEndpoint}`, data);
     if (response.isSuccess) {
-      await reloadEvidences(evidenceEndpoint);
       closeModal();
+      console.log(evidenceEndpoint);
+      await reloadEvidences(evidenceEndpoint);
     }
     setIsLoading(false);
     return response.isSuccess;
+  };
+
+  const handleModifyEvidence = async (evidence) => {
+    setIsLoading(true);
+    let data;
+    if (!evidence.EvidenceURL && !evidence.file) {
+    }
+    if (evidence.file) {
+      data = new FormData();
+      data.append("file", evidence.file);
+      data.append("EvidenceID", evidence.EvidenceID);
+      data.append("EvidenceFilename", evidence.EvidenceFilename);
+      data.append("EvidenceDescription", evidence.EvidenceDescription);
+      data.append("EvidenceEvidencetypeID", evidence.EvidenceEvidencetypeID);
+      data.append("EvidenceAnnotationID", evidence.EvidenceAnnotationID);
+    } else {
+      data = evidence;
+    }
+    const response = await API.put(
+      `${evidenceEndpoint}/${evidence.EvidenceID}`,
+      data,
+    );
+    if (response.isSuccess) {
+      closeModal();
+      console.log(evidenceEndpoint);
+      await reloadEvidences(evidenceEndpoint);
+    }
+    setIsLoading(false);
+    return response.isSuccess;
+  };
+
+  const handleDeleteEvidence = async (id) => {
+    setIsLoading(true);
+    const deleteResponse = await API.delete(`${evidenceEndpoint}/${id}`);
+    if (deleteResponse.isSuccess) {
+      closeModal();
+      await reloadEvidences(evidenceEndpoint);
+    }
+    setIsLoading(false);
+    return deleteResponse.isSuccess;
   };
 
   const handleAddAnnotation = async (annotation) => {
@@ -214,6 +267,32 @@ const ClaimInfo = () => {
     );
   };
 
+  const modifyEvidenceModal = (evidence) => {
+    openModal(
+      <EvidenceForm
+        onSubmit={handleModifyEvidence}
+        onCancel={closeModal}
+        initialEvidence={evidence}
+      />,
+      "Modify Evidence",
+    );
+  };
+
+  const deleteEvidenceModal = (id) => {
+    openModal(
+      <>
+        <p>Are you sure you want to delete this evidence?</p>
+        <ButtonTray>
+          <Button onClick={() => handleDeleteEvidence(id)} variant="darkDanger">
+            Delete
+          </Button>
+          <Button onClick={closeModal}>Cancel</Button>
+        </ButtonTray>
+      </>,
+      "Delete Evidence",
+    );
+  };
+
   // View ------------------------------------------
 
   if (!claims) return <p>Loading...</p>;
@@ -265,7 +344,11 @@ const ClaimInfo = () => {
                   onAnnotationModify={modifyAnnotationModal}
                   onAnnotationDelete={deleteAnnotationModal}
                 />
-                <EvidencesMap evidences={evidences} />
+                <EvidencesMap
+                  evidences={evidences}
+                  onEvidenceModify={modifyEvidenceModal}
+                  onEvidenceDelete={deleteEvidenceModal}
+                />
               </CardContainer>
             )}
           </div>

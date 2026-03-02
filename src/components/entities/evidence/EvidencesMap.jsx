@@ -3,12 +3,7 @@ import Icon from "../../UI/Icons.jsx";
 import EvidenceItem from "./EvidenceItem.jsx";
 import { Card } from "../../UI/Card.jsx";
 
-const EvidencesMap = ({
-  evidences,
-  // onSourceModify,
-  // onSourceDelete,
-  // onAddSource,
-}) => {
+const EvidencesMap = ({ evidences, onEvidenceModify, onEvidenceDelete }) => {
   return (
     <div>
       {evidences && evidences.length > 0 ? (
@@ -16,37 +11,28 @@ const EvidencesMap = ({
           {evidences.map((evidence) => (
             <Card key={evidence.EvidenceID}>
               <EvidenceItem evidence={evidence} />
-              {/* {onSourceModify && onSourceDelete && (
+              {onEvidenceModify && onEvidenceDelete && (
                 <ButtonTray>
                   <Button
-                    onClick={() => onSourceModify(source)}
+                    onClick={() => onEvidenceModify(evidence)}
                     variant="secondary"
                   >
                     <Icon.Pen />
                   </Button>
                   <Button
-                    onClick={() => onSourceDelete(source.SourceID)}
+                    onClick={() => onEvidenceDelete(evidence.EvidenceID)}
                     variant="danger"
                   >
                     <Icon.Trash />
                   </Button>
                 </ButtonTray>
-              )} */}
+              )}
             </Card>
           ))}
         </div>
       ) : (
-        <p>No sources attached.</p>
+        <p>No evidences attached.</p>
       )}
-      {/* {onAddSource && (
-        <Button
-          onClick={onAddSource}
-          variant="secondary"
-          style={{ marginTop: "15px" }}
-        >
-          Add a source
-        </Button>
-      )} */}
     </div>
   );
 };
