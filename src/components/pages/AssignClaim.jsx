@@ -6,6 +6,8 @@ import API from "../api/API.js";
 import { Modal, useModal } from "../UI/Modal.jsx";
 import { useState } from "react";
 import { Button, ButtonTray } from "../UI/Button.jsx";
+import Spinner from "react-spinner";
+import PageNotFound from "./404.jsx";
 
 const AssignClaim = () => {
   // Initialisation --------------------------------
@@ -13,22 +15,18 @@ const AssignClaim = () => {
   const { loggedInUser } = useAuth();
   const navigate = useNavigate();
 
-  const claimsEndpoint = `/claims`;
-  const assignedClaimsEndpoint = `/assignments`;
+  const claimsEndpoint = `/claims/${claimId}`;
   const claimSourcesEndpoint = `/sources/claims/${claimId}?orderby=SourceCreated%20desc`;
 
   // State -----------------------------------------
   const [claims, , , reloadClaims] = useLoad(claimsEndpoint);
   const [sources, , ,] = useLoad(claimSourcesEndpoint);
-  const [assignedClaims, , , reloadAssignedClaims] = useLoad(
-    assignedClaimsEndpoint,
-  );
   const [isLoading, setIsLoading] = useState(false);
   const [showModal, modalContent, modalTitle, openModal, closeModal] =
     useModal(false);
 
   // Handlers --------------------------------------
-  const claim = claims?.find((claim) => claim.ClaimID === parseInt(claimId));
+  const claim = claims?.[0];
 
   const handleAssignment = async () => {
     closeModal();
@@ -37,15 +35,18 @@ const AssignClaim = () => {
       AssignmentClaimID: claim.ClaimID,
       AssignmentUserID: loggedInUser?.UserID,
     });
-    const response = await API.put(`/claims/${claim.ClaimID}`, {
-      ...claim,
-      ClaimClaimstatusID: 3,
-    });
-    await reloadAssignedClaims(assignedClaimsEndpoint);
-    await reloadClaims(claimsEndpoint);
+    if (assignmentResponse.isSuccess) {
+      const response = await API.put(`/claims/${claim.ClaimID}`, {
+        ...claim,
+        ClaimClaimstatusID: 3,
+      });
+      await reloadClaims(claimsEndpoint);
+      setIsLoading(false);
+      navigate(`/tasks/${claim.ClaimID}`);
+      return response.isSuccess;
+    }
     setIsLoading(false);
-    navigate(`/tasks/${claim.ClaimID}`);
-    return assignmentResponse.isSuccess && response.isSuccess;
+    return false;
   };
 
   const confirmAssignmentModal = () => {
@@ -66,13 +67,13 @@ const AssignClaim = () => {
   // View ------------------------------------------
 
   if (!claims) return <p>Loading...</p>;
-  if (!claim) return <p>Claim not available.</p>;
+  if (!claim || loggedInUser.UserUsertypeID !== 2) return <PageNotFound />;
   return (
     <>
+      {isLoading && <Spinner />}
       <Modal className="Modal" show={showModal} title={modalTitle}>
         {modalContent}
       </Modal>
-
       <ButtonTray>
         <Button variant="secondary" onClick={confirmAssignmentModal}>
           Assign claim

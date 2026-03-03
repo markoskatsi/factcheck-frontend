@@ -30,9 +30,7 @@ const ClaimInfo = () => {
   const [claims, , , reloadClaims] = useLoad(claimsEndpoint);
   const [annotation, , , reloadAnnotation] = useLoad(annotationClaimEndpoint);
   const [sources, , ,] = useLoad(claimSourcesEndpoint);
-  const [assignedClaims, , , reloadAssignedClaims] = useLoad(
-    assignedClaimsEndpoint,
-  );
+  const [assignedClaims, , ,] = useLoad(assignedClaimsEndpoint);
   const [evidences, , , reloadEvidences] = useLoad(evidenceEndpoint);
   const [isLoading, setIsLoading] = useState(false);
   const [showModal, modalContent, modalTitle, openModal, closeModal] =
@@ -56,28 +54,29 @@ const ClaimInfo = () => {
     });
 
   const claim = claims?.find((claim) => claim.ClaimID === parseInt(claimId));
-
   const canEdit = claim?.ClaimClaimstatusID === 3;
+
+  const assignmentID = assignedClaims?.find(
+    (assignment) =>
+      assignment.AssignmentClaimID === claim?.ClaimID &&
+      assignment.AssignmentUserID === loggedInUser?.UserID,
+  )?.AssignmentID;
 
   const handleAbandon = async () => {
     setIsLoading(true);
-    const assignmentToDelete = assignedClaims.find(
-      (assignment) =>
-        assignment.AssignmentClaimID === claim.ClaimID &&
-        assignment.AssignmentUserID === loggedInUser?.UserID,
-    );
-    const deleteResponse = await API.delete(
-      `/assignments/${assignmentToDelete.AssignmentID}`,
-    );
-    const response = await API.put(`/claims/${claim.ClaimID}`, {
-      ...claim,
-      ClaimClaimstatusID: 2,
-    });
-    await reloadAssignedClaims(assignedClaimsEndpoint);
-    await reloadClaims(claimsEndpoint);
+    const deleteResponse = await API.delete(`/assignments/${assignmentID}`);
+    if (deleteResponse.isSuccess) {
+      const response = await API.put(`/claims/${claim.ClaimID}`, {
+        ...claim,
+        ClaimClaimstatusID: 2,
+      });
+      await reloadClaims(claimsEndpoint);
+      setIsLoading(false);
+      navigate(`/tasks`);
+      return response.isSuccess;
+    }
     setIsLoading(false);
-    navigate(`/tasks`);
-    return deleteResponse.isSuccess && response.isSuccess;
+    return false;
   };
 
   const handleSubmitWork = async () => {
@@ -112,12 +111,6 @@ const ClaimInfo = () => {
   };
 
   const addAnnotationsModal = () => {
-    const assignmentID = assignedClaims?.find(
-      (assignment) =>
-        assignment.AssignmentClaimID === claim.ClaimID &&
-        assignment.AssignmentUserID === loggedInUser?.UserID,
-    )?.AssignmentID;
-
     openModal(
       <AnnotationForm
         onSubmit={handleAddAnnotation}
@@ -238,20 +231,16 @@ const ClaimInfo = () => {
             <ClaimAndSources claim={claim} sources={sources} />
           </div>
           <div className="claimSidebar">
-            {annotation && annotation.length > 0 && (
+            {annotation && (
               <>
                 <h2>Your Work</h2>
                 <AnnotationAndEvidence
                   annotation={annotation[0]}
                   evidences={evidences}
-                  onAnnotationModify={
-                    canEdit ? modifyAnnotationModal : undefined
-                  }
-                  onAnnotationDelete={
-                    canEdit ? deleteAnnotationModal : undefined
-                  }
-                  onEvidenceModify={canEdit ? modifyEvidenceModal : undefined}
-                  onEvidenceDelete={canEdit ? deleteEvidenceModal : undefined}
+                  onAnnotationModify={canEdit && modifyAnnotationModal}
+                  onAnnotationDelete={canEdit && deleteAnnotationModal}
+                  onEvidenceModify={canEdit && modifyEvidenceModal}
+                  onEvidenceDelete={canEdit && deleteEvidenceModal}
                 />
               </>
             )}

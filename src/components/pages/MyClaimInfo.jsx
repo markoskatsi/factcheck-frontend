@@ -115,10 +115,6 @@ const MyClaimInfo = () => {
     return deleteResponse.isSuccess;
   };
 
-  const handleCancel = () => {
-    closeModal();
-  };
-
   const deleteClaimModal = () => {
     openModal(
       <>
@@ -144,7 +140,7 @@ const MyClaimInfo = () => {
         </div>
         <ClaimForm
           onSubmit={handleClaimModifySubmit}
-          onCancel={handleCancel}
+          onCancel={closeModal}
           initialClaim={claim[0]}
         />
       </>,
@@ -154,7 +150,7 @@ const MyClaimInfo = () => {
 
   const addSourceModal = () => {
     openModal(
-      <SourceForm onSubmit={handleSourceSubmit} onCancel={handleCancel} />,
+      <SourceForm onSubmit={handleSourceSubmit} onCancel={closeModal} />,
       "Add Source",
     );
   };
@@ -163,7 +159,7 @@ const MyClaimInfo = () => {
     openModal(
       <SourceForm
         onSubmit={handleSourceModifySubmit}
-        onCancel={handleCancel}
+        onCancel={closeModal}
         initialSource={source}
       />,
       "Modify Source",

@@ -19,7 +19,6 @@ const PublishedClaim = () => {
 
   // View ------------------------------------------
   if (!claim) return null;
-  if (!claim.length || !claim[0]) return <PageNotFound />;
   if (claim[0].ClaimClaimstatusID !== 5) return <PageNotFound />;
 
   return <ClaimAndSources claim={claim[0]} sources={sources} />;
