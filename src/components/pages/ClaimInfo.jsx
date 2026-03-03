@@ -10,6 +10,7 @@ import { Spinner } from "../UI/Spinner.jsx";
 import AnnotationForm from "../entities/annotations/AnnotationForm.jsx";
 import AnnotationAndEvidence from "../entities/annotations/AnnotationAndEvidence.jsx";
 import EvidenceForm from "../entities/evidence/EvidenceForm.jsx";
+import AnnotationCrud from "../entities/annotations/AnnotationCrud.jsx";
 import "./MyClaimInfo.scss";
 
 const ClaimInfo = () => {
@@ -38,6 +39,9 @@ const ClaimInfo = () => {
     useModal(false);
 
   // Handlers --------------------------------------
+  const [handleAddAnnotation, handleModifyAnnotation, handleDeleteAnnotation] =
+    AnnotationCrud({ setIsLoading, reloadAnnotation, annotationClaimEndpoint, closeModal });
+
   const claim = claims?.find((claim) => claim.ClaimID === parseInt(claimId));
 
   const isAssignedToUser = assignedClaims?.some(
@@ -153,45 +157,6 @@ const ClaimInfo = () => {
     return deleteResponse.isSuccess;
   };
 
-  const handleAddAnnotation = async (annotation) => {
-    setIsLoading(true);
-    const response = await API.post(`/annotations`, annotation);
-    if (response.isSuccess) {
-      await reloadAnnotation(annotationClaimEndpoint);
-      closeModal();
-    }
-    setIsLoading(false);
-    return response.isSuccess;
-  };
-
-  const handleModifyAnnotation = async (annotation) => {
-    setIsLoading(true);
-    const response = await API.put(
-      `/annotations/${annotation.AnnotationID}`,
-      annotation,
-    );
-    if (response.isSuccess) {
-      await reloadAnnotation(annotationClaimEndpoint);
-      closeModal();
-    }
-    setIsLoading(false);
-    return response.isSuccess;
-  };
-
-  const handleAnnotationDelete = async () => {
-    setIsLoading(true);
-    console.log("Deleting annotation:", annotation[0].AnnotationID);
-    const deleteResponse = await API.delete(
-      `/annotations/${annotation[0].AnnotationID}`,
-    );
-    if (deleteResponse.isSuccess) {
-      await reloadAnnotation(annotationClaimEndpoint);
-      closeModal();
-    }
-    setIsLoading(false);
-    return deleteResponse.isSuccess;
-  };
-
   const handleSubmitWork = async () => {
     setIsLoading(true);
     const response = await API.put(`/claims/${claimId}`, {
@@ -210,7 +175,10 @@ const ClaimInfo = () => {
       <>
         <p>Are you sure you want to delete this annotation?</p>
         <ButtonTray>
-          <Button onClick={handleAnnotationDelete} variant="darkDanger">
+          <Button
+            onClick={() => handleDeleteAnnotation(annotation[0])}
+            variant="darkDanger"
+          >
             Delete
           </Button>
           <Button onClick={closeModal}>Cancel</Button>
