@@ -8,6 +8,8 @@ import PageNotFound from "./components/pages/404";
 import Login from "./components/pages/Login";
 import AvailableClaims from "./components/pages/AvailableClaims.jsx";
 import MyTasks from "./components/pages/MyTasks.jsx";
+import AssignClaim from "./components/pages/AssignClaim.jsx";
+import PublishedClaim from "./components/pages/PublishedClaim.jsx";
 import { AuthProvider } from "./components/auth/useAuth.jsx";
 import "./App.scss";
 
@@ -18,13 +20,13 @@ function App() {
         <Layout>
           <Routes>
             <Route path="/" element={<Home />} />
-            <Route path="/claims/:claimId" element={<ClaimInfo />} />
+            <Route path="/claims/:claimId" element={<PublishedClaim />} />
             <Route path="/myclaims" element={<MyClaims />} />
             <Route path="/myclaims/:claimId" element={<MyClaimInfo />} />
             <Route path="/availableclaims" element={<AvailableClaims />} />
-            <Route path="/availableclaims/:claimId" element={<ClaimInfo />} />
-            <Route path="/mytasks" element={<MyTasks />} />
-            <Route path="/mytasks/:claimId" element={<ClaimInfo />} />
+            <Route path="/assign/:claimId" element={<AssignClaim />} />
+            <Route path="/tasks" element={<MyTasks />} />
+            <Route path="/tasks/:claimId" element={<ClaimInfo />} />
             <Route path="/login" element={<Login />} />
             <Route path="/logout" element={<Login />} />
             <Route path="*" element={<PageNotFound />} />

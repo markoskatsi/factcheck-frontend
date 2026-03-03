@@ -16,7 +16,7 @@ function MyTasks() {
   return (
     <section>
       <h1>My Tasks</h1>
-      <ClaimsMap claims={claims} basePath="/mytasks" />
+      <ClaimsMap claims={claims} basePath="/tasks" />
     </section>
   );
 }

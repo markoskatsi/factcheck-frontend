@@ -34,7 +34,6 @@ const ClaimInfo = () => {
     assignedClaimsEndpoint,
   );
   const [evidences, , , reloadEvidences] = useLoad(evidenceEndpoint);
-  // const [claim, , , reloadClaim] = useLoad(`/claims/${claimId}`);
   const [isLoading, setIsLoading] = useState(false);
   const [showModal, modalContent, modalTitle, openModal, closeModal] =
     useModal(false);
@@ -58,31 +57,7 @@ const ClaimInfo = () => {
 
   const claim = claims?.find((claim) => claim.ClaimID === parseInt(claimId));
 
-  const isAssignedToUser = assignedClaims?.some(
-    (claim) =>
-      claim.AssignmentClaimID === parseInt(claimId) &&
-      claim.AssignmentUserID === loggedInUser?.UserID,
-  );
-
-  const canEdit = claim?.ClaimClaimstatusID === 2;
-
-  const handleAssignment = async () => {
-    closeModal();
-    setIsLoading(true);
-    const assignmentResponse = await API.post(`/assignments`, {
-      AssignmentClaimID: claim.ClaimID,
-      AssignmentUserID: loggedInUser?.UserID,
-    });
-    const response = await API.put(`/claims/${claim.ClaimID}`, {
-      ...claim,
-      ClaimClaimstatusID: 3,
-    });
-    await reloadAssignedClaims(assignedClaimsEndpoint);
-    await reloadClaims(claimsEndpoint);
-    setIsLoading(false);
-    navigate(`/mytasks/${claim.ClaimID}`);
-    return assignmentResponse.isSuccess && response.isSuccess;
-  };
+  const canEdit = claim?.ClaimClaimstatusID === 3;
 
   const handleAbandon = async () => {
     setIsLoading(true);
@@ -101,7 +76,7 @@ const ClaimInfo = () => {
     await reloadAssignedClaims(assignedClaimsEndpoint);
     await reloadClaims(claimsEndpoint);
     setIsLoading(false);
-    navigate(`/mytasks`);
+    navigate(`/tasks`);
     return deleteResponse.isSuccess && response.isSuccess;
   };
 
@@ -109,7 +84,7 @@ const ClaimInfo = () => {
     setIsLoading(true);
     const response = await API.put(`/claims/${claimId}`, {
       ...claim,
-      ClaimClaimstatusID: 3,
+      ClaimClaimstatusID: 4,
     });
     if (response.isSuccess) {
       closeModal();
@@ -133,21 +108,6 @@ const ClaimInfo = () => {
         </ButtonTray>
       </>,
       "Delete Annotation",
-    );
-  };
-
-  const confirmAssignmentModal = () => {
-    openModal(
-      <div>
-        <p>Are you sure you want to assign this claim?</p>
-        <ButtonTray>
-          <Button onClick={handleAssignment} variant="secondary">
-            Yes
-          </Button>
-          <Button onClick={closeModal}>No</Button>
-        </ButtonTray>
-      </div>,
-      "Assign Claim",
     );
   };
 
@@ -238,8 +198,6 @@ const ClaimInfo = () => {
   };
 
   // View ------------------------------------------
-
-  if (!claims) return <p>Loading...</p>;
   if (!claim) return <p>Claim not available.</p>;
   return (
     <>
@@ -251,35 +209,26 @@ const ClaimInfo = () => {
       <div className="claimInfoWrapper">
         {canEdit && (
           <ButtonTray>
-            {!isAssignedToUser && (
-              <Button variant="secondary" onClick={confirmAssignmentModal}>
-                Assign claim
+            {!annotation && (
+              <Button onClick={addAnnotationsModal} variant="secondary">
+                Add Annotations
               </Button>
             )}
-            {isAssignedToUser && (
-              <>
-                {!annotation && (
-                  <Button onClick={addAnnotationsModal} variant="secondary">
-                    Add Annotations
-                  </Button>
-                )}
-                <Button onClick={addEvidenceModal} variant="secondary">
-                  Add Evidence
-                </Button>
-                {annotation && evidences && (
-                  <Button onClick={submitWorkModal} variant="secondary">
-                    Submit Work
-                  </Button>
-                )}
-                <Button
-                  variant="darkDanger"
-                  disabled={annotation && annotation.length > 0}
-                  onClick={handleAbandon}
-                >
-                  Abandon Claim
-                </Button>
-              </>
+            <Button onClick={addEvidenceModal} variant="secondary">
+              Add Evidence
+            </Button>
+            {annotation && evidences && (
+              <Button onClick={submitWorkModal} variant="secondary">
+                Submit Work
+              </Button>
             )}
+            <Button
+              variant="darkDanger"
+              disabled={annotation && annotation.length > 0}
+              onClick={handleAbandon}
+            >
+              Abandon Claim
+            </Button>
           </ButtonTray>
         )}
 

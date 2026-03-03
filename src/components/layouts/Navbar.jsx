@@ -31,7 +31,7 @@ function Navbar() {
               </NavLink>
             </NavItem>
             <NavItem>
-              <NavLink to="/mytasks" className={getLinkStyle}>
+              <NavLink to="/tasks" className={getLinkStyle}>
                 My Tasks
               </NavLink>
             </NavItem>

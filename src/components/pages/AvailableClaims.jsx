@@ -18,7 +18,7 @@ function AvailableClaims() {
   return (
     <section>
       <h1>Available Claims</h1>
-      <ClaimsMap claims={claims} basePath="/availableclaims" />
+      <ClaimsMap claims={claims} basePath="/assign" />
     </section>
   );
 }
