@@ -78,8 +78,6 @@ const MyClaimInfo = () => {
   const handleSourceModifySubmit = async (source) => {
     setIsLoading(true);
     let data;
-    if (!source.SourceURL && !source.file) {
-    }
     if (source.file) {
       data = new FormData();
       data.append("file", source.file);
@@ -97,7 +95,6 @@ const MyClaimInfo = () => {
     );
     if (response.isSuccess) {
       closeModal();
-      console.log(claimSourcesEndpoint);
       await loadSources(claimSourcesEndpoint);
     }
     setIsLoading(false);

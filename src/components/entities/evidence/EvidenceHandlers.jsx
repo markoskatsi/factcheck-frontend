@@ -1,11 +1,11 @@
 import { API } from "../../api/API.js";
 
-export default function EvidenceCrud({
+export const EvidenceHandlers = ({
   setIsLoading,
   reloadEvidences,
   evidenceEndpoint,
   closeModal,
-}) {
+}) => {
   const handleAddEvidence = async (evidence) => {
     setIsLoading(true);
     let data;
@@ -63,9 +63,7 @@ export default function EvidenceCrud({
 
   const handleDeleteEvidence = async (id) => {
     setIsLoading(true);
-    const deleteResponse = await API.delete(
-      `${evidenceEndpoint}/${id}`,
-    );
+    const deleteResponse = await API.delete(`${evidenceEndpoint}/${id}`);
     if (deleteResponse.isSuccess) {
       closeModal();
       await reloadEvidences(evidenceEndpoint);
@@ -75,4 +73,4 @@ export default function EvidenceCrud({
   };
 
   return [handleAddEvidence, handleModifyEvidence, handleDeleteEvidence];
-}
+};

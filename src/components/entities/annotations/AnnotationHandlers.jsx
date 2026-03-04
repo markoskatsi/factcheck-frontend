@@ -1,11 +1,11 @@
 import { API } from "../../api/API.js";
 
-export default function AnnotationCrud({
+export const AnnotationHandlers = ({
   setIsLoading,
   reloadAnnotation,
   annotationClaimEndpoint,
   closeModal,
-}) {
+}) => {
   const handleAddAnnotation = async (annotation) => {
     setIsLoading(true);
     const response = await API.post(`/annotations`, annotation);

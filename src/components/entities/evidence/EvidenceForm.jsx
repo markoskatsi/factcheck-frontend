@@ -1,6 +1,7 @@
 import Form from "../../UI/Form.jsx";
 import useLoad from "../../api/useLoad.js";
 import { Dropzone } from "../../UI/Dropzone.jsx";
+import { Dropdown } from "../../UI/Dropdown.jsx";
 
 const emptyEvidence = {
   EvidenceDescription: "",
@@ -55,34 +56,26 @@ export default function EvidenceForm({
   };
   // View ------------------------------------------
   return (
-    <Form onSubmit={handleSubmit} onCancel={onCancel} submitText="Save evidence">
+    <Form
+      onSubmit={handleSubmit}
+      onCancel={onCancel}
+      submitText="Save evidence"
+    >
       <Form.Item
         label="Evidence type"
         htmlFor="EvidenceEvidencetypeID"
         advice="Choose an evidence type"
         error={errors.EvidenceEvidencetypeID}
       >
-        {!evidenceTypes ? (
-          <p>{loadingTypesMessage}</p>
-        ) : evidenceTypes.length === 0 ? (
-          <p>No evidence types found</p>
-        ) : (
-          <select
-            className="FormInput"
-            name="EvidenceEvidencetypeID"
-            value={evidence.EvidenceEvidencetypeID}
-            onChange={handleChange}
-          >
-            <option value={0} disabled>
-              Select an option
-            </option>
-            {evidenceTypes.map((type) => (
-              <option key={type.EvidencetypeID} value={type.EvidencetypeID}>
-                {type.EvidencetypeName}
-              </option>
-            ))}
-          </select>
-        )}
+        <Dropdown
+          list={evidenceTypes}
+          value={evidence.EvidenceEvidencetypeID}
+          name="EvidenceEvidencetypeID"
+          loadingMessage={loadingTypesMessage}
+          handleChange={handleChange}
+          idField="EvidencetypeID"
+          labelField="EvidencetypeName"
+        />
       </Form.Item>
 
       {evidence.EvidenceEvidencetypeID !== 0 && (

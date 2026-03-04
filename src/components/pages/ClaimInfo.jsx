@@ -10,8 +10,8 @@ import { Spinner } from "../UI/Spinner.jsx";
 import AnnotationForm from "../entities/annotations/AnnotationForm.jsx";
 import AnnotationAndEvidence from "../entities/annotations/AnnotationAndEvidence.jsx";
 import EvidenceForm from "../entities/evidence/EvidenceForm.jsx";
-import AnnotationCrud from "../entities/annotations/AnnotationCrud.jsx";
-import EvidenceCrud from "../entities/evidence/EvidenceCrud.jsx";
+import { AnnotationHandlers } from "../entities/annotations/AnnotationHandlers.jsx";
+import { EvidenceHandlers } from "../entities/evidence/EvidenceHandlers.jsx";
 import "./MyClaimInfo.scss";
 
 const ClaimInfo = () => {
@@ -38,7 +38,7 @@ const ClaimInfo = () => {
 
   // Handlers --------------------------------------
   const [handleAddAnnotation, handleModifyAnnotation, handleDeleteAnnotation] =
-    AnnotationCrud({
+    AnnotationHandlers({
       setIsLoading,
       reloadAnnotation,
       annotationClaimEndpoint,
@@ -46,7 +46,7 @@ const ClaimInfo = () => {
     });
 
   const [handleAddEvidence, handleModifyEvidence, handleDeleteEvidence] =
-    EvidenceCrud({
+    EvidenceHandlers({
       setIsLoading,
       reloadEvidences,
       evidenceEndpoint,

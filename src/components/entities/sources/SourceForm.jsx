@@ -2,6 +2,7 @@ import Form from "../../UI/Form.jsx";
 import useLoad from "../../api/useLoad.js";
 import { Dropzone } from "../../UI/Dropzone.jsx";
 import { useParams } from "react-router-dom";
+import { Dropdown } from "../../UI/Dropdown.jsx";
 
 const emptySource = {
   SourceDescription: "",
@@ -65,27 +66,15 @@ export default function SourceForm({
         advice="Choose a source type"
         error={errors.SourceSourcetypeID}
       >
-        {!sourceTypes ? (
-          <p>{loadingTypesMessage}</p>
-        ) : sourceTypes.length === 0 ? (
-          <p>No source types found</p>
-        ) : (
-          <select
-            className="FormInput"
-            name="SourceSourcetypeID"
-            value={source.SourceSourcetypeID}
-            onChange={handleChange}
-          >
-            <option value={0} disabled>
-              Select an option
-            </option>
-            {sourceTypes.map((type) => (
-              <option key={type.SourcetypeID} value={type.SourcetypeID}>
-                {type.SourcetypeName}
-              </option>
-            ))}
-          </select>
-        )}
+        <Dropdown
+          list={sourceTypes}
+          value={source.SourceSourcetypeID}
+          name="SourceSourcetypeID"
+          loadingMessage={loadingTypesMessage}
+          handleChange={handleChange}
+          idField="SourcetypeID"
+          labelField="SourcetypeName"
+        />
       </Form.Item>
 
       {source.SourceSourcetypeID !== 0 && (
