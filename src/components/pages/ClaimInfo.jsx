@@ -20,17 +20,18 @@ const ClaimInfo = () => {
   const { loggedInUser } = useAuth();
   const navigate = useNavigate();
 
-  const claimsEndpoint = `/claims`;
+  const claimEndpoint = `/claims/${claimId}`;
   const assignedClaimsEndpoint = `/assignments`;
   const claimSourcesEndpoint = `/sources/claims/${claimId}?orderby=SourceCreated%20desc`;
   const annotationClaimEndpoint = `/annotations/claims/${claimId}`;
-  const evidenceEndpoint = `/evidence`;
 
   // State -----------------------------------------
-  const [claims, , , reloadClaims] = useLoad(claimsEndpoint);
+  const [claim, , , reloadClaim] = useLoad(claimEndpoint);
   const [annotation, , , reloadAnnotation] = useLoad(annotationClaimEndpoint);
   const [sources, , ,] = useLoad(claimSourcesEndpoint);
   const [assignedClaims, , ,] = useLoad(assignedClaimsEndpoint);
+
+  const evidenceEndpoint = `/evidence/annotations/${annotation?.[0]?.AnnotationID}`;
   const [evidences, , , reloadEvidences] = useLoad(evidenceEndpoint);
   const [isLoading, setIsLoading] = useState(false);
   const [showModal, modalContent, modalTitle, openModal, closeModal] =
@@ -53,12 +54,11 @@ const ClaimInfo = () => {
       closeModal,
     });
 
-  const claim = claims?.find((claim) => claim.ClaimID === parseInt(claimId));
   const canEdit = claim?.ClaimClaimstatusID === 3;
 
   const assignmentID = assignedClaims?.find(
     (assignment) =>
-      assignment.AssignmentClaimID === claim?.ClaimID &&
+      assignment.AssignmentClaimID === claim?.[0]?.ClaimID &&
       assignment.AssignmentUserID === loggedInUser?.UserID,
   )?.AssignmentID;
 
@@ -66,11 +66,11 @@ const ClaimInfo = () => {
     setIsLoading(true);
     const deleteResponse = await API.delete(`/assignments/${assignmentID}`);
     if (deleteResponse.isSuccess) {
-      const response = await API.put(`/claims/${claim.ClaimID}`, {
-        ...claim,
+      const response = await API.put(`/claims/${claim?.[0]?.ClaimID}`, {
+        ...claim?.[0],
         ClaimClaimstatusID: 2,
       });
-      await reloadClaims(claimsEndpoint);
+      await reloadClaim(claimEndpoint);
       setIsLoading(false);
       navigate(`/tasks`);
       return response.isSuccess;
@@ -82,12 +82,12 @@ const ClaimInfo = () => {
   const handleSubmitWork = async () => {
     setIsLoading(true);
     const response = await API.put(`/claims/${claimId}`, {
-      ...claim,
+      ...claim?.[0],
       ClaimClaimstatusID: 4,
     });
     if (response.isSuccess) {
       closeModal();
-      await reloadClaims(claimsEndpoint);
+      await reloadClaim(claimEndpoint);
     }
     setIsLoading(false);
   };
@@ -228,7 +228,7 @@ const ClaimInfo = () => {
         <div className="claimLayout">
           <div className="claimMain">
             <h2>Claim</h2>
-            <ClaimAndSources claim={claim} sources={sources} />
+            <ClaimAndSources claim={claim?.[0]} sources={sources} />
           </div>
           <div className="claimSidebar">
             {annotation && (
