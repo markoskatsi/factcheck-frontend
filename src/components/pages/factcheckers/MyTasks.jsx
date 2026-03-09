@@ -1,7 +1,7 @@
-import useLoad from "../api/useLoad.js";
-import ClaimsMap from "../entities/claims/ClaimsMap.jsx";
-import { useAuth } from "../auth/useAuth.jsx";
-import "./MyClaims.scss";
+import useLoad from "../../api/useLoad.js";
+import ClaimsMap from "../../entities/claims/ClaimsMap.jsx";
+import { useAuth } from "../../auth/useAuth.jsx";
+import "../submitters/MyClaims.scss";
 
 function MyTasks() {
   // Inititalisation ---------------------------------------

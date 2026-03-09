@@ -1,14 +1,14 @@
 import { useNavigate, useParams } from "react-router-dom";
-import useLoad from "../api/useLoad.js";
-import SourceForm from "../entities/sources/SourceForm.jsx";
-import ClaimForm from "../entities/claims/ClaimForm.jsx";
-import API from "../api/API.js";
+import useLoad from "../../api/useLoad.js";
+import SourceForm from "../../entities/sources/SourceForm.jsx";
+import ClaimForm from "../../entities/claims/ClaimForm.jsx";
+import API from "../../api/API.js";
 import { useState } from "react";
-import { useAuth } from "../auth/useAuth.jsx";
-import { Modal, useModal } from "../UI/Modal.jsx";
-import { Spinner } from "../UI/Spinner.jsx";
-import ClaimAndSources from "../entities/claims/ClaimAndSources.jsx";
-import { Button, ButtonTray } from "../UI/Button.jsx";
+import { useAuth } from "../../auth/useAuth.jsx";
+import { Modal, useModal } from "../../UI/Modal.jsx";
+import { Spinner } from "../../UI/Spinner.jsx";
+import ClaimAndSources from "../../entities/claims/ClaimAndSources.jsx";
+import { Button, ButtonTray } from "../../UI/Button.jsx";
 import "./MyClaimInfo.scss";
 
 const MyClaimInfo = () => {

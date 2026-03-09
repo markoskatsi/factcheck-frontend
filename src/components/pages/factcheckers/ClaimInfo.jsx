@@ -1,18 +1,18 @@
 import { useNavigate, useParams } from "react-router-dom";
-import useLoad from "../api/useLoad.js";
-import { useAuth } from "../auth/useAuth.jsx";
-import ClaimAndSources from "../entities/claims/ClaimAndSources.jsx";
-import API from "../api/API.js";
-import { Modal, useModal } from "../UI/Modal.jsx";
+import useLoad from "../../api/useLoad.js";
+import { useAuth } from "../../auth/useAuth.jsx";
+import ClaimAndSources from "../../entities/claims/ClaimAndSources.jsx";
+import API from "../../api/API.js";
+import { Modal, useModal } from "../../UI/Modal.jsx";
 import { useState } from "react";
-import { Button, ButtonTray } from "../UI/Button.jsx";
-import { Spinner } from "../UI/Spinner.jsx";
-import AnnotationForm from "../entities/annotations/AnnotationForm.jsx";
-import AnnotationAndEvidence from "../entities/annotations/AnnotationAndEvidence.jsx";
-import EvidenceForm from "../entities/evidence/EvidenceForm.jsx";
-import { AnnotationHandlers } from "../entities/annotations/AnnotationHandlers.jsx";
-import { EvidenceHandlers } from "../entities/evidence/EvidenceHandlers.jsx";
-import "./MyClaimInfo.scss";
+import { Button, ButtonTray } from "../../UI/Button.jsx";
+import { Spinner } from "../../UI/Spinner.jsx";
+import AnnotationForm from "../../entities/annotations/AnnotationForm.jsx";
+import AnnotationAndEvidence from "../../entities/annotations/AnnotationAndEvidence.jsx";
+import EvidenceForm from "../../entities/evidence/EvidenceForm.jsx";
+import { AnnotationHandlers } from "../../entities/annotations/AnnotationHandlers.jsx";
+import { EvidenceHandlers } from "../../entities/evidence/EvidenceHandlers.jsx";
+import "../submitters/MyClaimInfo.scss";
 
 const ClaimInfo = () => {
   // Initialisation --------------------------------

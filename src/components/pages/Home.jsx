@@ -1,5 +1,5 @@
 import useLoad from "../api/useLoad.js";
-import "./MyClaims.scss";
+import "./submitters/MyClaims.scss";
 import ClaimsMap from "../entities/claims/ClaimsMap.jsx";
 
 function Home() {

@@ -1,13 +1,13 @@
-import useLoad from "../api/useLoad.js";
-import { useAuth } from "../auth/useAuth.jsx";
+import useLoad from "../../api/useLoad.js";
+import { useAuth } from "../../auth/useAuth.jsx";
 import { useState } from "react";
-import ClaimForm from "../entities/claims/ClaimForm.jsx";
-import API from "../api/API.js";
-import { Modal, useModal } from "../UI/Modal.jsx";
-import { Button } from "../UI/Button.jsx";
+import ClaimForm from "../../entities/claims/ClaimForm.jsx";
+import API from "../../api/API.js";
+import { Modal, useModal } from "../../UI/Modal.jsx";
+import { Button } from "../../UI/Button.jsx";
 import "./MyClaims.scss";
-import { Spinner } from "../UI/Spinner.jsx";
-import ClaimsMap from "../entities/claims/ClaimsMap.jsx";
+import { Spinner } from "../../UI/Spinner.jsx";
+import ClaimsMap from "../../entities/claims/ClaimsMap.jsx";
 
 function MyClaims() {
   // Inititalisation ---------------------------------------

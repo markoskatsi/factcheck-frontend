@@ -1,10 +1,10 @@
 import { useParams } from "react-router-dom";
-import useLoad from "../api/useLoad.js";
-import ClaimAndSources from "../entities/claims/ClaimAndSources.jsx";
-import PageNotFound from "./404.jsx";
-import "./submitters/MyClaimInfo.scss";
+import useLoad from "../../api/useLoad.js";
+import ClaimAndSources from "../../entities/claims/ClaimAndSources.jsx";
+import { Button, ButtonTray } from "../../UI/Button.jsx";
+import "../submitters/MyClaimInfo.scss";
 
-const PublishedClaim = () => {
+const TriageInfo = () => {
   // Initialisation --------------------------------
   const { claimId } = useParams();
 
@@ -19,9 +19,16 @@ const PublishedClaim = () => {
 
   // View ------------------------------------------
   if (!claim) return null;
-  if (claim[0].ClaimClaimstatusID !== 5) return <PageNotFound />;
 
-  return <ClaimAndSources claim={claim[0]} sources={sources} />;
+  return (
+    <>
+      <ButtonTray>
+        <Button>Accept</Button>
+        <Button variant="darkDanger">Reject</Button>
+      </ButtonTray>
+      <ClaimAndSources claim={claim[0]} sources={sources} />
+    </>
+  );
 };
 
-export default PublishedClaim;
+export default TriageInfo;

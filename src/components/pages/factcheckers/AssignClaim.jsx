@@ -1,13 +1,13 @@
 import { useNavigate, useParams } from "react-router-dom";
-import useLoad from "../api/useLoad.js";
-import { useAuth } from "../auth/useAuth.jsx";
-import ClaimAndSources from "../entities/claims/ClaimAndSources.jsx";
-import API from "../api/API.js";
-import { Modal, useModal } from "../UI/Modal.jsx";
+import useLoad from "../../api/useLoad.js";
+import { useAuth } from "../../auth/useAuth.jsx";
+import ClaimAndSources from "../../entities/claims/ClaimAndSources.jsx";
+import API from "../../api/API.js";
+import { Modal, useModal } from "../../UI/Modal.jsx";
 import { useState } from "react";
-import { Button, ButtonTray } from "../UI/Button.jsx";
+import { Button, ButtonTray } from "../../UI/Button.jsx";
 import Spinner from "react-spinner";
-import PageNotFound from "./404.jsx";
+import PageNotFound from "../404.jsx";
 
 const AssignClaim = () => {
   // Initialisation --------------------------------

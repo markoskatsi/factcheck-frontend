@@ -37,6 +37,20 @@ function Navbar() {
             </NavItem>
           </>
         )}
+        {loggedInUser?.UserUsertypeID === 3 && (
+          <>
+            <NavItem>
+              <NavLink to="/triage" className={getLinkStyle}>
+                Triage
+              </NavLink>
+            </NavItem>
+            <NavItem>
+              <NavLink to="/review" className={getLinkStyle}>
+                Review
+              </NavLink>
+            </NavItem>
+          </>
+        )}
       </div>
       <div className="navRight">
         {loggedInUser ? (
