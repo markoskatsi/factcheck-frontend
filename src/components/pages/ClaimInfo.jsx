@@ -54,7 +54,7 @@ const ClaimInfo = () => {
       closeModal,
     });
 
-  const canEdit = claim?.ClaimClaimstatusID === 3;
+  const canEdit = claim?.[0]?.ClaimClaimstatusID === 3;
 
   const assignmentID = assignedClaims?.find(
     (assignment) =>
