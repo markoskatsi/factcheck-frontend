@@ -1,17 +1,17 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Layout from "./components/layouts/Layout";
-import Home from "./components/pages/Home";
+import Home from "./components/pages/shared/Home.jsx";
 import MyClaims from "./components/pages/submitters/MyClaims";
 import MyClaimInfo from "./components/pages/submitters/MyClaimInfo";
 import ClaimInfo from "./components/pages/factcheckers/ClaimInfo";
 import Triage from "./components/pages/editors/Triage";
 import TriageInfo from "./components/pages/editors/TriageInfo.jsx";
-import PageNotFound from "./components/pages/404";
-import Login from "./components/pages/Login";
+import PageNotFound from "./components/pages/shared/404.jsx";
+import Login from "./components/pages/shared/Login.jsx";
 import AvailableClaims from "./components/pages/factcheckers/AvailableClaims";
 import MyTasks from "./components/pages/factcheckers/MyTasks";
 import AssignClaim from "./components/pages/factcheckers/AssignClaim";
-import PublishedClaim from "./components/pages/PublishedClaim.jsx";
+import PublishedClaim from "./components/pages/shared/PublishedClaim.jsx";
 import { AuthProvider } from "./components/auth/useAuth.jsx";
 import "./App.scss";
 

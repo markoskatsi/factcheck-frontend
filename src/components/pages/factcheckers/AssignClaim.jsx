@@ -7,7 +7,7 @@ import { Modal, useModal } from "../../UI/Modal.jsx";
 import { useState } from "react";
 import { Button, ButtonTray } from "../../UI/Button.jsx";
 import Spinner from "react-spinner";
-import PageNotFound from "../404.jsx";
+import PageNotFound from "../shared/404.jsx";
 
 const AssignClaim = () => {
   // Initialisation --------------------------------

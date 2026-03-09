@@ -1,8 +1,8 @@
 import { useNavigate } from "react-router-dom";
-import { useAuth } from "../auth/useAuth.jsx";
-import Icon from "../UI/Icons.jsx";
-import { Button } from "../UI/Button.jsx";
-import useLoad from "../api/useLoad.js";
+import { useAuth } from "../../auth/useAuth.jsx";
+import Icon from "../../UI/Icons.jsx";
+import { Button } from "../../UI/Button.jsx";
+import useLoad from "../../api/useLoad.js";
 import { useState } from "react";
 import "./Login.scss";
 
@@ -27,7 +27,7 @@ function Login() {
   // Handlers -------------------------
   const handleChange = (e) => {
     const selectedUser = users.find(
-      (u) => u.UserID === parseInt(e.target.value)
+      (u) => u.UserID === parseInt(e.target.value),
     );
     setUser(selectedUser);
   };

@@ -1,4 +1,4 @@
-import FuzzyText from "../UI/FuzzyText";
+import FuzzyText from "../../UI/FuzzyText";
 import "./404.scss";
 
 function PageNotFound() {

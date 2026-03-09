@@ -1,7 +1,7 @@
 import useLoad from "../../api/useLoad.js";
 import "../submitters/MyClaims.scss";
 import { useAuth } from "../../auth/useAuth.jsx";
-import PageNotFound from "../404.jsx";
+import PageNotFound from "../shared/404.jsx";
 import ClaimsMap from "../../entities/claims/ClaimsMap.jsx";
 
 function AvailableClaims() {

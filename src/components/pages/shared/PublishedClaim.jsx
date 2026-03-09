@@ -1,8 +1,8 @@
 import { useParams } from "react-router-dom";
-import useLoad from "../api/useLoad.js";
-import ClaimAndSources from "../entities/claims/ClaimAndSources.jsx";
+import useLoad from "../../api/useLoad.js";
+import ClaimAndSources from "../../entities/claims/ClaimAndSources.jsx";
 import PageNotFound from "./404.jsx";
-import "./submitters/MyClaimInfo.scss";
+import "../submitters/MyClaimInfo.scss";
 
 const PublishedClaim = () => {
   // Initialisation --------------------------------
