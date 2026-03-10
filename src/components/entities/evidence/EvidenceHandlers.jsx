@@ -22,7 +22,7 @@ export const EvidenceHandlers = ({
     } else {
       data = evidence;
     }
-    const response = await API.post(`${evidenceEndpoint}`, data);
+    const response = await API.post(`/evidence`, data);
     if (response.isSuccess) {
       closeModal();
       console.log(evidenceEndpoint);
@@ -48,10 +48,7 @@ export const EvidenceHandlers = ({
     } else {
       data = evidence;
     }
-    const response = await API.put(
-      `${evidenceEndpoint}/${evidence.EvidenceID}`,
-      data,
-    );
+    const response = await API.put(`/evidence/${evidence.EvidenceID}`, data);
     if (response.isSuccess) {
       closeModal();
       console.log(evidenceEndpoint);
@@ -63,7 +60,7 @@ export const EvidenceHandlers = ({
 
   const handleDeleteEvidence = async (id) => {
     setIsLoading(true);
-    const deleteResponse = await API.delete(`${evidenceEndpoint}/${id}`);
+    const deleteResponse = await API.delete(`/evidence/${id}`);
     if (deleteResponse.isSuccess) {
       closeModal();
       await reloadEvidences(evidenceEndpoint);
