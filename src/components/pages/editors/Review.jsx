@@ -2,9 +2,9 @@ import useLoad from "../../api/useLoad.js";
 import ClaimsMap from "../../entities/claims/ClaimsMap.jsx";
 import "../submitters/MyClaims.scss";
 
-const Triage = () => {
+const Review = () => {
   // Inititalisation ---------------------------------------
-  const claimsEndpoint = `/claims/claimstatus/1?orderby=ClaimCreated%20esc`;
+  const claimsEndpoint = `/claims/claimstatus/4?orderby=ClaimCreated%20esc`;
   // State -------------------------------------------------
   const [claims, ,] = useLoad(claimsEndpoint);
   // Context -----------------------------------------------
@@ -12,10 +12,10 @@ const Triage = () => {
   // View --------------------------------------------------
   return (
     <section>
-      <h1>Triage Incoming Claims</h1>
-      <ClaimsMap claims={claims} basePath="/triage" />
+      <h1>Review Claims</h1>
+      <ClaimsMap claims={claims} basePath="/review" />
     </section>
   );
 };
 
-export default Triage;
+export default Review;
