@@ -8,10 +8,7 @@ function EditorTasks() {
   // Inititalisation ---------------------------------------
   const { loggedInUserID } = useAuth();
   const assignedClaimsEndpoint = `/assignments/users/${loggedInUserID}?orderby=AssignmentCreated%20desc`;
-  const list = [
-    { name: "Awaiting Verdict Approval" },
-    { name: "Published" },
-  ];
+  const list = [{ name: "Awaiting Verdict Approval" }, { name: "Published" }];
 
   // State -------------------------------------------------
   const [claims, ,] = useLoad(assignedClaimsEndpoint);
@@ -28,7 +25,9 @@ function EditorTasks() {
     if (!statusName) {
       setFilteredClaims(claims);
     } else {
-      setFilteredClaims(claims.filter((claim) => claim.ClaimstatusName === statusName));
+      setFilteredClaims(
+        claims.filter((claim) => claim.ClaimstatusName === statusName),
+      );
     }
   };
   // View --------------------------------------------------
@@ -43,7 +42,7 @@ function EditorTasks() {
           </option>
         ))}
       </select>
-      <ClaimsMap claims={filteredClaims} basePath="/editortasks" />
+      <ClaimsMap claims={filteredClaims} basePath="/verdict" />
     </section>
   );
 }
