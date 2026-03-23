@@ -42,6 +42,8 @@ const EditorTaskInfo = () => {
   const annotation = annotations?.[0];
   const verdict = verdicts?.[0];
 
+  const canEdit = claim?.ClaimClaimstatusID === 4;
+
   // Handlers --------------------------------------
   const handleSubmit = async (verdict) => {
     setIsLoading(true);
@@ -57,6 +59,17 @@ const EditorTaskInfo = () => {
   const handleModify = async (verdict) => {
     setIsLoading(true);
     const response = await API.put(`/verdicts/${verdict.VerdictID}`, verdict);
+    if (response.isSuccess) {
+      await loadVerdicts(verdictsEndpoint);
+    }
+    setIsLoading(false);
+    closeModal();
+    return response.isSuccess;
+  };
+
+  const handleDelete = async (verdict) => {
+    setIsLoading(true);
+    const response = await API.delete(`/verdicts/${verdict.VerdictID}`);
     if (response.isSuccess) {
       await loadVerdicts(verdictsEndpoint);
     }
@@ -92,6 +105,9 @@ const EditorTaskInfo = () => {
       <>
         <p>Are you sure you want to delete this verdict?</p>
         <ButtonTray>
+          <Button onClick={() => handleDelete(verdict)} variant="darkDanger">
+            Delete
+          </Button>
           <Button onClick={closeModal}>Cancel</Button>
         </ButtonTray>
       </>,
@@ -113,8 +129,8 @@ const EditorTaskInfo = () => {
         ) : (
           <VerdictItem
             verdict={verdict}
-            onModify={modifyVerdictModal}
-            onDelete={deleteVerdictModal}
+            onModify={canEdit && modifyVerdictModal}
+            onDelete={canEdit && deleteVerdictModal}
           />
         )}
         <div className="claimLayout">
