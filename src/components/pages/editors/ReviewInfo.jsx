@@ -2,6 +2,7 @@ import { useParams } from "react-router-dom";
 import useLoad from "../../api/useLoad.js";
 import ClaimDetails from "../../entities/claims/ClaimAndSources.jsx";
 import AnnotationDetails from "../../entities/annotations/AnnotationAndEvidence.jsx";
+import { Button, ButtonTray } from "../../UI/Button.jsx";
 import "../submitters/MyClaimInfo.scss";
 
 const ReviewInfo = () => {
@@ -18,14 +19,14 @@ const ReviewInfo = () => {
   const [sources, , ,] = useLoad(claimSourcesEndpoint);
 
   const evidenceEndpoint = `/evidence/annotations/${annotations?.[0]?.AnnotationID}`;
-  const [evidences, , , ] = useLoad(evidenceEndpoint);
+  const [evidences, , ,] = useLoad(evidenceEndpoint);
 
   const claim = claims?.[0];
   const annotation = annotations?.[0];
 
   // Handlers --------------------------------------
   // View ------------------------------------------
-  if (!claim) return <p>Claim not available.</p>;
+  if (!claim) return <p>Loading...</p>;
   return (
     <>
       <div className="claimInfoWrapper">

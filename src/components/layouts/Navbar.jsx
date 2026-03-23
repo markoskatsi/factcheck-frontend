@@ -49,6 +49,11 @@ function Navbar() {
                 Review
               </NavLink>
             </NavItem>
+            <NavItem>
+              <NavLink to="/editortasks" className={getLinkStyle}>
+                Tasks
+              </NavLink>
+            </NavItem>
           </>
         )}
       </div>

@@ -191,7 +191,7 @@ const ClaimInfo = () => {
   };
 
   // View ------------------------------------------
-  if (!claim) return <p>Claim not available.</p>;
+  if (!claim) return <p>Loading...</p>;
   return (
     <>
       {isLoading && <Spinner />}

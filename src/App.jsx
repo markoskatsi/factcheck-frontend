@@ -14,6 +14,7 @@ import AssignClaim from "./components/pages/factcheckers/AssignClaim";
 import PublishedClaim from "./components/pages/shared/PublishedClaim.jsx";
 import Review from "./components/pages/editors/Review.jsx";
 import ReviewInfo from "./components/pages/editors/ReviewInfo.jsx";
+import EditorTasks from "./components/pages/editors/EditorTasks.jsx";
 import { AuthProvider } from "./components/auth/useAuth.jsx";
 import "./App.scss";
 
@@ -35,6 +36,7 @@ function App() {
             <Route path="/triage/:claimId" element={<TriageInfo />} />
             <Route path="/review" element={<Review />} />
             <Route path="/review/:claimId" element={<ReviewInfo />} />
+            <Route path="/editortasks" element={<EditorTasks />} />
             <Route path="/login" element={<Login />} />
             <Route path="/logout" element={<Login />} />
             <Route path="*" element={<PageNotFound />} />
