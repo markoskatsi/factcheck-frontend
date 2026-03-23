@@ -4,10 +4,8 @@ import ClaimDetails from "../../entities/claims/ClaimAndSources.jsx";
 import AnnotationDetails from "../../entities/annotations/AnnotationAndEvidence.jsx";
 import { Button, ButtonTray } from "../../UI/Button.jsx";
 import "../submitters/MyClaimInfo.scss";
-import { useAuth } from "../../auth/useAuth.jsx";
 import API from "../../api/API.js";
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
 import { Spinner } from "../../UI/Spinner.jsx";
 import VerdictForm from "../../entities/verdicts/VerdictForm.jsx";
 import { Modal, useModal } from "../../UI/Modal.jsx";
@@ -15,10 +13,7 @@ import VerdictItem from "../../entities/verdicts/VerdictItem.jsx";
 
 const EditorTaskInfo = () => {
   // Initialisation --------------------------------
-  const { loggedInUserID } = useAuth();
   const { claimId } = useParams();
-
-  const navigate = useNavigate();
 
   const claimEndpoint = `/claims/${claimId}`;
   const claimSourcesEndpoint = `/sources/claims/${claimId}?orderby=SourceCreated%20desc`;
@@ -127,11 +122,14 @@ const EditorTaskInfo = () => {
         {!verdict ? (
           <Button onClick={addVerdictModal}>Start Work</Button>
         ) : (
-          <VerdictItem
-            verdict={verdict}
-            onModify={canEdit && modifyVerdictModal}
-            onDelete={canEdit && deleteVerdictModal}
-          />
+          <>
+            {canEdit && <Button variant="secondary">Submit Work</Button>}
+            <VerdictItem
+              verdict={verdict}
+              onModify={canEdit && modifyVerdictModal}
+              onDelete={canEdit && deleteVerdictModal}
+            />
+          </>
         )}
         <div className="claimLayout">
           <div className="claimMain">
