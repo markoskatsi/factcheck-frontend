@@ -47,7 +47,11 @@ export default function VerdictForm({
 
   // View ------------------------------------------
   return (
-    <Form onSubmit={handleSubmit} onCancel={onCancel}>
+    <Form
+      onSubmit={handleSubmit}
+      onCancel={onCancel}
+      submitText="Save In Progress"
+    >
       <Form.Item
         label="Verdict description"
         htmlFor="VerdictDescription"
@@ -59,7 +63,7 @@ export default function VerdictForm({
           name="VerdictDescription"
           value={verdict.VerdictDescription}
           onChange={handleChange}
-          rows="3"
+          rows="7"
         />
       </Form.Item>
     </Form>

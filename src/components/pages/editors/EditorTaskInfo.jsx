@@ -10,6 +10,8 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Spinner } from "../../UI/Spinner.jsx";
 import VerdictForm from "../../entities/verdicts/VerdictForm.jsx";
+import { Modal, useModal } from "../../UI/Modal.jsx";
+import VerdictItem from "../../entities/verdicts/VerdictItem.jsx";
 
 const EditorTaskInfo = () => {
   // Initialisation --------------------------------
@@ -21,39 +23,100 @@ const EditorTaskInfo = () => {
   const claimEndpoint = `/claims/${claimId}`;
   const claimSourcesEndpoint = `/sources/claims/${claimId}?orderby=SourceCreated%20desc`;
   const annotationClaimEndpoint = `/annotations/claims/${claimId}`;
+  const verdictsEndpoint = `/verdicts/claims/${claimId}`;
 
   // State -----------------------------------------
   const [isLoading, setIsLoading] = useState(false);
   const [claims, , ,] = useLoad(claimEndpoint);
   const [annotations, , ,] = useLoad(annotationClaimEndpoint);
   const [sources, , ,] = useLoad(claimSourcesEndpoint);
-  const [verdicts, , , loadVerdicts] = useLoad(`/verdicts`);
+  const [verdicts, , , loadVerdicts] = useLoad(verdictsEndpoint);
+
+  const [showModal, modalContent, modalTitle, openModal, closeModal] =
+    useModal(false);
 
   const evidenceEndpoint = `/evidence/annotations/${annotations?.[0]?.AnnotationID}`;
   const [evidences, , ,] = useLoad(evidenceEndpoint);
 
   const claim = claims?.[0];
   const annotation = annotations?.[0];
+  const verdict = verdicts?.[0];
 
   // Handlers --------------------------------------
   const handleSubmit = async (verdict) => {
     setIsLoading(true);
     const response = await API.post("/verdicts", verdict);
-    console.log(response);
-    console.log(verdict);
     if (response.isSuccess) {
-      await loadVerdicts(`/verdicts`);
+      await loadVerdicts(verdictsEndpoint);
     }
     setIsLoading(false);
+    closeModal();
     return response.isSuccess;
   };
+
+  const handleModify = async (verdict) => {
+    setIsLoading(true);
+    const response = await API.put(`/verdicts/${verdict.VerdictID}`, verdict);
+    if (response.isSuccess) {
+      await loadVerdicts(verdictsEndpoint);
+    }
+    setIsLoading(false);
+    closeModal();
+    return response.isSuccess;
+  };
+
+  const addVerdictModal = () => {
+    openModal(
+      <>
+        <VerdictForm onSubmit={handleSubmit} onCancel={closeModal} />
+      </>,
+      "Verdict Form",
+    );
+  };
+
+  const modifyVerdictModal = () => {
+    openModal(
+      <>
+        <VerdictForm
+          onSubmit={handleModify}
+          onCancel={closeModal}
+          initialVerdict={verdict}
+        />
+      </>,
+      "Modify Verdict",
+    );
+  };
+
+  const deleteVerdictModal = () => {
+    openModal(
+      <>
+        <p>Are you sure you want to delete this verdict?</p>
+        <ButtonTray>
+          <Button onClick={closeModal}>Cancel</Button>
+        </ButtonTray>
+      </>,
+      "Delete Verdict",
+    );
+  };
+
   // View ------------------------------------------
   if (!claim) return <p>Loading...</p>;
   return (
     <>
       {isLoading && <Spinner />}
-      <VerdictForm onSubmit={handleSubmit} onCancel={() => {}} submitText="Save In Progress" />
+      <Modal modalPaneClass="Modal" show={showModal} title={modalTitle}>
+        {modalContent}
+      </Modal>
       <div className="claimInfoWrapper">
+        {!verdict ? (
+          <Button onClick={addVerdictModal}>Start Work</Button>
+        ) : (
+          <VerdictItem
+            verdict={verdict}
+            onModify={modifyVerdictModal}
+            onDelete={deleteVerdictModal}
+          />
+        )}
         <div className="claimLayout">
           <div className="claimMain">
             <h2>Claim</h2>
