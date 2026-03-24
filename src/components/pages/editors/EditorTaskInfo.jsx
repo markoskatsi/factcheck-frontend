@@ -9,6 +9,7 @@ import { useState } from "react";
 import { Spinner } from "../../UI/Spinner.jsx";
 import VerdictForm from "../../entities/verdicts/VerdictForm.jsx";
 import { Modal, useModal } from "../../UI/Modal.jsx";
+import Icon from "../../UI/Icons.jsx";
 import VerdictItem from "../../entities/verdicts/VerdictItem.jsx";
 
 const EditorTaskInfo = () => {
@@ -22,7 +23,7 @@ const EditorTaskInfo = () => {
 
   // State -----------------------------------------
   const [isLoading, setIsLoading] = useState(false);
-  const [claims, , ,] = useLoad(claimEndpoint);
+  const [claims, , , loadClaims] = useLoad(claimEndpoint);
   const [annotations, , ,] = useLoad(annotationClaimEndpoint);
   const [sources, , ,] = useLoad(claimSourcesEndpoint);
   const [verdicts, , , loadVerdicts] = useLoad(verdictsEndpoint);
@@ -40,7 +41,44 @@ const EditorTaskInfo = () => {
   const canEdit = claim?.ClaimClaimstatusID === 4;
 
   // Handlers --------------------------------------
-  const handleSubmit = async (verdict) => {
+  const handleSubmitWork = async (claim) => {
+    setIsLoading(true);
+    const claimResponse = await API.put(`/claims/${claimId}`, {
+      ...claim,
+      ClaimClaimstatusID: 5,
+    });
+    if (claimResponse.isSuccess) {
+      const verdictResponse = await API.put(`/verdicts/${verdict.VerdictID}`, {
+        ...verdict,
+        VerdictStatusID: 1,
+      });
+      await loadVerdicts(verdictsEndpoint);
+      await loadClaims(claimEndpoint);
+      setIsLoading(false);
+      closeModal();
+      return verdictResponse.isSuccess;
+    }
+  };
+
+  // const handleUnsubmitWork = async (claim) => {
+  //   setIsLoading(true);
+  //   const claimResponse = await API.put(`/claims/${claimId}`, {
+  //     ...claim,
+  //     ClaimClaimstatusID: 4,
+  //   });
+  //   if (claimResponse.isSuccess) {
+  //     const verdictResponse = await API.put(`/verdicts/${verdict.VerdictID}`, {
+  //       ...verdict,
+  //       VerdictStatusID: 3,
+  //     });
+  //     await loadVerdicts(verdictsEndpoint);
+  //     await loadClaims(claimEndpoint);
+  //     setIsLoading(false);
+  //     return verdictResponse.isSuccess;
+  //   }
+  // };
+
+  const handleSubmitVerdict = async (verdict) => {
     setIsLoading(true);
     const response = await API.post("/verdicts", verdict);
     if (response.isSuccess) {
@@ -76,7 +114,7 @@ const EditorTaskInfo = () => {
   const addVerdictModal = () => {
     openModal(
       <>
-        <VerdictForm onSubmit={handleSubmit} onCancel={closeModal} />
+        <VerdictForm onSubmit={handleSubmitVerdict} onCancel={closeModal} />
       </>,
       "Verdict Form",
     );
@@ -101,15 +139,34 @@ const EditorTaskInfo = () => {
         <p>Are you sure you want to delete this verdict?</p>
         <ButtonTray>
           <Button onClick={() => handleDelete(verdict)} variant="darkDanger">
+            <Icon.Trash />
             Delete
           </Button>
-          <Button onClick={closeModal}>Cancel</Button>
+          <Button onClick={closeModal}> Cancel</Button>
         </ButtonTray>
       </>,
       "Delete Verdict",
     );
   };
 
+  const submitVerdictModal = (claim) => {
+    openModal(
+      <>
+        <p>Are you sure you want to submit this verdict?</p>
+        <ButtonTray>
+          <Button onClick={() => handleSubmitWork(claim)} variant="green">
+            <Icon.Tick />
+            Submit
+          </Button>
+          <Button onClick={closeModal}>
+            <Icon.Cross />
+            Cancel
+          </Button>
+        </ButtonTray>
+      </>,
+      "Submit Verdict",
+    );
+  };
   // View ------------------------------------------
   if (!claim) return <p>Loading...</p>;
   return (
@@ -119,11 +176,19 @@ const EditorTaskInfo = () => {
         {modalContent}
       </Modal>
       <div className="claimInfoWrapper">
+        {/* <Button onClick={() => handleUnsubmitWork(claim)}>Unsubmit TEST</Button> */}
         {!verdict ? (
           <Button onClick={addVerdictModal}>Start Work</Button>
         ) : (
           <>
-            {canEdit && <Button variant="secondary">Submit Work</Button>}
+            {canEdit && (
+              <Button
+                variant="secondary"
+                onClick={() => submitVerdictModal(claim)}
+              >
+                Submit Work
+              </Button>
+            )}
             <VerdictItem
               verdict={verdict}
               onModify={canEdit && modifyVerdictModal}
