@@ -2,18 +2,75 @@ header {
   color: white;
   background: #1e2a38;
   display: flex;
-  height: 70px;
+  height: 90px;
   align-items: center;
+  padding: 0 1.5rem;
 
-  > a {
+  .brand {
+    font-size: 2rem;
+    font-weight: 800;
+    letter-spacing: 0.04em;
     text-decoration: none;
-    color: inherit;
+    color: #f9fafb;
+    font-family: "Georgia", "Times New Roman", serif;
+    white-space: nowrap;
+    flex-shrink: 0;
+    min-width: 160px;
   }
 
-  div.login {
+  nav.navCenter {
+    display: flex;
     flex: 1;
-    margin-right: 0.5rem;
-    text-align: right;
-    margin-top: 45px;
+    justify-content: center;
+    align-items: center;
+
+    div.navItem {
+      padding: 0 1rem;
+      height: 90px;
+      display: flex;
+      align-items: center;
+
+      &:hover {
+        background-color: #2d3f52;
+      }
+
+      a {
+        color: #cbd5e1;
+        text-decoration: none;
+        font-size: 0.9rem;
+        font-weight: 500;
+        letter-spacing: 0.03em;
+        text-transform: uppercase;
+
+        &.navSelected {
+          color: #93c5fd;
+        }
+      }
+    }
+  }
+
+  .headerRight {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    flex-shrink: 0;
+    min-width: 160px;
+    justify-content: flex-end;
+
+    .welcomeText {
+      font-size: 0.85rem;
+      color: #94a3b8;
+    }
+
+    .authLink {
+      font-size: 0.85rem;
+      color: #93c5fd;
+      text-decoration: none;
+      font-weight: 500;
+
+      &:hover {
+        text-decoration: underline;
+      }
+    }
   }
 }
