@@ -16,6 +16,7 @@ import Review from "./components/pages/editors/Review.jsx";
 import ReviewInfo from "./components/pages/editors/ReviewInfo.jsx";
 import EditorTasks from "./components/pages/editors/EditorTasks.jsx";
 import EditorTaskInfo from "./components/pages/editors/EditorTaskInfo.jsx";
+import Profile from "./components/pages/shared/Profile.jsx";
 import { AuthProvider } from "./components/auth/useAuth.jsx";
 import "./App.scss";
 
@@ -41,6 +42,7 @@ function App() {
             <Route path="/verdict/:claimId" element={<EditorTaskInfo />} />
             <Route path="/login" element={<Login />} />
             <Route path="/logout" element={<Login />} />
+            <Route path="/profile/:userId" element={<Profile />} />
             <Route path="*" element={<PageNotFound />} />
           </Routes>
         </Layout>

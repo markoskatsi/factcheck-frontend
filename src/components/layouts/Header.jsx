@@ -1,10 +1,12 @@
 import { Link, NavLink } from "react-router-dom";
 import { useAuth } from "../auth/useAuth";
 import NavItem from "../UI/NavItem.jsx";
+import { useNavigate } from "react-router-dom";
 import "./Header.scss";
 
 function Header() {
   const { loggedInUser, logout } = useAuth();
+  const navigate = useNavigate();
 
   const getLinkStyle = ({ isActive }) => (isActive ? "navSelected" : null);
 
@@ -63,14 +65,13 @@ function Header() {
       </nav>
 
       <div className="headerRight">
-        <span className="welcomeText">
+        <span
+          className="welcomeText"
+          onClick={() => navigate(`/profile/${loggedInUser.UserID}`)}
+        >
           {loggedInUser ? `Welcome, ${loggedInUser.UserFirstname}` : "Guest"}
         </span>
-        {loggedInUser ? (
-          <NavLink to="/logout" onClick={logout} className="authLink">
-            Logout
-          </NavLink>
-        ) : (
+        {!loggedInUser && (
           <NavLink to="/login" className="authLink">
             Login
           </NavLink>
