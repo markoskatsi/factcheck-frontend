@@ -16,7 +16,7 @@ const ReviewInfo = () => {
   const { claimId } = useParams();
 
   const navigate = useNavigate();
-  
+
   const claimEndpoint = `/claims/${claimId}`;
   const claimSourcesEndpoint = `/sources/claims/${claimId}?orderby=SourceCreated%20desc`;
   const annotationClaimEndpoint = `/annotations/claims/${claimId}`;
@@ -42,14 +42,14 @@ const ReviewInfo = () => {
     });
     await reloadClaims(claimEndpoint);
     setIsLoading(false);
-    navigate(`/editortaskinfo/${claim.ClaimID}`);
+    navigate(`/verdict/${claim.ClaimID}`);
     return assignmentResponse.isSuccess;
   };
   // View ------------------------------------------
   if (!claim) return <p>Loading...</p>;
   return (
     <>
-    {isLoading && <Spinner />}
+      {isLoading && <Spinner />}
       <div className="claimInfoWrapper">
         <Button onClick={handleAssignment}>Assign to you</Button>
         <div className="claimLayout">
