@@ -202,14 +202,15 @@ const ClaimInfo = () => {
       <div className="claimInfoWrapper">
         {canEdit && (
           <ButtonTray>
-            {!annotation && (
+            {!annotation ? (
               <Button onClick={addAnnotationsModal} variant="secondary">
                 Add Annotations
               </Button>
+            ) : (
+              <Button onClick={addEvidenceModal} variant="secondary">
+                Add Evidence
+              </Button>
             )}
-            <Button onClick={addEvidenceModal} variant="secondary">
-              Add Evidence
-            </Button>
             {annotation && evidences && (
               <Button onClick={submitWorkModal} variant="secondary">
                 Submit Work
