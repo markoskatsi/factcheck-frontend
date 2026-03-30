@@ -4,7 +4,7 @@ import ClaimAndSources from "../../entities/claims/ClaimAndSources.jsx";
 import PageNotFound from "./404.jsx";
 import "../submitters/MyClaimInfo.scss";
 import VerdictAndEvidence from "../../entities/verdicts/VerdictAndEvidence.jsx";
-
+import ClaimInfoLayout from "../../UI/ClaimInfoLayout.jsx";
 
 const PublishedClaim = () => {
   // Initialisation --------------------------------
@@ -31,18 +31,12 @@ const PublishedClaim = () => {
   if (claim[0].ClaimClaimstatusID !== 5) return <PageNotFound />;
 
   return (
-    <div className="claimInfoWrapper">
-      <div className="claimLayout">
-        <div className="claimMain">
-          <h2>Claim</h2>
-          <ClaimAndSources claim={claim[0]} sources={sources} />
-        </div>
-        <div className="claimSidebar">
-          <h2>Verdict</h2>
-          <VerdictAndEvidence verdict={verdicts?.[0]} evidences={evidence} />
-        </div>
-      </div>
-    </div>
+    <ClaimInfoLayout
+      mainTitle="Claim"
+      sidebarTitle="Verdict"
+      main={<ClaimAndSources claim={claim[0]} sources={sources} />}
+      sidebar={<VerdictAndEvidence verdict={verdicts?.[0]} evidences={evidence} />}
+    />
   );
 };
 

@@ -1,9 +1,8 @@
 import { useParams } from "react-router-dom";
 import useLoad from "../../api/useLoad.js";
-import ClaimDetails from "../../entities/claims/ClaimAndSources.jsx";
-import AnnotationDetails from "../../entities/annotations/AnnotationAndEvidence.jsx";
+import ClaimAndSources from "../../entities/claims/ClaimAndSources.jsx";
+import AnnotationAndEvidence from "../../entities/annotations/AnnotationAndEvidence.jsx";
 import { Button, ButtonTray } from "../../UI/Button.jsx";
-import "../submitters/MyClaimInfo.scss";
 import API from "../../api/API.js";
 import { useState } from "react";
 import { Spinner } from "../../UI/Spinner.jsx";
@@ -11,6 +10,7 @@ import VerdictForm from "../../entities/verdicts/VerdictForm.jsx";
 import { Modal, useModal } from "../../UI/Modal.jsx";
 import Icon from "../../UI/Icons.jsx";
 import VerdictItem from "../../entities/verdicts/VerdictItem.jsx";
+import ClaimInfoLayout from "../../UI/ClaimInfoLayout.jsx";
 
 const EditorTaskInfo = () => {
   // Initialisation --------------------------------
@@ -169,51 +169,44 @@ const EditorTaskInfo = () => {
   };
   // View ------------------------------------------
   if (!claim) return <p>Loading...</p>;
+
+  const actions = !verdict ? (
+    <Button onClick={addVerdictModal}>Start Work</Button>
+  ) : (
+    <>
+      {canEdit && (
+        <Button variant="secondary" onClick={() => submitVerdictModal(claim)}>
+          Submit Work
+        </Button>
+      )}
+      <VerdictItem
+        verdict={verdict}
+        onModify={canEdit && modifyVerdictModal}
+        onDelete={canEdit && deleteVerdictModal}
+      />
+    </>
+  );
+
   return (
     <>
       {isLoading && <Spinner />}
       <Modal modalPaneClass="Modal" show={showModal} title={modalTitle}>
         {modalContent}
       </Modal>
-      <div className="claimInfoWrapper">
-        {/* <Button onClick={() => handleUnsubmitWork(claim)}>Unsubmit TEST</Button> */}
-        {!verdict ? (
-          <Button onClick={addVerdictModal}>Start Work</Button>
-        ) : (
-          <>
-            {canEdit && (
-              <Button
-                variant="secondary"
-                onClick={() => submitVerdictModal(claim)}
-              >
-                Submit Work
-              </Button>
-            )}
-            <VerdictItem
-              verdict={verdict}
-              onModify={canEdit && modifyVerdictModal}
-              onDelete={canEdit && deleteVerdictModal}
+      <ClaimInfoLayout
+        mainTitle="Claim"
+        sidebarTitle={"Fact-Checkers Work"}
+        actions={actions}
+        main={<ClaimAndSources claim={claim} sources={sources} />}
+        sidebar={
+          annotation && (
+            <AnnotationAndEvidence
+              annotation={annotation}
+              evidences={evidences}
             />
-          </>
-        )}
-        <div className="claimLayout">
-          <div className="claimMain">
-            <h2>Claim</h2>
-            <ClaimDetails claim={claim} sources={sources} />
-          </div>
-          <div className="claimSidebar">
-            {annotation && (
-              <>
-                <h2>Fact-Checkers Work</h2>
-                <AnnotationDetails
-                  annotation={annotation}
-                  evidences={evidences}
-                />
-              </>
-            )}
-          </div>
-        </div>
-      </div>
+          )
+        }
+      />
     </>
   );
 };

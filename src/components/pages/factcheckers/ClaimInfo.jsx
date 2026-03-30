@@ -1,7 +1,6 @@
 import { useNavigate, useParams } from "react-router-dom";
 import useLoad from "../../api/useLoad.js";
 import { useAuth } from "../../auth/useAuth.jsx";
-import ClaimAndSources from "../../entities/claims/ClaimAndSources.jsx";
 import API from "../../api/API.js";
 import { Modal, useModal } from "../../UI/Modal.jsx";
 import { useState } from "react";
@@ -12,7 +11,8 @@ import AnnotationAndEvidence from "../../entities/annotations/AnnotationAndEvide
 import EvidenceForm from "../../entities/evidence/EvidenceForm.jsx";
 import { AnnotationHandlers } from "../../entities/annotations/AnnotationHandlers.jsx";
 import { EvidenceHandlers } from "../../entities/evidence/EvidenceHandlers.jsx";
-import "../submitters/MyClaimInfo.scss";
+import ClaimAndSources from "../../entities/claims/ClaimAndSources.jsx";
+import ClaimInfoLayout from "../../UI/ClaimInfoLayout.jsx";
 
 const ClaimInfo = () => {
   // Initialisation --------------------------------
@@ -192,62 +192,57 @@ const ClaimInfo = () => {
 
   // View ------------------------------------------
   if (!claim) return <p>Loading...</p>;
+
+  const actions = canEdit && (
+    <ButtonTray>
+      {!annotation ? (
+        <Button onClick={addAnnotationsModal} variant="secondary">
+          Add Annotations
+        </Button>
+      ) : (
+        <Button onClick={addEvidenceModal} variant="secondary">
+          Add Evidence
+        </Button>
+      )}
+      {annotation && evidences && (
+        <Button onClick={submitWorkModal} variant="secondary">
+          Submit Work
+        </Button>
+      )}
+      <Button
+        variant="darkDanger"
+        disabled={annotation && annotation.length > 0}
+        onClick={handleAbandon}
+      >
+        Abandon Claim
+      </Button>
+    </ButtonTray>
+  );
+
+  const sidebar = annotation && (
+    <AnnotationAndEvidence
+      annotation={annotation[0]}
+      evidences={evidences}
+      onAnnotationModify={canEdit && modifyAnnotationModal}
+      onAnnotationDelete={canEdit && deleteAnnotationModal}
+      onEvidenceModify={canEdit && modifyEvidenceModal}
+      onEvidenceDelete={canEdit && deleteEvidenceModal}
+    />
+  );
+
   return (
     <>
       {isLoading && <Spinner />}
       <Modal className="Modal" show={showModal} title={modalTitle}>
         {modalContent}
       </Modal>
-
-      <div className="claimInfoWrapper">
-        {canEdit && (
-          <ButtonTray>
-            {!annotation ? (
-              <Button onClick={addAnnotationsModal} variant="secondary">
-                Add Annotations
-              </Button>
-            ) : (
-              <Button onClick={addEvidenceModal} variant="secondary">
-                Add Evidence
-              </Button>
-            )}
-            {annotation && evidences && (
-              <Button onClick={submitWorkModal} variant="secondary">
-                Submit Work
-              </Button>
-            )}
-            <Button
-              variant="darkDanger"
-              disabled={annotation && annotation.length > 0}
-              onClick={handleAbandon}
-            >
-              Abandon Claim
-            </Button>
-          </ButtonTray>
-        )}
-
-        <div className="claimLayout">
-          <div className="claimMain">
-            <h2>Claim</h2>
-            <ClaimAndSources claim={claim?.[0]} sources={sources} />
-          </div>
-          <div className="claimSidebar">
-            {annotation && (
-              <>
-                <h2>Your Work</h2>
-                <AnnotationAndEvidence
-                  annotation={annotation[0]}
-                  evidences={evidences}
-                  onAnnotationModify={canEdit && modifyAnnotationModal}
-                  onAnnotationDelete={canEdit && deleteAnnotationModal}
-                  onEvidenceModify={canEdit && modifyEvidenceModal}
-                  onEvidenceDelete={canEdit && deleteEvidenceModal}
-                />
-              </>
-            )}
-          </div>
-        </div>
-      </div>
+      <ClaimInfoLayout
+        mainTitle="Claim"
+        sidebarTitle="Your Work"
+        actions={actions}
+        main={<ClaimAndSources claim={claim?.[0]} sources={sources} />}
+        sidebar={sidebar}
+      />
     </>
   );
 };

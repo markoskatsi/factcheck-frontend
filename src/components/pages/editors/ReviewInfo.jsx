@@ -1,7 +1,7 @@
 import { useParams } from "react-router-dom";
 import useLoad from "../../api/useLoad.js";
-import ClaimDetails from "../../entities/claims/ClaimAndSources.jsx";
-import AnnotationDetails from "../../entities/annotations/AnnotationAndEvidence.jsx";
+import ClaimAndSources from "../../entities/claims/ClaimAndSources.jsx";
+import AnnotationAndEvidence from "../../entities/annotations/AnnotationAndEvidence.jsx";
 import { Button, ButtonTray } from "../../UI/Button.jsx";
 import "../submitters/MyClaimInfo.scss";
 import { useAuth } from "../../auth/useAuth.jsx";
@@ -9,6 +9,7 @@ import API from "../../api/API.js";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Spinner } from "../../UI/Spinner.jsx";
+import ClaimInfoLayout from "../../UI/ClaimInfoLayout.jsx";
 
 const ReviewInfo = () => {
   // Initialisation --------------------------------
@@ -50,26 +51,20 @@ const ReviewInfo = () => {
   return (
     <>
       {isLoading && <Spinner />}
-      <div className="claimInfoWrapper">
-        <Button onClick={handleAssignment}>Assign to you</Button>
-        <div className="claimLayout">
-          <div className="claimMain">
-            <h2>Claim</h2>
-            <ClaimDetails claim={claim} sources={sources} />
-          </div>
-          <div className="claimSidebar">
-            {annotation && (
-              <>
-                <h2>Fact-Checkers Work</h2>
-                <AnnotationDetails
-                  annotation={annotation}
-                  evidences={evidences}
-                />
-              </>
-            )}
-          </div>
-        </div>
-      </div>
+      <ClaimInfoLayout
+        mainTitle="Claim"
+        sidebarTitle="Fact-Checkers Work"
+        actions={<Button onClick={handleAssignment}>Assign to you</Button>}
+        main={<ClaimAndSources claim={claim} sources={sources} />}
+        sidebar={
+          annotation && (
+            <AnnotationAndEvidence
+              annotation={annotation}
+              evidences={evidences}
+            />
+          )
+        }
+      />
     </>
   );
 };
