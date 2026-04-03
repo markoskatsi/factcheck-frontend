@@ -11,18 +11,18 @@ import UserForm from "../../entities/UserForm.jsx";
 const Profile = () => {
   // Initialisation --------------------------------
   const navigate = useNavigate();
-  const { loggedInUserID, logout } = useAuth();
+  const { loggedInUser, logout } = useAuth();
 
   // State -----------------------------------------
   const [users, , , loadUsers] = useLoad(`/users`);
-  const [claims, , ,] = useLoad(`/claims/users/${loggedInUserID}`);
-  const [annotations, , ,] = useLoad(`/annotations/users/${loggedInUserID}`);
+  const [claims, , ,] = useLoad(`/claims/users/${loggedInUser.UserID}`);
+  const [annotations, , ,] = useLoad(`/annotations/users/${loggedInUser.UserID}`);
   const [verdicts, , ,] = useLoad(
-    `/verdicts/users/${loggedInUserID}?VerdictVerdictstatusID=1`,
+    `/verdicts/users/${loggedInUser.UserID}?VerdictVerdictstatusID=1`,
   );
   const [showEditForm, setShowEditForm] = useState(false);
 
-  const user = users?.find((u) => u.UserID === loggedInUserID);
+  const user = users?.find((u) => u.UserID === loggedInUser.UserID);
   // Handlers --------------------------------------
   const handleLogout = () => {
     logout();
@@ -30,7 +30,7 @@ const Profile = () => {
   };
 
   const handleEditProfile = async (updatedUser) => {
-    const response = await API.put(`/users/${loggedInUserID}`, updatedUser);
+    const response = await API.put(`/users/${loggedInUser.UserID}`, updatedUser);
     if (response.isSuccess) {
       setShowEditForm(false);
       await loadUsers("/users");
@@ -60,11 +60,13 @@ const Profile = () => {
         </p>
         <p>{user.UserEmail}</p>
         <p>{user.UsertypeName}</p>
-        {loggedInUserID === 1 && <p>Claims Submitted: {claims?.length}</p>}
-        {loggedInUserID === 2 && (
+        {loggedInUser.UserUsertypeID === 1 && (
+          <p>Claims Submitted: {claims?.length}</p>
+        )}
+        {loggedInUser.UserUsertypeID === 2 && (
           <p>Annotations Submitted: {annotations?.length}</p>
         )}
-        {loggedInUserID === 3 && <p>Verdicts Made: {verdicts?.length}</p>}
+        {loggedInUser.UserUsertypeID === 3 && <p>Verdicts Made: {verdicts?.length}</p>}
         <ButtonTray>
           {!showEditForm && (
             <Button variant="secondary" onClick={() => setShowEditForm(true)}>
