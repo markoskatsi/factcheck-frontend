@@ -5,7 +5,7 @@ import { useNavigate } from "react-router-dom";
 import "./Header.scss";
 
 function Header() {
-  const { loggedInUser, logout } = useAuth();
+  const { loggedInUser } = useAuth();
   const navigate = useNavigate();
 
   const getLinkStyle = ({ isActive }) => (isActive ? "navSelected" : null);
@@ -67,7 +67,7 @@ function Header() {
       <div className="headerRight">
         <span
           className="welcomeText"
-          onClick={() => navigate(`/profile/${loggedInUser.UserID}`)}
+          onClick={() => loggedInUser && navigate("/profile")}
         >
           {loggedInUser ? `Welcome, ${loggedInUser.UserFirstname}` : "Guest"}
         </span>

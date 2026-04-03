@@ -67,7 +67,7 @@ const AssignClaim = () => {
   // View ------------------------------------------
 
   if (!claims) return <p>Loading...</p>;
-  if (!claim || loggedInUser.UserUsertypeID !== 2) return <PageNotFound />;
+  if (!claim) return <PageNotFound />;
   return (
     <>
       {isLoading && <Spinner />}

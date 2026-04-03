@@ -17,37 +17,49 @@ import ReviewInfo from "./components/pages/editors/ReviewInfo.jsx";
 import EditorTasks from "./components/pages/editors/EditorTasks.jsx";
 import EditorTaskInfo from "./components/pages/editors/EditorTaskInfo.jsx";
 import Profile from "./components/pages/shared/Profile.jsx";
-import { AuthProvider } from "./components/auth/useAuth.jsx";
+import Logout from "./components/pages/shared/Logout.jsx";
+import { useAuth } from "./components/auth/useAuth.jsx";
 import "./App.scss";
 
 function App() {
+  const { loggedInUser } = useAuth();
   return (
-    <AuthProvider>
-      <BrowserRouter>
-        <Layout>
-          <Routes>
-            <Route path="/" element={<Home />} />
-            <Route path="/claims/:claimId" element={<PublishedClaim />} />
-            <Route path="/myclaims" element={<MyClaims />} />
-            <Route path="/myclaims/:claimId" element={<MyClaimInfo />} />
-            <Route path="/availableclaims" element={<AvailableClaims />} />
-            <Route path="/assign/:claimId" element={<AssignClaim />} />
-            <Route path="/tasks" element={<MyTasks />} />
-            <Route path="/tasks/:claimId" element={<ClaimInfo />} />
-            <Route path="/triage" element={<Triage />} />
-            <Route path="/triage/:claimId" element={<TriageInfo />} />
-            <Route path="/review" element={<Review />} />
-            <Route path="/review/:claimId" element={<ReviewInfo />} />
-            <Route path="/editortasks" element={<EditorTasks />} />
-            <Route path="/verdict/:claimId" element={<EditorTaskInfo />} />
-            <Route path="/login" element={<Login />} />
-            <Route path="/logout" element={<Login />} />
-            <Route path="/profile/:userId" element={<Profile />} />
-            <Route path="*" element={<PageNotFound />} />
-          </Routes>
-        </Layout>
-      </BrowserRouter>
-    </AuthProvider>
+    <BrowserRouter>
+      <Layout>
+        <Routes>
+          <Route path="/" element={<Home />} />
+          <Route path="/claims/:claimId" element={<PublishedClaim />} />
+          {loggedInUser?.UserUsertypeID === 1 && (
+            <>
+              <Route path="/myclaims" element={<MyClaims />} />
+              <Route path="/myclaims/:claimId" element={<MyClaimInfo />} />
+            </>
+          )}
+          {loggedInUser?.UserUsertypeID === 2 && (
+            <>
+              <Route path="/availableclaims" element={<AvailableClaims />} />
+              <Route path="/assign/:claimId" element={<AssignClaim />} />
+              <Route path="/tasks" element={<MyTasks />} />
+              <Route path="/tasks/:claimId" element={<ClaimInfo />} />
+            </>
+          )}
+          {loggedInUser?.UserUsertypeID === 3 && (
+            <>
+              <Route path="/triage" element={<Triage />} />
+              <Route path="/triage/:claimId" element={<TriageInfo />} />
+              <Route path="/review" element={<Review />} />
+              <Route path="/review/:claimId" element={<ReviewInfo />} />
+              <Route path="/editortasks" element={<EditorTasks />} />
+              <Route path="/verdict/:claimId" element={<EditorTaskInfo />} />
+            </>
+          )}
+          {loggedInUser && <Route path="/profile" element={<Profile />} />}
+          <Route path="/login" element={<Login />} />
+          <Route path="/logout" element={<Logout />} />
+          <Route path="*" element={<PageNotFound />} />
+        </Routes>
+      </Layout>
+    </BrowserRouter>
   );
 }
 
