@@ -1,10 +1,10 @@
 import { Link } from "react-router-dom";
 import ClaimItem from "./ClaimItem.jsx";
-import { useEffect, useState } from "react";
+import { act, useEffect, useState } from "react";
 import { CardContainer } from "../../UI/Card.jsx";
 import "./ClaimsMap.scss";
 
-const ClaimsMap = ({ claims, basePath = "" }) => {
+const ClaimsMap = ({ claims, basePath = "", actions }) => {
   const [filteredClaims, setFilteredClaims] = useState([]);
 
   const availableStatuses = claims
@@ -28,6 +28,7 @@ const ClaimsMap = ({ claims, basePath = "" }) => {
 
   return (
     <div className="claims-view">
+      {actions && <div className="actions">{actions}</div>}
       {availableStatuses.length > 1 && (
         <select className="status-filter" onChange={handleStatusFilterChange}>
           <option value="">All</option>

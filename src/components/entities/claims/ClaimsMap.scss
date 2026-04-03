@@ -1,6 +1,18 @@
 .claims-view {
   width: 100%;
 
+  .actions {
+    display: flex;
+    justify-content: flex-start;
+    margin-left: 20px;
+    margin-bottom: -50px;
+
+    @media (max-width: 768px) {
+      justify-content: center;
+      margin-bottom: 12px;
+    }
+  }
+
   .status-filter {
     display: block;
     margin: 0 auto 20px auto;

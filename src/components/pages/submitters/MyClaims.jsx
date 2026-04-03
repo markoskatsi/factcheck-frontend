@@ -8,6 +8,7 @@ import { Button } from "../../UI/Button.jsx";
 import "./MyClaims.scss";
 import { Spinner } from "../../UI/Spinner.jsx";
 import ClaimsMap from "../../entities/claims/ClaimsMap.jsx";
+import Icon from "../../UI/Icons.jsx";
 
 function MyClaims() {
   // Inititalisation ---------------------------------------
@@ -48,8 +49,17 @@ function MyClaims() {
         {claimModalContent}
       </Modal>
       <h1>My Claims</h1>
-      <Button onClick={() => showAddClaimModal()}>Add New Claim</Button>
-      <ClaimsMap claims={claims} basePath="/myclaims" />
+
+      <ClaimsMap
+        claims={claims}
+        basePath="/myclaims"
+        actions={
+          <Button onClick={() => showAddClaimModal()}>
+            <Icon.Plus />
+            Create a Claim
+          </Button>
+        }
+      />
     </section>
   );
 }

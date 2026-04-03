@@ -1,7 +1,7 @@
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../../auth/useAuth.jsx";
 import Icon from "../../UI/Icons.jsx";
-import { Button } from "../../UI/Button.jsx";
+import { Button, ButtonTray } from "../../UI/Button.jsx";
 import useLoad from "../../api/useLoad.js";
 import { useState } from "react";
 import "./Login.scss";
@@ -25,6 +25,7 @@ function Login() {
   const [user, setUser] = useState(emptyUser);
 
   // Handlers -------------------------
+  /* Dropdown login handlers
   const handleChange = (e) => {
     const selectedUser = users.find(
       (u) => u.UserID === parseInt(e.target.value),
@@ -32,7 +33,13 @@ function Login() {
     setUser(selectedUser);
   };
 
-  const handleSubmit = () => {
+  const handleSubmitDropdown = () => {
+    const selectedUser = users.find(
+      (u) =>
+        u.UserEmail === user.UserEmail &&
+        u.UserFirstname === user.UserFirstname,
+    );
+    setUser(selectedUser);
     if (user.UserID) {
       login(user);
       navigate("/");
@@ -40,12 +47,28 @@ function Login() {
       alert("Please select a user to log in.");
     }
   };
+  */
+
+  const handleSubmit = () => {
+    if (!users) {
+      alert("No user found with that email.");
+      return;
+    }
+    const selectedUser = users.find((u) => u.UserEmail === user.UserEmail);
+    if (selectedUser) {
+      login(selectedUser);
+      navigate("/");
+    } else {
+      alert("No user found with that email.");
+    }
+  };
 
   // View -----------------------------
   return (
     <div className="loginOptions">
       <h1>Welcome to FactCheck</h1>
-      <h2>Select a user to log in</h2>
+      <p>The platform to verify facts and combat misinformation</p>
+      {/* <h2>Select a user to log in</h2>
       {!users ? (
         <p>{loadingUsersMessage}</p>
       ) : (
@@ -63,7 +86,24 @@ function Login() {
       <Button onClick={handleSubmit}>
         <Icon.Tick />
         Log in
-      </Button>
+      </Button> */}
+      <input
+        type="text"
+        placeholder="Email"
+        value={user.UserEmail}
+        onChange={(e) => setUser({ ...user, UserEmail: e.target.value })}
+      />
+      <input type="password" placeholder="Password" />
+      <ButtonTray>
+        <Button onClick={handleSubmit}>
+          <Icon.Tick />
+          Log in
+        </Button>
+        <Button variant="secondary">
+          <Icon.Plus />
+          Register
+        </Button>
+      </ButtonTray>
     </div>
   );
 }
