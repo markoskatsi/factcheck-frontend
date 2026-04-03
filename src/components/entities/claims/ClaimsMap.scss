@@ -1,6 +1,13 @@
 .claims-view {
   width: 100%;
 
+  p {
+    text-align: center;
+    align-content: center;
+    color: #555;
+    margin-top: 20px;
+  }
+
   .actions {
     display: flex;
     justify-content: flex-start;

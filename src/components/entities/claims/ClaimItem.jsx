@@ -6,13 +6,13 @@ import { Card } from "../../UI/Card.jsx";
 export function ClaimItem({ claim, onClaimModify, onClaimDelete }) {
   return (
     <Card key={claim.ClaimID}>
-      <p className="status" status={claim.ClaimstatusName}>{claim.ClaimstatusName}</p>
+      <p className="status" status={claim.ClaimstatusName}>
+        {claim.ClaimstatusName}
+      </p>
       <h3>{claim.ClaimTitle}</h3>
       <p className="description">{claim.ClaimDescription}</p>
-      <p>
-        Date Created: {formatDateTime(claim.ClaimCreated)}
-      </p>
-      {onClaimModify && onClaimDelete && (
+      <p>Date Created: {formatDateTime(claim.ClaimCreated)}</p>
+      {onClaimModify && onClaimDelete && claim.ClaimClaimstatusID === 1 && (
         <ButtonTray>
           <Button onClick={onClaimModify} variant="secondary">
             <Icon.Pen />
