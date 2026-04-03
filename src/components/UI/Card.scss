@@ -59,27 +59,26 @@ div.card {
 }
 
 div.card.claim-details-card {
-  max-width: 50%;
+  width: min(100%, 920px);
+  max-width: 100%;
   margin: 0 auto;
-  background: #34495e;
-  padding: 15px;
+  background: linear-gradient(160deg, #2e4257 0%, #28384b 100%);
+  padding: 18px;
+  border-radius: 12px;
+  border: 1px solid rgba(255, 255, 255, 0.14);
 
   .claimLayout & {
-    max-width: none;
+    width: 100%;
     margin: 0;
   }
 
-  .card {
-    &:hover {
-      transform: translateY(-5px);
-      border-color: rgba(41, 231, 205, 0.4);
-      box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
-      transition: all 0.4s ease;
-    }
+  .card > .card {
+    background: rgba(7, 20, 31, 0.72);
+    border-color: rgba(255, 255, 255, 0.14);
   }
 
   h3 {
-    margin-top: 20px;
+    margin-top: 18px;
     margin-bottom: 10px;
 
     &:first-child {
@@ -95,12 +94,9 @@ div.card.claim-details-card {
     }
   }
 
-  @media (max-width: 1200px) {
-    max-width: 70%;
-  }
-
   @media (max-width: 768px) {
     max-width: 100%;
+    padding: 14px;
   }
 }
 

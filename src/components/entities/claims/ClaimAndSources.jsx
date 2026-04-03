@@ -1,6 +1,7 @@
 import { Card } from "../../UI/Card.jsx";
 import ClaimItem from "./ClaimItem.jsx";
 import SourcesMap from "../sources/SourcesMap.jsx";
+import Accordion from "../../UI/Accordion.jsx";
 
 export default function ClaimAndSources({
   claim,
@@ -10,7 +11,10 @@ export default function ClaimAndSources({
   onSourceModify,
   onSourceDelete,
   onAddSource,
+  open = false,
 }) {
+  const sourceCount = sources?.length ?? 0;
+
   return (
     <Card className="claim-details-card">
       <ClaimItem
@@ -18,13 +22,14 @@ export default function ClaimAndSources({
         onClaimModify={onClaimModify}
         onClaimDelete={onClaimDelete}
       />
-      <h3>Attached sources:</h3>
-      <SourcesMap
-        sources={sources}
-        onSourceModify={onSourceModify}
-        onSourceDelete={onSourceDelete}
-        onAddSource={onAddSource}
-      />
+      <Accordion title={`Attached Sources (${sourceCount})` } defaultOpen={open}>
+        <SourcesMap
+          sources={sources}
+          onSourceModify={onSourceModify}
+          onSourceDelete={onSourceDelete}
+          onAddSource={onAddSource}
+        />
+      </Accordion>
     </Card>
   );
 }

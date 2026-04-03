@@ -1,0 +1,88 @@
+.accordion {
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 12px;
+  margin-top: 16px;
+  overflow: hidden;
+  background: linear-gradient(
+    180deg,
+    rgba(50, 73, 98, 0.62) 0%,
+    rgba(42, 63, 86, 0.56) 100%
+  );
+  box-shadow: 0 10px 30px rgba(8, 12, 22, 0.22);
+}
+
+.accordion-header {
+  width: 100%;
+  color: #f7fbff;
+  background: transparent;
+  border: none;
+  padding: 0.9rem 1rem;
+  font-size: 1rem;
+  font-weight: 600;
+  text-align: left;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+
+  &:hover {
+    background: rgba(137, 175, 225, 0.15);
+  }
+
+  &:focus-visible {
+    outline: 2px solid rgba(120, 170, 245, 0.9);
+    outline-offset: -2px;
+  }
+}
+
+.accordion-title {
+  letter-spacing: 0.2px;
+}
+
+.accordion-action {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  .Action {
+    pointer-events: none;
+    background: rgba(255, 255, 255, 0.12);
+    border-color: rgba(255, 255, 255, 0.75);
+    border-radius: 10px;
+
+    img {
+      filter: brightness(0) invert(1) opacity(0.95);
+    }
+  }
+
+  .accordion-header:hover & .Action {
+    background: rgba(255, 255, 255, 0.2);
+    border-color: #ffffff;
+
+    img {
+      filter: brightness(0) invert(1) opacity(1);
+    }
+  }
+}
+
+.accordion-content {
+  padding: 1rem;
+  border-top: 1px solid rgba(255, 255, 255, 0.16);
+  background: rgba(29, 48, 67, 0.46);
+
+  .card {
+    border-color: rgba(255, 255, 255, 0.16);
+    background: rgba(22, 39, 55, 0.72);
+
+    h3 {
+      font-size: 1.1rem;
+      margin-bottom: 10px;
+    }
+  }
+
+  p:last-child {
+    margin-bottom: 0;
+  }
+}

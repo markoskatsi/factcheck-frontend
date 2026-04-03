@@ -5,6 +5,7 @@ import PageNotFound from "./404.jsx";
 import "../submitters/MyClaimInfo.scss";
 import VerdictAndEvidence from "../../entities/verdicts/VerdictAndEvidence.jsx";
 import ClaimInfoLayout from "../../UI/ClaimInfoLayout.jsx";
+import Accordion from "../../UI/Accordion.jsx";
 
 const PublishedClaim = () => {
   // Initialisation --------------------------------
@@ -31,12 +32,16 @@ const PublishedClaim = () => {
   if (claim[0].ClaimClaimstatusID !== 5) return <PageNotFound />;
 
   return (
-    <ClaimInfoLayout
-      mainTitle="Claim"
-      sidebarTitle="Verdict"
-      main={<ClaimAndSources claim={claim[0]} sources={sources} />}
-      sidebar={<VerdictAndEvidence verdict={verdicts?.[0]} evidences={evidence} />}
-    />
+    <>
+      <ClaimInfoLayout
+        mainTitle="Claim"
+        sidebarTitle="Verdict"
+        main={<ClaimAndSources claim={claim[0]} sources={sources} />}
+        sidebar={
+          <VerdictAndEvidence verdict={verdicts?.[0]} evidences={evidence} />
+        }
+      />
+    </>
   );
 };
 

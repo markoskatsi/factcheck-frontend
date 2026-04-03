@@ -1,6 +1,7 @@
 import { Card } from "../../UI/Card.jsx";
 import AnnotationItem from "./AnnotationItem.jsx";
 import EvidencesMap from "../evidence/EvidencesMap.jsx";
+import Accordion from "../../UI/Accordion.jsx";
 
 export default function AnnotationAndEvidence({
   annotation,
@@ -9,7 +10,10 @@ export default function AnnotationAndEvidence({
   onAnnotationDelete,
   onEvidenceModify,
   onEvidenceDelete,
+  open = false,
 }) {
+  const evidenceCount = evidences?.length ?? 0;
+
   return (
     <Card className="claim-details-card">
       <AnnotationItem
@@ -17,12 +21,13 @@ export default function AnnotationAndEvidence({
         onAnnotationModify={onAnnotationModify}
         onAnnotationDelete={onAnnotationDelete}
       />
-      <h3>Attached evidence:</h3>
-      <EvidencesMap
-        evidences={evidences}
-        onEvidenceModify={onEvidenceModify}
-        onEvidenceDelete={onEvidenceDelete}
-      />
+      <Accordion title={`Attached Evidence (${evidenceCount})` } defaultOpen={open}>
+        <EvidencesMap
+          evidences={evidences}
+          onEvidenceModify={onEvidenceModify}
+          onEvidenceDelete={onEvidenceDelete}
+        />
+      </Accordion>
     </Card>
   );
 }

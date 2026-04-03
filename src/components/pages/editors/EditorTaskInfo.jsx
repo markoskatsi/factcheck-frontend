@@ -197,12 +197,14 @@ const EditorTaskInfo = () => {
         mainTitle="Claim"
         sidebarTitle={"Fact-Checkers Work"}
         actions={actions}
-        main={<ClaimAndSources claim={claim} sources={sources} />}
+        main={<ClaimAndSources claim={claim} sources={sources} open={true} />}
         sidebar={
           annotation && (
             <AnnotationAndEvidence
               annotation={annotation}
               evidences={evidences}
+              open={true}
+
             />
           )
         }

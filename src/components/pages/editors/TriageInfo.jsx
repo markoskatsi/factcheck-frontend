@@ -100,7 +100,7 @@ const TriageInfo = () => {
           Reject
         </Button>
       </ButtonTray>
-      <ClaimAndSources claim={claim} sources={sources} />
+      <ClaimAndSources claim={claim} sources={sources} open={true} />
     </>
   );
 };
