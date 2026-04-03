@@ -22,7 +22,7 @@ export default function ClaimAndSources({
         onClaimModify={onClaimModify}
         onClaimDelete={onClaimDelete}
       />
-      <Accordion title={`Attached Sources (${sourceCount})` } defaultOpen={open}>
+      <Accordion title={`Attached Sources (${sourceCount})`} defaultOpen={open}>
         <SourcesMap
           sources={sources}
           onSourceModify={onSourceModify}

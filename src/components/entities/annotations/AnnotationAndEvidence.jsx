@@ -21,7 +21,10 @@ export default function AnnotationAndEvidence({
         onAnnotationModify={onAnnotationModify}
         onAnnotationDelete={onAnnotationDelete}
       />
-      <Accordion title={`Attached Evidence (${evidenceCount})` } defaultOpen={open}>
+      <Accordion
+        title={`Attached Evidence (${evidenceCount})`}
+        defaultOpen={open}
+      >
         <EvidencesMap
           evidences={evidences}
           onEvidenceModify={onEvidenceModify}
