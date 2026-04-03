@@ -46,7 +46,7 @@ const SourcesMap = ({
       ) : (
         <p>No sources attached.</p>
       )}
-      {onAddSource && (
+      {onAddSource && isEditable && (
         <Button onClick={onAddSource} variant="secondary">
           Add a source
         </Button>
