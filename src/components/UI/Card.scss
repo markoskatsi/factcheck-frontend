@@ -21,10 +21,12 @@ div.card {
   }
 
   h3 {
-    font-size: 1.35rem;
-    font-weight: 400;
-    color: #fff;
-    margin-bottom: 15px;
+    font-size: 1rem;
+    font-weight: 600;
+    color: #a8bfd0;
+    margin-bottom: 6px;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
   }
 
   p {
@@ -33,16 +35,68 @@ div.card {
     color: #d0d0d0;
     margin-bottom: 10px;
 
+    &.user {
+      font-size: 1rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      color: #7a9ab5;
+    }
+
+    &.description {
+      font-size: 1.05rem;
+      color: #eef2f6;
+      line-height: 1.65;
+      margin-bottom: 14px;
+    }
+
     &.status {
-      display: inline-block;
-      padding: 4px 10px;
-      background: rgba(41, 231, 205, 0.15);
-      border: 1px solid #d0d0d0;
-      border-radius: 4px;
-      color: #d0d0d0;
-      font-size: 0.8rem;
-      font-weight: 500;
-      margin-top: 8px;
+      display: block;
+      margin: -20px -20px 16px -20px;
+      padding: 7px 20px;
+      border-radius: 5px 5px 0 0;
+      font-size: 0.75rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.07em;
+      background: rgba(160, 160, 160, 0.15);
+      color: #a0a0a0;
+      border-bottom: 1px solid rgba(160, 160, 160, 0.2);
+
+      &[status="Pending"] {
+        background: rgba(160, 160, 160, 0.12);
+        color: #a0a0a0;
+        border-bottom-color: rgba(160, 160, 160, 0.2);
+      }
+
+      &[status="Accepted"] {
+        background: rgba(52, 152, 219, 0.15);
+        color: #3498db;
+        border-bottom-color: rgba(52, 152, 219, 0.25);
+      }
+
+      &[status="Under Review"] {
+        background: rgba(155, 89, 182, 0.15);
+        color: #9b59b6;
+        border-bottom-color: rgba(155, 89, 182, 0.25);
+      }
+
+      &[status="Awaiting Verdict Approval"] {
+        background: rgba(243, 156, 18, 0.15);
+        color: #f39c12;
+        border-bottom-color: rgba(243, 156, 18, 0.25);
+      }
+
+      &[status="Published"] {
+        background: rgba(46, 204, 113, 0.15);
+        color: #2ecc71;
+        border-bottom-color: rgba(46, 204, 113, 0.25);
+      }
+
+      &[status="Rejected"] {
+        background: rgba(231, 76, 60, 0.15);
+        color: #e74c3c;
+        border-bottom-color: rgba(231, 76, 60, 0.25);
+      }
     }
   }
 

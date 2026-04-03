@@ -6,9 +6,9 @@ import { Card } from "../../UI/Card.jsx";
 export function ClaimItem({ claim, onClaimModify, onClaimDelete }) {
   return (
     <Card key={claim.ClaimID}>
+      <p className="status" status={claim.ClaimstatusName}>{claim.ClaimstatusName}</p>
       <h3>{claim.ClaimTitle}</h3>
-      <p>{claim.ClaimDescription}</p>
-      <p className="status">Status: {claim.ClaimstatusName}</p>
+      <p className="description">{claim.ClaimDescription}</p>
       <p>
         Date Created: {formatDateTime(claim.ClaimCreated)}
       </p>
