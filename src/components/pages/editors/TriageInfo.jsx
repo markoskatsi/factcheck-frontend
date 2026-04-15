@@ -2,11 +2,13 @@ import { useParams } from "react-router-dom";
 import useLoad from "../../api/useLoad.js";
 import ClaimAndSources from "../../entities/claims/ClaimAndSources.jsx";
 import { Button, ButtonTray } from "../../UI/Button.jsx";
+import { Card } from "../../UI/Card.jsx";
 import API from "../../api/API.js";
 import { useState } from "react";
 import { Spinner } from "../../UI/Spinner.jsx";
 import { useNavigate } from "react-router-dom";
 import { Modal, useModal } from "../../UI/Modal.jsx";
+import Icon from "../../UI/Icons.jsx";
 import "../submitters/MyClaimInfo.scss";
 
 const TriageInfo = () => {
@@ -70,12 +72,20 @@ const TriageInfo = () => {
   const acceptClaimModal = (id) => {
     openModal(
       <>
-        <p>Accepting this claim will foward it to fact-checkers</p>
+        <div className="option-card-tray">
+          <Card className="option-card" onClick={() => {}}>
+            <h3>Assign to Fact-Checker</h3>
+            <p>Pick a specific fact-checker to handle this claim.</p>
+          </Card>
+          <Card className="option-card" onClick={() => handleAccept(id)}>
+            <h3>Open Pool</h3>
+            <p>Make available for any fact-checker to claim themselves.</p>
+          </Card>
+        </div>
         <ButtonTray>
-          <Button onClick={() => handleAccept(id)} variant="darkDanger">
-            Proceed
+          <Button onClick={closeModal} variant="darkDanger">
+            <Icon.Cross /> Cancel
           </Button>
-          <Button onClick={closeModal}>Cancel</Button>
         </ButtonTray>
       </>,
       "Accept Claim",
