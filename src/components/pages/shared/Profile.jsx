@@ -6,7 +6,7 @@ import { useNavigate } from "react-router-dom";
 import { useState } from "react";
 import API from "../../api/API.js";
 import "./Profile.scss";
-import UserForm from "../../entities/UserForm.jsx";
+import UserForm from "../../entities/users/UserForm.jsx";
 
 const Profile = () => {
   // Initialisation --------------------------------
@@ -16,7 +16,9 @@ const Profile = () => {
   // State -----------------------------------------
   const [users, , , loadUsers] = useLoad(`/users`);
   const [claims, , ,] = useLoad(`/claims/users/${loggedInUser.UserID}`);
-  const [annotations, , ,] = useLoad(`/annotations/users/${loggedInUser.UserID}`);
+  const [annotations, , ,] = useLoad(
+    `/annotations/users/${loggedInUser.UserID}`,
+  );
   const [verdicts, , ,] = useLoad(
     `/verdicts/users/${loggedInUser.UserID}?VerdictVerdictstatusID=1`,
   );
@@ -30,7 +32,10 @@ const Profile = () => {
   };
 
   const handleEditProfile = async (updatedUser) => {
-    const response = await API.put(`/users/${loggedInUser.UserID}`, updatedUser);
+    const response = await API.put(
+      `/users/${loggedInUser.UserID}`,
+      updatedUser,
+    );
     if (response.isSuccess) {
       setShowEditForm(false);
       await loadUsers("/users");
@@ -66,7 +71,9 @@ const Profile = () => {
         {loggedInUser.UserUsertypeID === 2 && (
           <p>Annotations Submitted: {annotations?.length}</p>
         )}
-        {loggedInUser.UserUsertypeID === 3 && <p>Verdicts Made: {verdicts?.length}</p>}
+        {loggedInUser.UserUsertypeID === 3 && (
+          <p>Verdicts Made: {verdicts?.length}</p>
+        )}
         <ButtonTray>
           {!showEditForm && (
             <Button variant="secondary" onClick={() => setShowEditForm(true)}>

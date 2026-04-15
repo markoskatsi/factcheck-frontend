@@ -1,5 +1,5 @@
-import Form from "../UI/Form.jsx";
-import { useAuth } from "../auth/useAuth.jsx";
+import Form from "../../UI/Form.jsx";
+import { useAuth } from "../../auth/useAuth.jsx";
 const emptyUser = {
   UserFirstname: "",
   UserLastname: "",
