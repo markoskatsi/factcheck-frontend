@@ -9,6 +9,7 @@ import { Spinner } from "../../UI/Spinner.jsx";
 import { useNavigate } from "react-router-dom";
 import { Modal, useModal } from "../../UI/Modal.jsx";
 import Icon from "../../UI/Icons.jsx";
+import { Dropdown } from "../../UI/Dropdown.jsx";
 import "../submitters/MyClaimInfo.scss";
 
 const TriageInfo = () => {
@@ -21,6 +22,8 @@ const TriageInfo = () => {
 
   // State -----------------------------------------
   const [claims, , , reloadClaims] = useLoad(claimEndpoint);
+  const [users, , loadingUsersMessage] = useLoad("/users");
+  const [user, setUser] = useState({});
   const [sources, , ,] = useLoad(claimSourcesEndpoint);
   const [isLoading, setIsLoading] = useState(false);
   const [showModal, modalContent, modalTitle, openModal, closeModal] =
@@ -54,6 +57,16 @@ const TriageInfo = () => {
     return response.isSuccess;
   };
 
+  const handleChange = (e) => {
+    const selectedValue = parseInt(e.target.value);
+    if (selectedValue === 0) {
+      setUser({});
+    } else {
+      const selectedUser = users.find((u) => u.UserID === selectedValue);
+      setUser(selectedUser);
+    }
+  };
+
   const rejectClaimModal = (id) => {
     openModal(
       <>
@@ -69,11 +82,51 @@ const TriageInfo = () => {
     );
   };
 
+  const selectUserModal = () => {
+    if (!users) {
+      openModal(<p>Loading users...</p>, "Select Fact-Checker");
+      return;
+    }
+    openModal(
+      <>
+        {users.length === 0 ? (
+          <p>No dropdown options found</p>
+        ) : (
+          <select
+            className="FormInput"
+            name={"UserID"}
+            value={user.UserID || 0}
+            onChange={handleChange}
+          >
+            <option value={0}>Select an option</option>
+            {users.map((user) => (
+              <option key={user.UserID} value={user.UserID}>
+                {user.UserFirstname} {user.UserLastname} ({user.UserEmail})
+              </option>
+            ))}
+          </select>
+        )}
+        <ButtonTray>
+          <Button variant="darkDanger" onClick={closeModal}>
+            <Icon.Cross /> Close
+          </Button>
+        </ButtonTray>
+      </>,
+      "Select Fact-Checker",
+    );
+  };
+
   const acceptClaimModal = (id) => {
     openModal(
       <>
         <div className="option-card-tray">
-          <Card className="option-card" onClick={() => {}}>
+          <Card
+            className="option-card"
+            onClick={() => {
+              closeModal();
+              selectUserModal();
+            }}
+          >
             <h3>Assign to Fact-Checker</h3>
             <p>Pick a specific fact-checker to handle this claim.</p>
           </Card>
@@ -83,7 +136,7 @@ const TriageInfo = () => {
           </Card>
         </div>
         <ButtonTray>
-          <Button onClick={closeModal} variant="darkDanger">
+          <Button onClick={closeModal && setUser({})} variant="darkDanger">
             <Icon.Cross /> Cancel
           </Button>
         </ButtonTray>
