@@ -22,10 +22,11 @@ const TriageInfo = () => {
 
   // State -----------------------------------------
   const [claims, , , reloadClaims] = useLoad(claimEndpoint);
-  const [users, , loadingUsersMessage] = useLoad("/users");
+  const [users, , loadingUsersMessage] = useLoad("/users/usertypes/2");
   const [user, setUser] = useState({});
   const [sources, , ,] = useLoad(claimSourcesEndpoint);
   const [isLoading, setIsLoading] = useState(false);
+  const [isAssignModalOpen, setIsAssignModalOpen] = useState(false);
   const [showModal, modalContent, modalTitle, openModal, closeModal] =
     useModal(false);
 
@@ -43,6 +44,28 @@ const TriageInfo = () => {
     alert(response.isSuccess ? "Claim accepted" : "Error accepting claim");
     navigate("/triage");
     return response.isSuccess;
+  };
+
+  const handleAssign = async (userId) => {
+    setIsLoading(true);
+    const response = await API.post(`/assignments`, {
+      AssignmentClaimID: claimId,
+      AssignmentUserID: userId,
+    });
+    if (response.isSuccess) {
+      await API.put(`/claims/${claimId}`, {
+        ...claim,
+        ClaimClaimstatusID: 3,
+      });
+    }
+    if (response.isSuccess) {
+      alert("Claim assigned to fact-checker");
+    } else {
+      alert("Error assigning claim");
+      console.log(response);
+    }
+    navigate("/triage");
+    setIsLoading(false);
   };
 
   const handleReject = async (id) => {
@@ -82,40 +105,6 @@ const TriageInfo = () => {
     );
   };
 
-  const selectUserModal = () => {
-    if (!users) {
-      openModal(<p>Loading users...</p>, "Select Fact-Checker");
-      return;
-    }
-    openModal(
-      <>
-        {users.length === 0 ? (
-          <p>No dropdown options found</p>
-        ) : (
-          <select
-            className="FormInput"
-            name={"UserID"}
-            value={user.UserID || 0}
-            onChange={handleChange}
-          >
-            <option value={0}>Select an option</option>
-            {users.map((user) => (
-              <option key={user.UserID} value={user.UserID}>
-                {user.UserFirstname} {user.UserLastname} ({user.UserEmail})
-              </option>
-            ))}
-          </select>
-        )}
-        <ButtonTray>
-          <Button variant="darkDanger" onClick={closeModal}>
-            <Icon.Cross /> Close
-          </Button>
-        </ButtonTray>
-      </>,
-      "Select Fact-Checker",
-    );
-  };
-
   const acceptClaimModal = (id) => {
     openModal(
       <>
@@ -124,7 +113,7 @@ const TriageInfo = () => {
             className="option-card"
             onClick={() => {
               closeModal();
-              selectUserModal();
+              setIsAssignModalOpen(true);
             }}
           >
             <h3>Assign to Fact-Checker</h3>
@@ -136,7 +125,13 @@ const TriageInfo = () => {
           </Card>
         </div>
         <ButtonTray>
-          <Button onClick={closeModal && setUser({})} variant="darkDanger">
+          <Button
+            onClick={() => {
+              closeModal();
+              setUser({});
+            }}
+            variant="darkDanger"
+          >
             <Icon.Cross /> Cancel
           </Button>
         </ButtonTray>
@@ -153,6 +148,41 @@ const TriageInfo = () => {
       {isLoading && <Spinner />}
       <Modal show={showModal} title={modalTitle}>
         {modalContent}
+      </Modal>
+      <Modal show={isAssignModalOpen} title="Select Fact-Checker">
+        <Dropdown
+          className="modal-dropdown"
+          list={users}
+          value={user.UserID || 0}
+          name="UserID"
+          loadingMessage={loadingUsersMessage}
+          handleChange={handleChange}
+          idField="UserID"
+          labelFormatter={(u) =>
+            `${u.UserFirstname} ${u.UserLastname} (${u.UserEmail})`
+          }
+        />
+        <ButtonTray>
+          {user.UserID && (
+            <Button
+              onClick={() => {
+                handleAssign(user.UserID);
+                setIsAssignModalOpen(false);
+              }}
+            >
+              <Icon.Tick /> Assign to {user.UserFirstname}
+            </Button>
+          )}
+          <Button
+            variant="darkDanger"
+            onClick={() => {
+              setIsAssignModalOpen(false);
+              setUser({});
+            }}
+          >
+            <Icon.Cross /> Close
+          </Button>
+        </ButtonTray>
       </Modal>
       <ButtonTray>
         <Button onClick={() => acceptClaimModal(claim.ClaimID)}>Accept</Button>

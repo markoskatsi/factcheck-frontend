@@ -1,0 +1,19 @@
+.modal-dropdown {
+  width: 100%;
+
+  select.FormInput {
+    width: 100%;
+    padding: 8px 12px;
+    font-size: 100%;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    background-color: #fff;
+    cursor: pointer;
+
+    &:focus {
+      outline: none;
+      border-color: #222a46;
+      box-shadow: 0 0 0 2px rgba(34, 42, 70, 0.15);
+    }
+  }
+}
