@@ -1,3 +1,5 @@
+import "./Dropdown.scss";
+
 export const Dropdown = ({
   list,
   value,
@@ -6,8 +8,10 @@ export const Dropdown = ({
   handleChange,
   idField,
   labelField,
+  labelFormatter,
+  className,
 }) => {
-  return !list ? (
+  const select = !list ? (
     <p>{loadingMessage}</p>
   ) : list.length === 0 ? (
     <p>No dropdown options found</p>
@@ -23,9 +27,11 @@ export const Dropdown = ({
       </option>
       {list.map((item) => (
         <option key={item[idField]} value={item[idField]}>
-          {item[labelField]}
+          {labelFormatter ? labelFormatter(item) : item[labelField]}
         </option>
       ))}
     </select>
   );
+
+  return className ? <div className={className}>{select}</div> : select;
 };
