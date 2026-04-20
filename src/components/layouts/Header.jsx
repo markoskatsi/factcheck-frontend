@@ -60,6 +60,11 @@ function Header() {
                 Tasks
               </NavLink>
             </NavItem>
+            <NavItem>
+              <NavLink to="/disputes" className={getLinkStyle}>
+                Disputes
+              </NavLink>
+            </NavItem>
           </>
         )}
       </nav>
