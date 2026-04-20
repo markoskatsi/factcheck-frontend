@@ -42,7 +42,7 @@ const DisputeInfo = () => {
     const assignmentResponse = await API.post(`/assignments`, {
       AssignmentClaimID: claim.ClaimID,
       AssignmentUserID: loggedInUserID,
-      AssignmentRoleId: 2,
+      AssignmentRoleID: 2,
     });
     await reloadClaims(claimEndpoint);
     setIsLoading(false);
