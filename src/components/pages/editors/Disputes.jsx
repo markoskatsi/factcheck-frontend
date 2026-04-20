@@ -20,7 +20,7 @@ const Disputes = () => {
         (assignment) =>
           assignment.AssignmentUserID === loggedInUserID &&
           assignment.AssignmentClaimID === claim.ClaimID &&
-          assignment.RoleID === 1,
+          (assignment.RoleID === 1 || assignment.RoleID === 2),
       ),
   );
 

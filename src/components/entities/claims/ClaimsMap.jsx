@@ -2,9 +2,12 @@ import { Link } from "react-router-dom";
 import ClaimItem from "./ClaimItem.jsx";
 import { act, useEffect, useState } from "react";
 import { CardContainer } from "../../UI/Card.jsx";
+import { useAuth } from "../../auth/useAuth.jsx";
 import "./ClaimsMap.scss";
 
 const ClaimsMap = ({ claims, basePath = "", actions }) => {
+  const { loggedInUserID } = useAuth();
+
   const [filteredClaims, setFilteredClaims] = useState([]);
 
   const availableStatuses = claims
@@ -44,8 +47,14 @@ const ClaimsMap = ({ claims, basePath = "", actions }) => {
         <CardContainer>
           {filteredClaims.map((claim) => {
             const id = claim.AssignmentClaimID || claim.ClaimID;
+            const claimBasePath =
+              claim.ClaimstatusName === "Under Dispute" &&
+              claim.AssignmentRoleID === 2 &&
+              claim.AssignmentUserID === loggedInUserID
+                ? `/ref/disputes`
+                : basePath;
             return (
-              <Link to={`${basePath}/${id}`} key={id}>
+              <Link to={`${claimBasePath}/${id}`} key={id}>
                 <div className="fixed">
                   <ClaimItem claim={claim} />
                 </div>
