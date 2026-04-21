@@ -56,24 +56,41 @@ const Profile = () => {
         />
       )}
       <Card className="profile-card">
-        <img
-          src={user.UserProfileImage}
-          alt={`${user.UserFirstname} ${user.UserLastname}`}
-        />
-        <p>
-          {user.UserFirstname} {user.UserLastname}
-        </p>
-        <p>{user.UserEmail}</p>
-        <p>{user.UsertypeName}</p>
-        {loggedInUser.UserUsertypeID === 1 && (
-          <p>Claims Submitted: {claims?.length}</p>
-        )}
-        {loggedInUser.UserUsertypeID === 2 && (
-          <p>Annotations Submitted: {annotations?.length}</p>
-        )}
-        {loggedInUser.UserUsertypeID === 3 && (
-          <p>Verdicts Made: {verdicts?.length}</p>
-        )}
+        <div className="profile-avatar-wrapper">
+          <img
+            className="profile-avatar"
+            src={user.UserImageURL}
+            alt={`${user.UserFirstname} ${user.UserLastname}`}
+          />
+        </div>
+        <div className="profile-info">
+          <h2 className="profile-name">
+            {user.UserFirstname} {user.UserLastname}
+          </h2>
+          <span className="profile-role">{user.UsertypeName}</span>
+          <p className="profile-email">{user.UserEmail}</p>
+        </div>
+        <div className="profile-divider" />
+        <div className="profile-stats">
+          {loggedInUser.UserUsertypeID === 1 && (
+            <div className="profile-stat">
+              <span className="profile-stat-value">{claims?.length ?? "—"}</span>
+              <span className="profile-stat-label">Claims Submitted</span>
+            </div>
+          )}
+          {loggedInUser.UserUsertypeID === 2 && (
+            <div className="profile-stat">
+              <span className="profile-stat-value">{annotations?.length ?? "—"}</span>
+              <span className="profile-stat-label">Annotations Submitted</span>
+            </div>
+          )}
+          {loggedInUser.UserUsertypeID === 3 && (
+            <div className="profile-stat">
+              <span className="profile-stat-value">{verdicts?.length ?? "—"}</span>
+              <span className="profile-stat-label">Verdicts Made</span>
+            </div>
+          )}
+        </div>
         <ButtonTray>
           {!showEditForm && (
             <Button variant="secondary" onClick={() => setShowEditForm(true)}>
