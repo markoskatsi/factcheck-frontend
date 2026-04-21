@@ -10,6 +10,7 @@ function Accordion({ title, children, defaultOpen = false }) {
       <button
         type="button"
         className="accordion-header"
+        title={title}
         onClick={() => setIsOpen(!isOpen)}
         aria-expanded={isOpen}
       >

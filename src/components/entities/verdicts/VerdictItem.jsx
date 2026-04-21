@@ -7,7 +7,7 @@ export function VerdictItem({ verdict, onModify, onDelete }) {
   if (!verdict) return null;
   return (
     <Card key={verdict.VerdictID}>
-      <p className="user">{verdict.VerdictUsername}</p>
+      <p className="user">Last modified by: {verdict.VerdictUsername}</p>
       <p className="description">{verdict.VerdictDescription}</p>
       <p>Date Created: {formatDateTime(verdict.VerdictCreated)}</p>
       {onModify && onDelete && (

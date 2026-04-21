@@ -31,6 +31,12 @@
     background: rgba(137, 175, 225, 0.15);
   }
 
+  &[title="Dispute"] {
+    background: rgba(241, 196, 15, 0.15);
+    color: #f1c40f;
+    border-bottom-color: rgba(241, 196, 15, 0.25);
+  }
+
   &:focus-visible {
     outline: 2px solid rgba(120, 170, 245, 0.9);
     outline-offset: -2px;

@@ -8,6 +8,7 @@ import API from "../../api/API.js";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Spinner } from "../../UI/Spinner.jsx";
+import { DisputeItem } from "../../entities/disputes/DisputeItem.jsx";
 import ClaimInfoLayout from "../../UI/ClaimInfoLayout.jsx";
 import VerdictAndEvidence from "../../entities/verdicts/VerdictAndEvidence.jsx";
 
@@ -30,11 +31,15 @@ const DisputeInfo = () => {
   const [sources, , ,] = useLoad(claimSourcesEndpoint);
   const [verdicts, , ,] = useLoad(verdictEndpoint);
 
+  const disputeEndpoint = `/disputes/verdicts/${verdicts?.[0]?.VerdictID}`;
+  const [disputes, , ,] = useLoad(disputeEndpoint);
+
   const evidenceEndpoint = `/evidence/annotations/${annotations?.[0]?.AnnotationID}`;
   const [evidences, , ,] = useLoad(evidenceEndpoint);
 
   const claim = claims?.[0];
   const verdict = verdicts?.[0];
+  const dispute = disputes?.[0];
 
   // Handlers --------------------------------------
   const handleAssignment = async () => {
@@ -56,18 +61,25 @@ const DisputeInfo = () => {
   };
   // View ------------------------------------------
   if (!claim) return <p>Loading...</p>;
+
+  const actions = <Button onClick={handleAssignment}>Assign to you</Button>;
+
   return (
     <>
       {isLoading && <Spinner />}
       <ClaimInfoLayout
         mainTitle="Claim"
         sidebarTitle="Verdict"
-        actions={<Button onClick={handleAssignment}>Assign to you</Button>}
-        main={<ClaimAndSources claim={claim} sources={sources} />}
+        actions={actions}
+        main={
+          <ClaimAndSources claim={claim} sources={sources} dispute={dispute} />
+        }
         sidebar={
-          verdict && (
-            <VerdictAndEvidence verdict={verdict} evidences={evidences} />
-          )
+          <>
+            {verdict && (
+              <VerdictAndEvidence verdict={verdict} evidences={evidences} />
+            )}
+          </>
         }
       />
     </>
