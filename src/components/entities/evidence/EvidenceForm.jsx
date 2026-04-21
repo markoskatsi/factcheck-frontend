@@ -15,6 +15,7 @@ export default function EvidenceForm({
   initialEvidence = emptyEvidence,
 }) {
   // Initialisation --------------------------------
+  const evidenceWithDefaults = { ...emptyEvidence, ...initialEvidence };
   const validation = {
     isValid: {
       EvidenceURL: (url) => !url || url.startsWith("http"),
@@ -35,7 +36,7 @@ export default function EvidenceForm({
 
   // State -----------------------------------------
   const [evidence, errors, handleChange, handleSubmit] = Form.useForm(
-    initialEvidence,
+    evidenceWithDefaults,
     conformance,
     validation,
     onSubmit,

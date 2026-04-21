@@ -1,17 +1,18 @@
 import { useParams } from "react-router-dom";
 import useLoad from "../../api/useLoad.js";
 import ClaimAndSources from "../../entities/claims/ClaimAndSources.jsx";
-import AnnotationAndEvidence from "../../entities/annotations/AnnotationAndEvidence.jsx";
-import { Button, ButtonTray } from "../../UI/Button.jsx";
+import { Button } from "../../UI/Button.jsx";
 import "../submitters/MyClaimInfo.scss";
 import { useAuth } from "../../auth/useAuth.jsx";
 import API from "../../api/API.js";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Spinner } from "../../UI/Spinner.jsx";
+import { DisputeItem } from "../../entities/disputes/DisputeItem.jsx";
 import ClaimInfoLayout from "../../UI/ClaimInfoLayout.jsx";
+import VerdictAndEvidence from "../../entities/verdicts/VerdictAndEvidence.jsx";
 
-const ReviewInfo = () => {
+const DisputeInfo = () => {
   // Initialisation --------------------------------
   const { loggedInUserID } = useAuth();
   const { claimId } = useParams();
@@ -21,18 +22,24 @@ const ReviewInfo = () => {
   const claimEndpoint = `/claims/${claimId}`;
   const claimSourcesEndpoint = `/sources/claims/${claimId}?orderby=SourceCreated%20desc`;
   const annotationClaimEndpoint = `/annotations/claims/${claimId}`;
+  const verdictEndpoint = `/verdicts/claims/${claimId}`;
 
   // State -----------------------------------------
   const [isLoading, setIsLoading] = useState(false);
   const [claims, , , reloadClaims] = useLoad(claimEndpoint);
   const [annotations, , ,] = useLoad(annotationClaimEndpoint);
   const [sources, , ,] = useLoad(claimSourcesEndpoint);
+  const [verdicts, , ,] = useLoad(verdictEndpoint);
+
+  const disputeEndpoint = `/disputes/verdicts/${verdicts?.[0]?.VerdictID}`;
+  const [disputes, , ,] = useLoad(disputeEndpoint);
 
   const evidenceEndpoint = `/evidence/annotations/${annotations?.[0]?.AnnotationID}`;
   const [evidences, , ,] = useLoad(evidenceEndpoint);
 
   const claim = claims?.[0];
-  const annotation = annotations?.[0];
+  const verdict = verdicts?.[0];
+  const dispute = disputes?.[0];
 
   // Handlers --------------------------------------
   const handleAssignment = async () => {
@@ -40,34 +47,40 @@ const ReviewInfo = () => {
     const assignmentResponse = await API.post(`/assignments`, {
       AssignmentClaimID: claim.ClaimID,
       AssignmentUserID: loggedInUserID,
-      AssignmentRoleID: 1,
+      AssignmentRoleID: 2,
     });
     await reloadClaims(claimEndpoint);
     setIsLoading(false);
-    navigate(`/verdict/${claim.ClaimID}`);
+    if (assignmentResponse.isSuccess) {
+      navigate(`/ref/disputes/${claim.ClaimID}`);
+    } else {
+      alert("Error assigning claim");
+    }
     return assignmentResponse.isSuccess;
   };
   // View ------------------------------------------
   if (!claim) return <p>Loading...</p>;
+
+  const actions = <Button onClick={handleAssignment}>Assign to you</Button>;
+
   return (
     <>
       {isLoading && <Spinner />}
       <ClaimInfoLayout
         mainTitle="Claim"
-        sidebarTitle="Fact-Checkers Work"
-        actions={<Button onClick={handleAssignment}>Assign to you</Button>}
+        sidebarTitle="Verdict"
+        actions={actions}
         main={<ClaimAndSources claim={claim} sources={sources} />}
         sidebar={
-          annotation && (
-            <AnnotationAndEvidence
-              annotation={annotation}
-              evidences={evidences}
-            />
-          )
+          <>
+            {verdict && (
+              <VerdictAndEvidence verdict={verdict} evidences={evidences} />
+            )}
+          </>
         }
       />
     </>
   );
 };
 
-export default ReviewInfo;
+export default DisputeInfo;

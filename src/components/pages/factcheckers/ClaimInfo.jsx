@@ -209,13 +209,19 @@ const ClaimInfo = () => {
           Submit Work
         </Button>
       )}
-      <Button
-        variant="darkDanger"
-        disabled={annotation && annotation.length > 0}
-        onClick={handleAbandon}
+      <span
+        title={
+          evidences ? "Remove any work on the claim before abandoning" : undefined
+        }
       >
-        Abandon Claim
-      </Button>
+        <Button
+          variant="darkDanger"
+          disabled={annotation && annotation.length > 0}
+          onClick={handleAbandon}
+        >
+          Abandon Claim
+        </Button>
+      </span>
     </ButtonTray>
   );
 

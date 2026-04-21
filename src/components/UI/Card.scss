@@ -97,6 +97,12 @@ div.card {
         color: #e74c3c;
         border-bottom-color: rgba(231, 76, 60, 0.25);
       }
+
+      &[status="Under Dispute"] {
+        background: rgba(241, 196, 15, 0.15);
+        color: #f1c40f;
+        border-bottom-color: rgba(241, 196, 15, 0.25);
+      }
     }
   }
 

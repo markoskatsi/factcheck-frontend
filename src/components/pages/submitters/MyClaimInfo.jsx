@@ -10,6 +10,8 @@ import { Spinner } from "../../UI/Spinner.jsx";
 import ClaimAndSources from "../../entities/claims/ClaimAndSources.jsx";
 import { Button, ButtonTray } from "../../UI/Button.jsx";
 import "./MyClaimInfo.scss";
+import VerdictAndEvidence from "../../entities/verdicts/VerdictAndEvidence.jsx";
+import ClaimInfoLayout from "../../UI/ClaimInfoLayout.jsx";
 
 const MyClaimInfo = () => {
   // Initialisation --------------------------------
@@ -22,9 +24,21 @@ const MyClaimInfo = () => {
   const putClaimEndpoint = `/claims`;
   const sourcesEndpoint = "/sources";
 
+  const annotationClaimEndpoint = `/annotations/claims/${claimId}`;
+  const verdictEndpoint = `/verdicts/claims/${claimId}`;
+
   // State -----------------------------------------
   const [claim, , , loadClaim] = useLoad(claimEndpoint);
   const [sources, , , loadSources] = useLoad(claimSourcesEndpoint);
+
+  const [verdicts, , ,] = useLoad(verdictEndpoint);
+  const [annotations, , ,] = useLoad(annotationClaimEndpoint);
+  const disputeEndpoint = `/disputes/verdicts/${verdicts?.[0]?.VerdictID}`;
+  const evidenceEndpoint = `/evidence/annotations/${annotations?.[0]?.AnnotationID}`;
+
+  const [disputes, , ,] = useLoad(disputeEndpoint);
+  const [evidences, , ,] = useLoad(evidenceEndpoint);
+
   const [isLoading, setIsLoading] = useState(false);
   const [showModal, modalContent, modalTitle, openModal, closeModal] =
     useModal(false);
@@ -196,15 +210,37 @@ const MyClaimInfo = () => {
       >
         {modalContent}
       </Modal>
-      <ClaimAndSources
-        claim={claim[0]}
-        sources={sources}
-        onClaimModify={modifyClaimModal}
-        onClaimDelete={() => deleteClaimModal(claim[0])}
-        onSourceModify={modifySourceModal}
-        onSourceDelete={deleteSourceModal}
-        onAddSource={addSourceModal}
-      />
+
+      
+      
+      {disputes?.[0]?.DisputeOutcome === 0 ? (
+        <ClaimInfoLayout
+          main={
+            <ClaimAndSources
+              claim={claim[0]}
+              sources={sources}
+              onClaimModify={modifyClaimModal}
+              onClaimDelete={() => deleteClaimModal(claim[0])}
+              onSourceModify={modifySourceModal}
+              onSourceDelete={deleteSourceModal}
+              onAddSource={addSourceModal}
+            />
+          }
+          sidebar={
+            <VerdictAndEvidence verdict={verdicts?.[0]} evidences={evidences} />
+          }
+        />
+      ) : (
+        <ClaimAndSources
+          claim={claim[0]}
+          sources={sources}
+          onClaimModify={modifyClaimModal}
+          onClaimDelete={() => deleteClaimModal(claim[0])}
+          onSourceModify={modifySourceModal}
+          onSourceDelete={deleteSourceModal}
+          onAddSource={addSourceModal}
+        />
+      )}
     </>
   );
 };
