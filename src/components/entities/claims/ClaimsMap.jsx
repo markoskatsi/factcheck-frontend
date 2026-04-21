@@ -29,6 +29,21 @@ const ClaimsMap = ({ claims, basePath = "", actions }) => {
     }
   };
 
+  const correctPath = (claim) => {
+    if (
+      claim.ClaimstatusName === "Under Dispute" &&
+      claim.AssignmentRoleID === 2 &&
+      claim.AssignmentUserID === loggedInUserID
+    ) {
+      return `/ref/disputes`;
+    }
+
+    if (claim.ClaimstatusName === "Published") {
+      return `/claims`;
+    }
+    return basePath;
+  };
+
   return (
     <div className="claims-view">
       {actions && <div className="actions">{actions}</div>}
@@ -47,14 +62,8 @@ const ClaimsMap = ({ claims, basePath = "", actions }) => {
         <CardContainer>
           {filteredClaims.map((claim) => {
             const id = claim.AssignmentClaimID || claim.ClaimID;
-            const claimBasePath =
-              claim.ClaimstatusName === "Under Dispute" &&
-              claim.AssignmentRoleID === 2 &&
-              claim.AssignmentUserID === loggedInUserID
-                ? `/ref/disputes`
-                : basePath;
             return (
-              <Link to={`${claimBasePath}/${id}`} key={id}>
+              <Link to={`${correctPath(claim)}/${id}`} key={id}>
                 <div className="fixed">
                   <ClaimItem claim={claim} />
                 </div>

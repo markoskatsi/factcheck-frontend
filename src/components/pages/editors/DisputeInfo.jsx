@@ -72,7 +72,7 @@ const DisputeInfo = () => {
         sidebarTitle="Verdict"
         actions={actions}
         main={
-          <ClaimAndSources claim={claim} sources={sources} dispute={dispute} />
+          <ClaimAndSources claim={claim} sources={sources} />
         }
         sidebar={
           <>

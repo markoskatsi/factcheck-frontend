@@ -2,12 +2,12 @@ import { Card } from "../../UI/Card.jsx";
 import ClaimItem from "./ClaimItem.jsx";
 import { DisputeItem } from "../disputes/DisputeItem.jsx";
 import SourcesMap from "../sources/SourcesMap.jsx";
+import useLoad from "../../api/useLoad.js";
 import Accordion from "../../UI/Accordion.jsx";
 
 export default function ClaimAndSources({
   claim,
   sources,
-  dispute,
   onClaimModify,
   onClaimDelete,
   onSourceModify,
@@ -17,6 +17,14 @@ export default function ClaimAndSources({
 }) {
   const sourceCount = sources?.length ?? 0;
 
+  const verdictEndpoint = `/verdicts/claims/${claim.ClaimID}`;
+  const [verdict] = useLoad(verdictEndpoint);
+
+  const disputeEndpoint = `/disputes/verdicts/${verdict?.[0]?.VerdictID}`;
+  const [disputes] = useLoad(disputeEndpoint);
+
+  const dispute = disputes?.[0];
+
   return (
     <Card className="claim-details-card">
       <ClaimItem
@@ -24,7 +32,7 @@ export default function ClaimAndSources({
         onClaimModify={onClaimModify}
         onClaimDelete={onClaimDelete}
       />
-      {dispute && (
+      {dispute && dispute.DisputeOutcome === 0 && (
         <Accordion title="Dispute" defaultOpen={true}>
           <DisputeItem dispute={dispute} />
         </Accordion>

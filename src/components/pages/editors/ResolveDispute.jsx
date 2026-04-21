@@ -51,7 +51,7 @@ const ResolveDispute = () => {
       <ClaimInfoLayout
         mainTitle="Claim"
         sidebarTitle="Verdict"
-        main={<ClaimAndSources claim={claim} sources={sources} dispute={dispute} />}
+        main={<ClaimAndSources claim={claim} sources={sources} />}
         sidebar={
           verdict && (
             <VerdictAndEvidence verdict={verdict} evidences={evidences} />

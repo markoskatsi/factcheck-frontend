@@ -71,6 +71,15 @@
   }
 }
 
+.button.orange {
+  background: #ffaa42b7;
+  border: 1px solid rgba(255, 255, 255, 0.4);
+
+  &:hover {
+    background: #ffa60071;
+  }
+}
+
 .button:disabled {
   opacity: 0.5;
   cursor: not-allowed;
