@@ -1,8 +1,9 @@
 import Form from "../../UI/Form.jsx";
 import { useAuth } from "../../auth/useAuth.jsx";
 const emptyClaim = {
-  ClaimTitle: "",
-  ClaimDescription: "",
+  ClaimTitle: "NHS waiting lists have been cut by 20% in the past year",
+  ClaimDescription:
+    "The UK government has claimed that NHS waiting lists have been reduced by 20% over the past 12 months due to new investment in elective care and increased consultant hours. This claim has been repeated across multiple press releases and media briefings.",
   ClaimClaimstatusID: 1,
   ClaimUserID: 1,
 };

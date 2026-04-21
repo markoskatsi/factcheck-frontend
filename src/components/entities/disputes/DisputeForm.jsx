@@ -4,7 +4,7 @@ import { Dropdown } from "../../UI/Dropdown.jsx";
 
 const emptyDispute = {
   DisputeDescription:
-    "The claim states a 40% increase in screen time across all children aged 5–15, but the Ofcom 2024 report shows this figure represents the upper end of the range and applies primarily to younger children (5–10). Teenagers showed more moderate growth in certain categories. Presenting 40% as a uniform average across all age groups is misleading and not supported by the data.",
+    "The verdict labels this claim as misleading, but the government's press release clearly stated the 20% figure in the context of the longest waiters — this is standard practice in NHS reporting. The verdict fails to acknowledge this and presents a misleading characterisation of what was actually claimed. The 6.4% overall reduction figure, while accurate, does not invalidate the specific 20% reduction in 65-week waiters.",
   DisputeDisputetypeID: 0,
   DisputeOutcome: 0,
   DisputeVerdictID: 0,

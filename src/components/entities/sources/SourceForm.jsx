@@ -5,8 +5,9 @@ import { useParams } from "react-router-dom";
 import { Dropdown } from "../../UI/Dropdown.jsx";
 
 const emptySource = {
-  SourceDescription: "",
-  SourceURL: "",
+  SourceDescription:
+    "Official NHS England statistics page tracking referral-to-treatment waiting times, published monthly. Used to verify the 20% reduction claim.",
+  SourceURL: "https://www.england.nhs.uk/statistics/statistical-work-areas/rtt-waiting-times/",
   SourceSourcetypeID: 0,
 };
 

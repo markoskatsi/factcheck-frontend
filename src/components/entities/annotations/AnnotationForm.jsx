@@ -1,14 +1,16 @@
 import Form from "../../UI/Form.jsx";
 const emptyAnnotation = {
-  AnnotationDescription: "",
+  AnnotationDescription:
+    "NHS England RTT data shows total waiting list figures fell from 7.8 million to 7.3 million between Jan 2024 and Jan 2025 — a reduction of approximately 6.4%, not 20%. The 20% figure appears to refer only to the subset of patients waiting over 65 weeks, not the overall list. The government's claim uses selective data and is therefore misleading without further qualification.",
   AnnotationAssignmentID: 1,
 };
 
 export default function AnnotationForm({
   onSubmit,
   onCancel,
-  initialAnnotation = emptyAnnotation,
+  initialAnnotation: initialAnnotationProp = {},
 }) {
+  const initialAnnotation = { ...emptyAnnotation, ...initialAnnotationProp };
   // Initialisation --------------------------------
   const validation = {
     isValid: {
