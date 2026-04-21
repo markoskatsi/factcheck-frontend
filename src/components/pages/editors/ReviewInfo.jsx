@@ -40,6 +40,7 @@ const ReviewInfo = () => {
     const assignmentResponse = await API.post(`/assignments`, {
       AssignmentClaimID: claim.ClaimID,
       AssignmentUserID: loggedInUserID,
+      AssignmentRoleID: 1,
     });
     await reloadClaims(claimEndpoint);
     setIsLoading(false);

@@ -52,8 +52,7 @@ const DisputeInfo = () => {
     await reloadClaims(claimEndpoint);
     setIsLoading(false);
     if (assignmentResponse.isSuccess) {
-      alert("Claim assigned to you");
-      navigate("/tasks");
+      navigate(`/ref/disputes/${claim.ClaimID}`);
     } else {
       alert("Error assigning claim");
     }
@@ -71,9 +70,7 @@ const DisputeInfo = () => {
         mainTitle="Claim"
         sidebarTitle="Verdict"
         actions={actions}
-        main={
-          <ClaimAndSources claim={claim} sources={sources} />
-        }
+        main={<ClaimAndSources claim={claim} sources={sources} />}
         sidebar={
           <>
             {verdict && (
