@@ -3,7 +3,8 @@ import useLoad from "../../api/useLoad.js";
 import { Dropdown } from "../../UI/Dropdown.jsx";
 
 const emptyDispute = {
-  DisputeDescription: "",
+  DisputeDescription:
+    "The claim states a 40% increase in screen time across all children aged 5–15, but the Ofcom 2024 report shows this figure represents the upper end of the range and applies primarily to younger children (5–10). Teenagers showed more moderate growth in certain categories. Presenting 40% as a uniform average across all age groups is misleading and not supported by the data.",
   DisputeDisputetypeID: 0,
   DisputeOutcome: 0,
   DisputeVerdictID: 0,
