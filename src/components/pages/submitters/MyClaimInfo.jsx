@@ -12,6 +12,7 @@ import { Button, ButtonTray } from "../../UI/Button.jsx";
 import "./MyClaimInfo.scss";
 import VerdictAndEvidence from "../../entities/verdicts/VerdictAndEvidence.jsx";
 import ClaimInfoLayout from "../../UI/ClaimInfoLayout.jsx";
+import { StatusMessage } from "../../UI/StatusMessage.jsx";
 
 const MyClaimInfo = () => {
   // Initialisation --------------------------------
@@ -211,8 +212,6 @@ const MyClaimInfo = () => {
         {modalContent}
       </Modal>
 
-      
-      
       {disputes?.[0]?.DisputeOutcome === 0 ? (
         <ClaimInfoLayout
           main={
@@ -231,15 +230,18 @@ const MyClaimInfo = () => {
           }
         />
       ) : (
-        <ClaimAndSources
-          claim={claim[0]}
-          sources={sources}
-          onClaimModify={modifyClaimModal}
-          onClaimDelete={() => deleteClaimModal(claim[0])}
-          onSourceModify={modifySourceModal}
-          onSourceDelete={deleteSourceModal}
-          onAddSource={addSourceModal}
-        />
+        <>
+          <StatusMessage claim={claim[0]} />
+          <ClaimAndSources
+            claim={claim[0]}
+            sources={sources}
+            onClaimModify={modifyClaimModal}
+            onClaimDelete={() => deleteClaimModal(claim[0])}
+            onSourceModify={modifySourceModal}
+            onSourceDelete={deleteSourceModal}
+            onAddSource={addSourceModal}
+          />
+        </>
       )}
     </>
   );
