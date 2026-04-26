@@ -4,8 +4,7 @@ import { useAuth } from "../../auth/useAuth.jsx";
 import useLoad from "../../api/useLoad.js";
 
 const emptyVerdict = {
-  VerdictDescription:
-    "MISLEADING. The claim that NHS waiting lists have been cut by 20% is not supported by overall NHS England data. Total incomplete pathways fell by approximately 6.4% over the period cited. The 20% figure refers specifically to the reduction in patients waiting over 65 weeks — a subset of the waiting list. Presenting this as an overall 20% reduction is misleading and lacks the necessary context.",
+  VerdictDescription: "",
   VerdictVerdictstatusID: 3,
 };
 

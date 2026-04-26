@@ -9,13 +9,9 @@ export const EvidenceHandlers = ({
   const handleAddEvidence = async (evidence) => {
     setIsLoading(true);
     let data;
-    if (!evidence.EvidenceURL && !evidence.file) {
-    }
     if (evidence.file) {
       data = new FormData();
       data.append("file", evidence.file);
-      data.append("EvidenceID", evidence.EvidenceID);
-      data.append("EvidenceFilename", evidence.EvidenceFilename);
       data.append("EvidenceDescription", evidence.EvidenceDescription);
       data.append("EvidenceEvidencetypeID", evidence.EvidenceEvidencetypeID);
       data.append("EvidenceAnnotationID", evidence.EvidenceAnnotationID);
@@ -25,7 +21,6 @@ export const EvidenceHandlers = ({
     const response = await API.post(`/evidence`, data);
     if (response.isSuccess) {
       closeModal();
-      console.log(evidenceEndpoint);
       await reloadEvidences(evidenceEndpoint);
     }
     setIsLoading(false);
@@ -35,8 +30,6 @@ export const EvidenceHandlers = ({
   const handleModifyEvidence = async (evidence) => {
     setIsLoading(true);
     let data;
-    if (!evidence.EvidenceURL && !evidence.file) {
-    }
     if (evidence.file) {
       data = new FormData();
       data.append("file", evidence.file);
@@ -51,7 +44,6 @@ export const EvidenceHandlers = ({
     const response = await API.put(`/evidence/${evidence.EvidenceID}`, data);
     if (response.isSuccess) {
       closeModal();
-      console.log(evidenceEndpoint);
       await reloadEvidences(evidenceEndpoint);
     }
     setIsLoading(false);

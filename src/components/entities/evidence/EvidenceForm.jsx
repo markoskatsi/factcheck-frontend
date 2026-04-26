@@ -4,9 +4,8 @@ import { Dropzone } from "../../UI/Dropzone.jsx";
 import { Dropdown } from "../../UI/Dropdown.jsx";
 
 const emptyEvidence = {
-  EvidenceDescription:
-    "NHS England monthly RTT statistical release for January 2025, showing total incomplete pathways at 7.31 million — a 6.4% fall from the January 2024 figure of 7.80 million.",
-  EvidenceURL: "https://www.england.nhs.uk/statistics/statistical-work-areas/rtt-waiting-times/rtt-data-2024-25/",
+  EvidenceDescription: "",
+  EvidenceURL: "",
   EvidenceEvidencetypeID: 0,
 };
 
