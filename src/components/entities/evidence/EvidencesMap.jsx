@@ -12,7 +12,7 @@ const EvidencesMap = ({ evidences, onEvidenceModify, onEvidenceDelete }) => {
             <Card key={evidence.EvidenceID}>
               <EvidenceItem evidence={evidence} />
               {onEvidenceModify && onEvidenceDelete && (
-                <ButtonTray>
+                <div style={{ marginTop: "12px" }}><ButtonTray>
                   <Button
                     onClick={() => onEvidenceModify(evidence)}
                     variant="secondary"
@@ -25,7 +25,7 @@ const EvidencesMap = ({ evidences, onEvidenceModify, onEvidenceDelete }) => {
                   >
                     <Icon.Trash />
                   </Button>
-                </ButtonTray>
+                </ButtonTray></div>
               )}
             </Card>
           ))}

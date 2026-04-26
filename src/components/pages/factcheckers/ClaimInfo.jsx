@@ -211,7 +211,9 @@ const ClaimInfo = () => {
       )}
       <span
         title={
-          evidences ? "Remove any work on the claim before abandoning" : undefined
+          evidences
+            ? "Remove any work on the claim before abandoning"
+            : undefined
         }
       >
         <Button
@@ -239,7 +241,7 @@ const ClaimInfo = () => {
   return (
     <>
       {isLoading && <Spinner />}
-      <Modal className="Modal" show={showModal} title={modalTitle}>
+      <Modal modalPaneClass="Modal" show={showModal} title={modalTitle}>
         {modalContent}
       </Modal>
       <ClaimInfoLayout
