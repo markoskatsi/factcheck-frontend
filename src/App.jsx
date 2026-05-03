@@ -21,6 +21,7 @@ import Logout from "./components/pages/shared/Logout.jsx";
 import Disputes from "./components/pages/editors/Disputes.jsx";
 import DisputeInfo from "./components/pages/editors/DisputeInfo.jsx";
 import ResolveDispute from "./components/pages/editors/ResolveDispute.jsx";
+import Register from "./components/pages/shared/Register.jsx";
 import { useAuth } from "./components/auth/useAuth.jsx";
 import "./App.scss";
 
@@ -64,6 +65,7 @@ function App() {
           )}
           {loggedInUser && <Route path="/profile" element={<Profile />} />}
           <Route path="/login" element={<Login />} />
+          <Route path="/register" element={<Register />} />
           <Route path="/logout" element={<Logout />} />
           <Route path="*" element={<PageNotFound />} />
         </Routes>
