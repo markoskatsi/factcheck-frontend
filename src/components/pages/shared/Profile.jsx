@@ -32,9 +32,10 @@ const Profile = () => {
   };
 
   const handleEditProfile = async (updatedUser) => {
+    const { UserPassword, ...userWithoutPassword } = updatedUser;
     const response = await API.put(
       `/users/${loggedInUser.UserID}`,
-      updatedUser,
+      userWithoutPassword,
     );
     if (response.isSuccess) {
       setShowEditForm(false);
@@ -74,19 +75,25 @@ const Profile = () => {
         <div className="profile-stats">
           {loggedInUser.UserUsertypeID === 1 && (
             <div className="profile-stat">
-              <span className="profile-stat-value">{claims?.length ?? "—"}</span>
+              <span className="profile-stat-value">
+                {claims?.length ?? "—"}
+              </span>
               <span className="profile-stat-label">Claims Submitted</span>
             </div>
           )}
           {loggedInUser.UserUsertypeID === 2 && (
             <div className="profile-stat">
-              <span className="profile-stat-value">{annotations?.length ?? "—"}</span>
+              <span className="profile-stat-value">
+                {annotations?.length ?? "—"}
+              </span>
               <span className="profile-stat-label">Annotations Submitted</span>
             </div>
           )}
           {loggedInUser.UserUsertypeID === 3 && (
             <div className="profile-stat">
-              <span className="profile-stat-value">{verdicts?.length ?? "—"}</span>
+              <span className="profile-stat-value">
+                {verdicts?.length ?? "—"}
+              </span>
               <span className="profile-stat-label">Verdicts Made</span>
             </div>
           )}

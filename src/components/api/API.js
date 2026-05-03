@@ -6,25 +6,36 @@ API.post = (endpoint, data) => callFetch(endpoint, "POST", data);
 API.put = (endpoint, data) => callFetch(endpoint, "PUT", data);
 API.delete = (endpoint) => callFetch(endpoint, "DELETE", null);
 
+const getAuthHeader = () => {
+  try {
+    const user = JSON.parse(localStorage.getItem("user"));
+    return user?.token ? { Authorization: `Bearer ${user.token}` } : {};
+  } catch {
+    return {};
+  }
+};
+
 const callFetch = async (endpoint, method, record) => {
   const isFormData = record instanceof FormData;
+  const authHeader = getAuthHeader();
   // Build request object
   let requestObj = { method: method };
   if (record) {
     if (isFormData) {
-      // For FormData, lets browsser set the headers
       requestObj = {
         ...requestObj,
+        headers: { ...authHeader },
         body: record,
       };
     } else {
-      // For regular objects use JSON
       requestObj = {
         ...requestObj,
-        headers: { "Content-type": "application/json" },
+        headers: { "Content-type": "application/json", ...authHeader },
         body: JSON.stringify(record),
       };
     }
+  } else {
+    requestObj = { ...requestObj, headers: { ...authHeader } };
   }
 
   // Call Fetch
