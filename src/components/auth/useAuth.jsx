@@ -10,7 +10,6 @@ export const AuthProvider = ({ children }) => {
     if (!savedUser) {
       return null;
     }
-
     try {
       return JSON.parse(savedUser);
     } catch {
