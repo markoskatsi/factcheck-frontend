@@ -32,9 +32,10 @@ const Profile = () => {
   };
 
   const handleEditProfile = async (updatedUser) => {
+    const { UserPassword, ...userWithoutPassword } = updatedUser;
     const response = await API.put(
       `/users/${loggedInUser.UserID}`,
-      updatedUser,
+      userWithoutPassword,
     );
     if (response.isSuccess) {
       setShowEditForm(false);
