@@ -32,7 +32,6 @@ function App() {
       <Layout>
         <Routes>
           <Route path="/" element={<Home />} />
-          <Route path="/claims/:claimId" element={<PublishedClaim />} />
           {loggedInUser?.UserUsertypeID === 1 && (
             <>
               <Route path="/myclaims" element={<MyClaims />} />
@@ -63,7 +62,12 @@ function App() {
               />
             </>
           )}
-          {loggedInUser && <Route path="/profile" element={<Profile />} />}
+          {loggedInUser && (
+            <>
+              <Route path="/profile" element={<Profile />} />
+              <Route path="/claims/:claimId" element={<PublishedClaim />} />
+            </>
+          )}
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
           <Route path="/logout" element={<Logout />} />
