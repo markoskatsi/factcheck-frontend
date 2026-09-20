@@ -1,6 +1,6 @@
 import { Link } from "react-router-dom";
 import ClaimItem from "./ClaimItem.jsx";
-import { act, useEffect, useState } from "react";
+import { useState } from "react";
 import { CardContainer } from "../../UI/Card.jsx";
 import { useAuth } from "../../auth/useAuth.jsx";
 import "./ClaimsMap.scss";
@@ -8,25 +8,18 @@ import "./ClaimsMap.scss";
 const ClaimsMap = ({ claims, basePath = "", actions }) => {
   const { loggedInUserID } = useAuth();
 
-  const [filteredClaims, setFilteredClaims] = useState([]);
+  const [selectedStatus, setSelectedStatus] = useState("");
 
   const availableStatuses = claims
     ? [...new Set(claims.map((c) => c.ClaimstatusName))]
     : [];
 
-  useEffect(() => {
-    setFilteredClaims(claims);
-  }, [claims]);
+  const filteredClaims = selectedStatus
+    ? claims?.filter((claim) => claim.ClaimstatusName === selectedStatus)
+    : claims;
 
   const handleStatusFilterChange = (e) => {
-    const statusName = e.target.value;
-    if (!statusName) {
-      setFilteredClaims(claims);
-    } else {
-      setFilteredClaims(
-        claims.filter((claim) => claim.ClaimstatusName === statusName),
-      );
-    }
+    setSelectedStatus(e.target.value);
   };
 
   const correctPath = (claim) => {
@@ -48,7 +41,11 @@ const ClaimsMap = ({ claims, basePath = "", actions }) => {
     <div className="claims-view">
       {actions && <div className="actions">{actions}</div>}
       {availableStatuses.length > 1 && (
-        <select className="status-filter" onChange={handleStatusFilterChange}>
+        <select
+          className="status-filter"
+          value={selectedStatus}
+          onChange={handleStatusFilterChange}
+        >
           <option value="">All</option>
           {availableStatuses.map((status) => (
             <option key={status} value={status}>
@@ -61,9 +58,10 @@ const ClaimsMap = ({ claims, basePath = "", actions }) => {
       {filteredClaims && filteredClaims.length > 0 ? (
         <CardContainer>
           {filteredClaims.map((claim) => {
-            const id = claim.AssignmentClaimID || claim.ClaimID;
+            const claimId = claim.AssignmentClaimID || claim.ClaimID;
+            const rowKey = claim.AssignmentID ?? claim.ClaimID;
             return (
-              <Link to={`${correctPath(claim)}/${id}`} key={id}>
+              <Link to={`${correctPath(claim)}/${claimId}`} key={rowKey}>
                 <div className="fixed">
                   <ClaimItem claim={claim} />
                 </div>
