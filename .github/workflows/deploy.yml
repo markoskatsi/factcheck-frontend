@@ -11,4 +11,4 @@ jobs:
 
     steps:
       - name: Run deploy script
-        run: ~/factcheck-frontend/deploy.sh
+        run: ~/projects/factcheck-frontend/deploy.sh
