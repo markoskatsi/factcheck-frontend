@@ -1,6 +1,6 @@
 #!/bin/bash
 set -e
-cd ~/factcheck-frontend
+cd ~/projects/factcheck-frontend
 git fetch origin
 git reset --hard origin/master
 npm ci
