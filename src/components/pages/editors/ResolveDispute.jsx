@@ -7,7 +7,7 @@ import "../submitters/MyClaimInfo.scss";
 import API from "../../api/API.js";
 import { useState } from "react";
 import { Spinner } from "../../UI/Spinner.jsx";
-import { DisputeItem } from "../../entities/disputes/DisputeItem.jsx";
+import { useNavigate } from "react-router-dom";
 import ClaimInfoLayout from "../../UI/ClaimInfoLayout.jsx";
 import VerdictForm from "../../entities/verdicts/VerdictForm.jsx";
 import { Modal, useModal } from "../../UI/Modal.jsx";
@@ -17,6 +17,7 @@ import VerdictItem from "../../entities/verdicts/VerdictItem.jsx";
 const ResolveDispute = () => {
   // Initialisation --------------------------------
   const { claimId } = useParams();
+  const navigate = useNavigate();
 
   const claimEndpoint = `/claims/${claimId}`;
   const claimSourcesEndpoint = `/sources/claims/${claimId}?orderby=SourceCreated%20desc`;
@@ -82,13 +83,13 @@ const ResolveDispute = () => {
           ...claim,
           ClaimClaimstatusID: 5,
         });
-        await loadVerdicts(verdictEndpoint);
-        await loadDisputes(disputeEndpoint);
-        await loadClaims(claimEndpoint);
       }
     }
     setIsLoading(false);
     closeModal();
+    if (verdictResponse.isSuccess) {
+      navigate(`/claims/${claimId}`);
+    }
     return verdictResponse.isSuccess;
   };
 

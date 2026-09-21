@@ -50,7 +50,7 @@ export default function VerdictForm({
     <Form
       onSubmit={handleSubmit}
       onCancel={onCancel}
-      submitText="Save In Progress"
+      submitText="Submit"
     >
       <Form.Item
         label="Verdict description"
