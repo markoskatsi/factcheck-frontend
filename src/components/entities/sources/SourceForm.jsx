@@ -5,8 +5,9 @@ import { useParams } from "react-router-dom";
 import { Dropdown } from "../../UI/Dropdown.jsx";
 
 const emptySource = {
-  SourceDescription: "",
-  SourceURL: "",
+  SourceDescription:
+    "Society of Motor Manufacturers and Traders (SMMT) new car registration statistics, published monthly. The definitive UK source for vehicle registrations by fuel type. Used to verify the claim that EV sales have doubled.",
+  SourceURL: "https://www.smmt.co.uk/vehicle-data/car-registrations/",
   SourceSourcetypeID: 0,
 };
 

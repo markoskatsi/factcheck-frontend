@@ -3,7 +3,8 @@ import useLoad from "../../api/useLoad.js";
 import { Dropdown } from "../../UI/Dropdown.jsx";
 
 const emptyDispute = {
-  DisputeDescription: "",
+  DisputeDescription:
+    "The verdict labels this claim as misleading, but the government's statement referred specifically to the fastest-growing EV segment, where sales genuinely did double. Highlighting the strongest-performing segment is common practice in industry reporting. The verdict fails to acknowledge this context. The 21% overall growth figure, while accurate, does not invalidate the doubling within that segment.",
   DisputeDisputetypeID: 0,
   DisputeOutcome: 0,
   DisputeVerdictID: 0,

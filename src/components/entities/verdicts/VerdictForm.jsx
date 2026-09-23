@@ -4,7 +4,8 @@ import { useAuth } from "../../auth/useAuth.jsx";
 import useLoad from "../../api/useLoad.js";
 
 const emptyVerdict = {
-  VerdictDescription: "",
+  VerdictDescription:
+    "MISLEADING. The claim that UK electric vehicle sales have doubled is not supported by SMMT registration data. Total battery electric vehicle registrations rose by approximately 21% year-on-year. The 'doubled' figure refers only to a specific model segment and cannot be generalised to the whole market. Presenting this as an overall doubling of EV sales is misleading and lacks the necessary context.",
   VerdictVerdictstatusID: 3,
 };
 

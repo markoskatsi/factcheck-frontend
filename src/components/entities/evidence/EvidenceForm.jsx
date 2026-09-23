@@ -4,8 +4,10 @@ import { Dropzone } from "../../UI/Dropzone.jsx";
 import { Dropdown } from "../../UI/Dropdown.jsx";
 
 const emptyEvidence = {
-  EvidenceDescription: "",
-  EvidenceURL: "",
+  EvidenceDescription:
+    "SMMT annual registration data showing battery electric vehicle (BEV) registrations rose from approximately 315,000 to 382,000 year-on-year — an increase of about 21%, not 100%. The 'doubled' figure appears to relate only to a single manufacturer's model range, not the overall EV market.",
+  EvidenceURL:
+    "https://www.smmt.co.uk/vehicle-data/car-registrations/",
   EvidenceEvidencetypeID: 0,
 };
 

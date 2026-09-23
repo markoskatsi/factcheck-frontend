@@ -1,8 +1,9 @@
 import Form from "../../UI/Form.jsx";
 import { useAuth } from "../../auth/useAuth.jsx";
 const emptyClaim = {
-  ClaimTitle: "",
-  ClaimDescription: "",
+  ClaimTitle: "Electric vehicle sales in the UK have doubled in the past year",
+  ClaimDescription:
+    "The government has claimed that UK electric vehicle sales have doubled over the past 12 months, citing this as evidence that its net-zero transport strategy and charging infrastructure investment are working. The claim has been repeated in ministerial speeches and press releases.",
   ClaimClaimstatusID: 1,
   ClaimUserID: 1,
 };

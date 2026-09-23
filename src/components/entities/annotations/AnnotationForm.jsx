@@ -1,6 +1,7 @@
 import Form from "../../UI/Form.jsx";
 const emptyAnnotation = {
-  AnnotationDescription: "",
+  AnnotationDescription:
+    "SMMT data shows BEV registrations grew by roughly 21% year-on-year (approx. 315,000 to 382,000), not 100%. The 'doubled' figure appears to describe one manufacturer's model range rather than the overall market. The government's claim uses selective data and is misleading without further qualification.",
   AnnotationAssignmentID: 1,
 };
 
