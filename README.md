@@ -4,6 +4,8 @@ My final year project, a full-stack fact-checking platform built with React, Exp
 
 Visit the app at: https://factcheck.mark0s.com
 
+Backend code: https://github.com/markoskatsi/factcheck-backend
+
 ## User Roles
 
 ### Submitters
